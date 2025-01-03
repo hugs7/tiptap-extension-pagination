@@ -156,7 +156,6 @@ export const moveToNextTextBlock = (tr: Transaction, $pos: ResolvedPos | number)
  * @param $pos - The resolved position in the document.
  * @param bias - The search direction.
  * @returns {void} The new selection.
- * @throws {Error} If the parent is not a text block.
  */
 export const moveToNearestTextSelection = (tr: Transaction, $pos: ResolvedPos, bias: Sign = 1): void => {
     const textSelection = getNearestTextSelection($pos, bias);
@@ -168,14 +167,8 @@ export const moveToNearestTextSelection = (tr: Transaction, $pos: ResolvedPos, b
  * @param $pos - The resolved position in the document.
  * @param bias - The search direction.
  * @returns {Selection} The nearest text selection.
- * @throws {Error} If the parent is not a text block.
  */
 export const getNearestTextSelection = ($pos: ResolvedPos, bias: Sign = 1): Selection => {
-    if (!$pos.parent.isTextblock) {
-        throw new Error("Parent is not a text block");
-    }
-
-    console.log("The position is valid for a TextSelection. Setting selection to", $pos.pos);
     return TextSelection.near($pos, bias);
 };
 
