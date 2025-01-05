@@ -12,6 +12,7 @@ import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { PAGE_NODE_NAME, DEFAULT_PAGE_GAP, PAGE_ATTRIBUTES } from "../constants/page";
+import { PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
 import { getPageNodePaperColour } from "../utils/paperColour";
@@ -31,8 +32,8 @@ type PageNodeOptions = {
 
 const PageNode = Node.create<PageNodeOptions>({
     name: PAGE_NODE_NAME,
-    group: "block",
-    content: "block*",
+    group: "page",
+    content: `${PAGE_SECTION_NODE_NAME}{1, 3}`, // We must have a body section and can optionally have a header and footer
     defining: true,
     isolating: false,
 
