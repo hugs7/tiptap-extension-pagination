@@ -674,14 +674,18 @@ export const buildNewDocument = (
     nodeHeights: number[]
 ): { newDoc: PMNode; oldToNewPosMap: CursorMap } => {
     const { schema, doc } = state;
+    const { nodes } = schema;
     let pageNum = 0;
 
-    const pageType = schema.nodes.page;
+    const pageType = nodes.page;
+    const pageSectionType = nodes.pageSection;
+
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageSectionNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum);
 
     const addPage = (currentPageContent: PMNode[]): PMNode => {
-        const pageNode = pageType.create(pageNodeAttributes, currentPageContent);
+        const pageBody = pageSectionType.create(pageSectionNodeAttributes, currentPageContent);
+        const pageNode = pageType.create(pageNodeAttributes, pageBody);
         pages.push(pageNode);
         return pageNode;
     };
@@ -704,7 +708,7 @@ export const buildNewDocument = (
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageSectionNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
             }
         }
 
