@@ -25,6 +25,7 @@ export { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
 
 // === Nodes ===
 import PageNode from "./Nodes/Page";
+import PageSectionNode from "./Nodes/PageSection";
 
 // === Utils ===
 export { isPageNode } from "./utils/page";
@@ -36,6 +37,6 @@ export { getPageNumPaperMargins, getPageNodePaperMargins } from "./utils/paperMa
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
 
 // === Exports ===
-export { PageNode };
+export { PageNode, PageSectionNode };
 
 export default PaginationExtension;
