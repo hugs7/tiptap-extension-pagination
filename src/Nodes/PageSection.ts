@@ -9,8 +9,7 @@ import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { DOMSerializer, Fragment } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
-import PageSectionType from "../types/pageSection";
-import { getSectionAttribute, isPageSectionNode } from "../utils/pageSection";
+import { getPageSectionType, isPageSectionNode } from "../utils/pageSection";
 import { addNodeAttributes } from "../utils/node";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
@@ -21,10 +20,9 @@ import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
 import { mm } from "../utils/units";
 
 const baseElement = "div" as const;
+const pageSectionAttribute = "data-page-section" as const;
 
-type PageSectionNodeOptions = {
-    type: PageSectionType;
-};
+type PageSectionNodeOptions = {};
 
 const PageSectionNode = Node.create<PageSectionNodeOptions>({
     name: PAGE_SECTION_NODE_NAME,
@@ -33,50 +31,39 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     defining: true,
     isolating: false,
 
-    addOptions() {
-        return {
-            type: "main",
-        };
-    },
-
     addAttributes() {
         return addNodeAttributes(PAGE_SECTION_ATTRIBUTES);
     },
 
     parseHTML() {
-        const type = this.options.type;
-        const sectionAttribute = getSectionAttribute(type);
         return [
             {
-                tag: `${baseElement}[${sectionAttribute}]`,
+                tag: `${baseElement}[${pageSectionAttribute}]`,
                 getAttrs: (node) => {
                     const parent = (node as HTMLElement).parentElement;
 
                     // Prevent nested page section nodes
-                    if (parent && parent.hasAttribute(sectionAttribute)) {
+                    if (parent && parent.hasAttribute(pageSectionAttribute)) {
                         return false;
                     }
 
-                    return { type };
+                    return {};
                 },
             },
         ];
     },
 
     renderHTML({ HTMLAttributes }) {
-        const type = this.options.type;
-        const sectionAttribute = getSectionAttribute(type);
-        return [baseElement, mergeAttributes(HTMLAttributes, { [sectionAttribute]: true }), 0];
+        return [baseElement, mergeAttributes(HTMLAttributes, { [pageSectionAttribute]: true }), 0];
     },
 
     addNodeView() {
         return (props: NodeViewRendererProps) => {
             const { node } = props;
-            const sectionType = this.options.type;
-            const sectionAttribute = getSectionAttribute(sectionType);
+            const sectionType = getPageSectionType(node) ?? "body";
 
             const dom = document.createElement(baseElement);
-            dom.setAttribute(sectionAttribute, String(true));
+            dom.setAttribute(pageSectionAttribute, String(true));
             dom.classList.add(PAGE_SECTION_NODE_NAME);
 
             const paperSize = getPageNodePaperSize(node) ?? DEFAULT_PAPER_SIZE;

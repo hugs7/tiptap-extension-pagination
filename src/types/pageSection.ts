@@ -6,11 +6,13 @@
 
 import { PageNodeAttributes } from "./page";
 
-type PageSectionType = "header" | "main" | "footer";
+type PageSectionType = "header" | "body" | "footer";
 
 /**
  * Attributes for a page section node.
  */
-export type PageSectionNodeAttributes = Pick<PageNodeAttributes, "paperSize" | "paperOrientation" | "pageMargins"> & {};
+export type PageSectionNodeAttributes = Pick<PageNodeAttributes, "paperSize" | "paperOrientation" | "pageMargins"> & {
+    type: PageSectionType;
+};
 
 export default PageSectionType;

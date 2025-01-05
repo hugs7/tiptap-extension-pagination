@@ -13,6 +13,7 @@ export const PAGE_SECTION_NODE_NAME = "pageSection" as const;
 export const PAGE_SECTION_ATTRIBUTES: {
     [K in keyof PageSectionNodeAttributes]: AttributeConfig<PageSectionNodeAttributes[K]>;
 } = {
+    type: { default: "body" },
     paperSize: PAGE_ATTRIBUTES.paperSize,
     paperOrientation: PAGE_ATTRIBUTES.paperOrientation,
     pageMargins: PAGE_ATTRIBUTES.pageMargins,
