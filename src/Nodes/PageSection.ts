@@ -71,18 +71,39 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
             const paperMargins = getPageNodePaperMargins(node) ?? DEFAULT_MARGIN_CONFIG;
             const { width: pageWidth, height: pageHeight } = getPaperDimensions(paperSize, paperOrientation);
 
-            dom.style.width = mm(pageWidth - paperMargins.left - paperMargins.right);
-            dom.style.height = mm(pageHeight - paperMargins.top - paperMargins.bottom);
+            dom.style.width = mm(pageWidth - paperMargins.left - paperMargins.right); // TODO have independent margins for header and footer
+
+            switch (sectionType) {
+                case "header":
+                    dom.style.height = mm(paperMargins.top);
+
+                    dom.style.marginTop = mm(0);
+                    dom.style.marginLeft = mm(paperMargins.left); // TODO have independent margins for header
+                    dom.style.marginRight = mm(paperMargins.right); // TODO have independent margins for header
+                    dom.style.marginBottom = mm(0);
+                    break;
+                case "body":
+                    dom.style.height = mm(pageHeight - paperMargins.top - paperMargins.bottom);
+
+                    dom.style.marginTop = mm(paperMargins.top);
+                    dom.style.marginLeft = mm(paperMargins.left);
+                    dom.style.marginRight = mm(paperMargins.right);
+                    dom.style.marginBottom = mm(paperMargins.bottom);
+                    break;
+                case "footer":
+                    dom.style.height = mm(paperMargins.bottom);
+
+                    dom.style.marginTop = mm(0);
+                    dom.style.marginLeft = mm(paperMargins.left); // TODO have independent margins for footer
+                    dom.style.marginRight = mm(paperMargins.right); // TODO have independent margins for footer
+                    dom.style.marginBottom = mm(0);
+                    break;
+            }
 
             dom.style.border = "1px solid #ccc";
 
             dom.style.overflow = "hidden";
             dom.style.position = "relative";
-
-            dom.style.marginTop = mm(paperMargins.top);
-            dom.style.marginLeft = mm(paperMargins.left);
-            dom.style.marginRight = mm(paperMargins.right);
-            dom.style.marginBottom = mm(paperMargins.bottom);
 
             const contentDOM = document.createElement(baseElement);
             dom.appendChild(contentDOM);
