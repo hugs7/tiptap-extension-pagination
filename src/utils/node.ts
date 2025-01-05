@@ -6,6 +6,8 @@
 
 import { Node, ResolvedPos } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
+import { AttributeConfig } from "../types/page";
+import { Attributes } from "@tiptap/core";
 
 /**
  * Get the type of the node at the specified position.
@@ -107,13 +109,34 @@ export const nodeHasAttribute = (node: Node, attr: string): boolean => {
 };
 
 /**
+ * Add the specified attributes to the node.
+ * @param attributes - The attributes to add to the node.
+ * @returns {Attributes} The attributes to add to the node.
+ */
+export const addNodeAttributes = <T extends Record<string, any>>(attributes: {
+    [K in keyof T]: AttributeConfig<T[K]>;
+}): Attributes => {
+    return Object.entries(attributes).reduce(
+        (attributes, [key, config]) => ({
+            ...attributes,
+            [key]: {
+                default: config.default,
+                parseHTML: parseHTMLAttribute(key, config.default),
+                renderHTML: renderHTMLAttribute(key),
+            },
+        }),
+        {} as Attributes
+    );
+};
+
+/**
  * Parse the HTML attribute of the element.
  * @param element - The element to parse the attribute from.
  * @param attr - The attribute to parse.
  * @param fallback - The fallback value if the attribute is not found.
  * @returns {T} The parsed attribute value or the fallback value.
  */
-export const parseHTMLAttribute =
+const parseHTMLAttribute =
     <T>(attr: string, fallback: T) =>
     (element: HTMLElement): T => {
         const margins = element.getAttribute(attr);
@@ -126,7 +149,7 @@ export const parseHTMLAttribute =
  * @param attributes - The attributes to render.
  * @returns {Object} The rendered attribute.
  */
-export const renderHTMLAttribute =
+const renderHTMLAttribute =
     <T extends Record<string, unknown>>(attr: keyof T) =>
     (attributes: T): { [key in keyof T]: string } => {
         const value = attributes[attr];

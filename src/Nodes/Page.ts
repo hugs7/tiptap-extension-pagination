@@ -4,7 +4,7 @@
  * @description Custom node for creating a page in the editor.
  */
 
-import { Attributes, Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
+import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { DOMSerializer, Fragment } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
@@ -20,7 +20,7 @@ import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { calculatePagePadding, getPageNodePaperMargins } from "../utils/paperMargins";
 import { mm, px } from "../utils/units";
 import { calculatePageBorders, getPageNodePageBorders } from "../utils/pageBorders";
-import { parseHTMLAttribute, renderHTMLAttribute } from "../utils/node";
+import { addNodeAttributes } from "../utils/node";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;
@@ -43,17 +43,7 @@ const PageNode = Node.create<PageNodeOptions>({
     },
 
     addAttributes() {
-        return Object.entries(PAGE_ATTRIBUTES).reduce(
-            (attributes, [key, config]) => ({
-                ...attributes,
-                [key]: {
-                    default: config.default,
-                    parseHTML: parseHTMLAttribute(key, config.default),
-                    renderHTML: renderHTMLAttribute(key),
-                },
-            }),
-            {} as Attributes
-        );
+        return addNodeAttributes(PAGE_ATTRIBUTES);
     },
 
     parseHTML() {
