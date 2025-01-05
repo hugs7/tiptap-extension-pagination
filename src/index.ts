@@ -8,7 +8,6 @@
 import PaginationExtension from "./PaginationExtension";
 
 // === Types ===
-
 export type { PaginationOptions } from "./PaginationExtension";
 export type * from "./types/cursor";
 export type * from "./types/node";
@@ -35,6 +34,7 @@ export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColo
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
 export { getPageNumPaperMargins, getPageNodePaperMargins } from "./utils/paperMargins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
+export { doesDocHavePageNodes } from "./utils/page";
 
 // === Exports ===
 export { PageNode, PageSectionNode };
