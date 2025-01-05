@@ -583,22 +583,30 @@ export const getPageNumber = (doc: PMNode, $pos: ResolvedPos | number, zeroIndex
 };
 
 /**
- * Collect content nodes and their old positions
+ * Collect content nodes and their existing positions
  * @param state - The editor state.
  * @returns {NodePosArray} The content nodes and their positions.
  */
 export const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
-    const pageType = schema.nodes.page;
+    const { nodes } = schema;
+    const pageType = nodes.page;
+    const pageSectionType = nodes.pageSection;
 
     const contentNodes: NodePosArray = [];
-    state.doc.forEach((node, offset) => {
-        if (node.type === pageType) {
-            node.forEach((child, childOffset) => {
-                contentNodes.push({ node: child, pos: offset + childOffset + 1 });
+    state.doc.forEach((pageNode, offset) => {
+        if (pageNode.type === pageType) {
+            pageNode.forEach((pageSectionNode, pageSectionOffset) => {
+                if (pageSectionNode.type === pageSectionType) {
+                    pageSectionNode.forEach((child, childOffset) => {
+                        contentNodes.push({ node: child, pos: offset + pageSectionOffset + childOffset + 1 });
+                    });
+                } else {
+                    contentNodes.push({ node: pageSectionNode, pos: offset + pageSectionOffset + 1 });
+                }
             });
         } else {
-            contentNodes.push({ node, pos: offset + 1 });
+            contentNodes.push({ node: pageNode, pos: offset + 1 });
         }
     });
 
