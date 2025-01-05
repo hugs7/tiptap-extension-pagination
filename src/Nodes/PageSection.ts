@@ -26,7 +26,7 @@ type PageSectionNodeOptions = {
     type: PageSectionType;
 };
 
-const PageSection = Node.create<PageSectionNodeOptions>({
+const PageSectionNode = Node.create<PageSectionNodeOptions>({
     name: PAGE_SECTION_NODE_NAME,
     group: PAGE_SECTION_NODE_NAME,
     content: "block*",
@@ -145,4 +145,4 @@ const PageSection = Node.create<PageSectionNodeOptions>({
     },
 });
 
-export default PageSection;
+export default PageSectionNode;
