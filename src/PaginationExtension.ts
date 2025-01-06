@@ -206,40 +206,42 @@ declare module "@tiptap/core" {
             getDefaultPageMargins: () => MarginConfig;
 
             /**
-             * Set the paper margins for the document
-             * @param paperMargins The paper margins (top, right, bottom, left)
-             * @example editor.commands.setDocumentPaperMargins({ top: 10, right: 15, bottom: 10, left: 15 })
+             * Set the page margins for the document
+             * @param pageMargins The page margins (top, right, bottom, left)
+             * @example editor.commands.setDocumentPageMargins({ top: 10, right: 15, bottom: 10, left: 15 })
              */
-            setDocumentPaperMargins: (paperMargins: MarginConfig) => ReturnType;
+            setDocumentPageMargins: (pageMargins: MarginConfig) => ReturnType;
 
             /**
-             * Set the default paper margins
-             * @example editor.commands.setDocumentDefaultPaperMargins()
+             * Set the default page margins
+             * @example editor.commands.setDocumentDefaultPageMargins()
              */
-            setDocumentDefaultPaperMargins: () => ReturnType;
+            setDocumentDefaultPageMargins: () => ReturnType;
 
             /**
-             * Set the paper margins for a specific page
+             * Set the page margins for a specific page
              * @param pageNum The page number (0-indexed)
-             * @param paperMargins The paper margins
-             * @example editor.commands.setPagePaperMargins(0, { top: 10, right: 15, bottom: 10, left: 15 })
+             * @param pageMargins The page margins
+             * @example editor.commands.setPagePageMargins(0, { top: 10, right: 15, bottom: 10, left: 15 })
              */
-            setPagePaperMargins: (pageNum: number, paperMargins: MarginConfig) => ReturnType;
+            setPagePageMargins: (pageNum: number, pageMargins: MarginConfig) => ReturnType;
 
             /**
              * Set a margin for the document on a specific side
              * @param margin The margin to set (top, right, bottom, left, x, y, all)
              * @param value The value to set the margin to
+             * @example editor.commands.setDocumentPageMargin("top", 10)
              */
-            setDocumentPaperMargin: (margin: MultiSide, value: number) => ReturnType;
+            setDocumentPageMargin: (margin: MultiSide, value: number) => ReturnType;
 
             /**
              * Set a margin for a specific page on a specific side
              * @param pageNum The page number (0-indexed)
              * @param margin The margin to set (top, right, bottom, left, x, y, all)
              * @param value The value to set the margin to
+             * @example editor.commands.setPagePageMargin(0, "top", 10)
              */
-            setPagePaperMargin: (pageNum: number, margin: MultiSide, value: number) => ReturnType;
+            setPagePageMargin: (pageNum: number, margin: MultiSide, value: number) => ReturnType;
 
             /**
              * Get the default page borders
@@ -686,27 +688,27 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                 return this.options.defaultMarginConfig;
             },
 
-            setDocumentPaperMargins: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageMargins, isValidPaperMargins),
+            setDocumentPageMargins: setDocumentSideConfig(PAGE_SECTION_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
 
-            setDocumentDefaultPaperMargins:
+            setDocumentDefaultPageMargins:
                 () =>
                 ({ editor }) =>
-                    editor.commands.setDocumentPaperMargins(this.options.defaultMarginConfig),
+                    editor.commands.setDocumentPageMargins(this.options.defaultMarginConfig),
 
-            setPagePaperMargins: setPageSideConfig(setPageNodePosPaperMargins),
+            setPagePageMargins: setPageSideConfig(setPageSectionNodePosPageMargins),
 
-            setDocumentPaperMargin:
+            setDocumentPageMargin:
                 (margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setDocumentSideValue(editor.commands.setDocumentPaperMargins, isMarginValid, updatePaperMargin)(margin, value)({
+                    setDocumentSideValue(editor.commands.setDocumentPageMargins, isMarginValid, updatePageSectionMargin)(margin, value)({
                         tr,
                         dispatch,
                     }),
 
-            setPagePaperMargin:
+            setPagePageMargin:
                 (pageNum: number, margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setPageSideValue(editor.commands.setPagePaperMargins, isMarginValid, updatePaperMargin)(pageNum, margin, value)({
+                    setPageSideValue(editor.commands.setPagePageMargins, isMarginValid, updatePageSectionMargin)(pageNum, margin, value)({
                         tr,
                         dispatch,
                     }),
