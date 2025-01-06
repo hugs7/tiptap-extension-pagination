@@ -54,7 +54,7 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     },
 
     renderHTML({ HTMLAttributes }) {
-        return [baseElement, mergeAttributes(HTMLAttributes, { [pageSectionAttribute]: true }), 0];
+        return [baseElement, mergeAttributes(HTMLAttributes, { [pageSectionAttribute]: true, class: "pageSection" }), 0];
     },
 
     addNodeView() {
