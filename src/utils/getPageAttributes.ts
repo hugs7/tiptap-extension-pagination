@@ -6,12 +6,13 @@
 
 import { EditorState } from "@tiptap/pm/state";
 import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
-import { PageSectionNodeAttributes } from "../types/pageSection";
+import PageSectionType, { PageSectionNodeAttributes, PageSectionNoteAttributesObject } from "../types/pageSection";
 import { calculatePageContentPixelDimensions, getPageNumPaperSize } from "./paperSize";
 import { getPageNumPaperColour } from "./paperColour";
 import { getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNumPageMargins } from "./pageSectionMargins";
+import { getPageNumSectionPageMargins } from "./pageSectionMargins";
 import { getPageNumPageBorders } from "./pageBorders";
+import { pageSectionTypes } from "../constants/pageSection";
 
 /**
  * Retrieves page attributes from the editor state.
@@ -32,15 +33,28 @@ const getPageNodeAttributes = (state: EditorState, pageNum: number): PageNodeAtt
  * Retrieves page section attributes from the editor state.
  * @param state - The current editor state.
  * @param pageNum - The page number to retrieve the attributes for.
+ * @param sectionType - The type of section to retrieve the attributes for.
  * @returns {PageNodeAttributes} The attributes of the specified page.
  */
-const getPageSectionNodeAttributes = (state: EditorState, pageNum: number): PageSectionNodeAttributes => {
+const getPageSectionNodeAttributes = (state: EditorState, pageNum: number, sectionType: PageSectionType): PageSectionNodeAttributes => {
     const paperSize = getPageNumPaperSize(state, pageNum);
     const paperOrientation = getPageNumPaperOrientation(state, pageNum);
-    const sectionType = "body"; // TODO
-    const pageMargins = getPageNumPageMargins(state, pageNum, sectionType);
+    const pageMargins = getPageNumSectionPageMargins(state, pageNum, sectionType);
 
     return { paperSize, paperOrientation, pageMargins, type: sectionType };
+};
+
+/**
+ * Retrieves page section attributes from the editor state.
+ * @param state - The current editor state.
+ * @param pageNum - The page number to retrieve the attributes for.
+ * @returns {PageNodeAttributes} The attributes of the specified page.
+ */
+const getPageSectionsNodeAttributes = (state: EditorState, pageNum: number): PageSectionNoteAttributesObject => {
+    return pageSectionTypes.reduce((acc, sectionType) => {
+        acc[sectionType] = getPageSectionNodeAttributes(state, pageNum, sectionType);
+        return acc;
+    }, {} as PageSectionNoteAttributesObject);
 };
 
 /**
@@ -54,12 +68,12 @@ export const getCalculatedPageNodeAttributes = (
     pageNum: number
 ): {
     pageNodeAttributes: PageNodeAttributes;
-    pageSectionNodeAttributes: PageSectionNodeAttributes;
+    pageSectionsNodeAttributes: PageSectionNoteAttributesObject;
     pagePixelDimensions: PageContentPixelDimensions;
 } => {
     const pageNodeAttributes = getPageNodeAttributes(state, pageNum);
-    const pageSectionNodeAttributes = getPageSectionNodeAttributes(state, pageNum);
+    const pageSectionsNodeAttributes = getPageSectionsNodeAttributes(state, pageNum);
     const pagePixelDimensions = calculatePageContentPixelDimensions(pageNodeAttributes);
 
-    return { pageNodeAttributes, pageSectionNodeAttributes, pagePixelDimensions };
+    return { pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions };
 };

@@ -47,14 +47,18 @@ export const getPageSectionNodePageMargins = (pageSectionNode: PMNode): Nullable
 };
 
 /**
- * Retrieves the page margin config of a specific page using the editor instance.
+ * Retrieves the page margin config of a specific page section using the editor instance.
  * Falls back to the default page margin config if the page number is invalid.
  * @param context - The current editor instance or editor state.
  * @param pageNum - The page number to retrieve the page margin config for.
  * @param sectionType - The type of the page section node to retrieve the page margin config for.
  * @returns {MarginConfig} The page margin config of the specified page or default.
  */
-export const getPageNumPageMargins = (context: Editor | EditorState, pageNum: number, sectionType: PageSectionType): MarginConfig => {
+export const getPageNumSectionPageMargins = (
+    context: Editor | EditorState,
+    pageNum: number,
+    sectionType: PageSectionType
+): MarginConfig => {
     const getDefault = context instanceof Editor ? context.commands.getDefaultPageMargins : () => DEFAULT_MARGIN_CONFIG;
     return getPageSectionAttributeByPageNum(context, pageNum, sectionType, getDefault, getPageSectionNodePageMargins);
 };
