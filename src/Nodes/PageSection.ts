@@ -8,7 +8,7 @@
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { DOMSerializer, Fragment } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
-import { PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
+import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { getPageSectionType, isPageSectionNode } from "../utils/pageSection";
 import { addNodeAttributes } from "../utils/node";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
@@ -60,7 +60,7 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     addNodeView() {
         return (props: NodeViewRendererProps) => {
             const { node } = props;
-            const sectionType = getPageSectionType(node) ?? "body";
+            const sectionType = getPageSectionType(node) ?? DEFAULT_PAGE_SECTION_TYPE;
 
             const dom = document.createElement(baseElement);
             dom.setAttribute(pageSectionAttribute, String(true));
