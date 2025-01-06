@@ -32,7 +32,7 @@ type PageNodeOptions = {
 
 const PageNode = Node.create<PageNodeOptions>({
     name: PAGE_NODE_NAME,
-    group: "page",
+    group: "block",
     content: `${PAGE_SECTION_NODE_NAME}{1, 3}`, // We must have a body section and can optionally have a header and footer
     defining: true,
     isolating: false,
