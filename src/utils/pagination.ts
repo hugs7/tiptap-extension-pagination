@@ -735,7 +735,7 @@ export const buildNewDocument = (
     return { newDoc, oldToNewPosMap };
 };
 
-/***
+/**
  * Limit mapped cursor positions to document size to prevent out of bounds errors
  * when setting the cursor position
  * @param oldToNewPosMap - The mapping from old positions to new positions.
@@ -769,7 +769,7 @@ export const mapCursorPosition = (
         const { node, pos: oldNodePos } = contentNodes[i];
         const nodeSize = node.nodeSize;
 
-        if (oldNodePos <= oldCursorPos && oldCursorPos <= oldNodePos + nodeSize) {
+        if (inRange(oldCursorPos, oldNodePos, oldNodePos + nodeSize)) {
             const offsetInNode = oldCursorPos - oldNodePos;
             const newNodePos = oldToNewPosMap.get(oldNodePos);
             if (newNodePos === undefined) {
