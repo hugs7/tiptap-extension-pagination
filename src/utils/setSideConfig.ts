@@ -157,7 +157,7 @@ export const setPageSideValue =
  * @param dispatch - The dispatch function to apply the transaction.
  * @param pagePos - The position of the page node to set the side config for.
  * @param pageNode - The page node to set the side config for.
- * @param paperMargins - The side config to set.
+ * @param configObj - The side config to set.
  * @param isValidConfig - A function to validate the side config.
  * @param getPageNodeSideConfig - A function to get the existing side config from the page node.
  * @param attrKey - The key of the attribute to update.
@@ -176,7 +176,7 @@ export const setPageNodePosSideConfig = <V, T extends SideConfig<V>>(
     if (!dispatch) return false;
 
     if (!isValidConfig(configObj)) {
-        console.warn("Invalid paper margins", configObj);
+        console.warn("Invalid side config:", configObj);
         return false;
     }
 
