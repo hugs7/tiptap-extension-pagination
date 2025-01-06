@@ -44,12 +44,11 @@ const PaginationPlugin = new Plugin({
                     const nodeHeights = measureNodeHeights(view, contentNodes);
 
                     // Record the cursor's old position
-                    const { selection } = state;
+                    const { tr, selection } = state;
                     const oldCursorPos = selection.from;
 
                     const { newDoc, oldToNewPosMap } = buildNewDocument(state, contentNodes, nodeHeights);
 
-                    const tr = state.tr;
                     // Compare the content of the documents
                     if (!newDoc.content.eq(doc.content)) {
                         tr.replaceWith(0, doc.content.size, newDoc.content);
