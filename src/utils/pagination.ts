@@ -685,7 +685,8 @@ export const buildNewDocument = (
 
     const addPage = (currentPageContent: PMNode[]): PMNode => {
         const pageBody = pageSectionType.create(pageSectionNodeAttributes, currentPageContent);
-        const pageNode = pageType.create(pageNodeAttributes, pageBody);
+        const pageNodeContents = [pageBody];
+        const pageNode = pageType.create(pageNodeAttributes, pageNodeContents);
         pages.push(pageNode);
         return pageNode;
     };
