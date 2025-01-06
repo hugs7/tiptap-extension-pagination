@@ -12,12 +12,12 @@ import { PAGE_NODE_NAME } from "../constants/page";
 import { NodePosArray } from "../types/node";
 import { CursorMap } from "../types/cursor";
 import { Nullable } from "../types/record";
+import { MarginConfig } from "../types/paper";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
 import { getCalculatedPageNodeAttributes } from "./getPageAttributes";
-import { MarginConfig } from "../types/paper";
 
 /**
  * Check if the given node is a paragraph node.
@@ -681,11 +681,19 @@ export const buildNewDocument = (
     const pageSectionType = nodes.pageSection;
 
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pageSectionNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum);
+
+    const constructPageSections = (currentPageContent: PMNode[]): PMNode[] => {
+        const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageSectionsNodeAttributes;
+        const pageHeader = pageSectionType.create(headerAttrs, []);
+        const pageBody = pageSectionType.create(bodyAttrs, currentPageContent);
+        const pageFooter = pageSectionType.create(footerAttrs, []);
+
+        return [pageHeader, pageBody, pageFooter];
+    };
 
     const addPage = (currentPageContent: PMNode[]): PMNode => {
-        const pageBody = pageSectionType.create(pageSectionNodeAttributes, currentPageContent);
-        const pageNodeContents = [pageBody];
+        const pageNodeContents = constructPageSections(currentPageContent);
         const pageNode = pageType.create(pageNodeAttributes, pageNodeContents);
         pages.push(pageNode);
         return pageNode;
@@ -703,15 +711,15 @@ export const buildNewDocument = (
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
-        const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight && currentPageContent.length > 0;
-        if (isPageFull) {
+        const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight;
+        if (isPageFull && currentPageContent.length > 0) {
             const pageNode = addPage(currentPageContent);
             cumulativeNewDocPos += pageNode.nodeSize;
             currentPageContent = [];
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pageSectionNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
             }
         }
 

@@ -17,4 +17,9 @@ export type PageSectionNodeAttributes = Pick<PageNodeAttributes, "paperSize" | "
     type: PageSectionType;
 };
 
+/**
+ * Object mapping page section types to their attributes (for a given page)
+ */
+export type PageSectionNoteAttributesObject = { [key in PageSectionType]: PageSectionNodeAttributes };
+
 export default PageSectionType;
