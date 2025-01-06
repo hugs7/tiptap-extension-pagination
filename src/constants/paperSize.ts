@@ -6,7 +6,7 @@
 
 import { APaperSize, BPaperSize, CPaperSize, USPaperSize, PaperDimensions, PaperSize } from "../types/paper";
 
-export const DEFAULT_PAPER_SIZE: PaperSize = "A4" as const;
+export const DEFAULT_PAPER_SIZE: PaperSize = "A4";
 
 const aPaperSizes: Record<APaperSize, PaperDimensions> = {
     A0: { width: 841, height: 1189 },
