@@ -13,12 +13,10 @@ import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { PAGE_NODE_NAME, DEFAULT_PAGE_GAP, PAGE_ATTRIBUTES } from "../constants/page";
 import { PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
-import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
 import { getPageNodePaperColour } from "../utils/paperColour";
 import { isPageNode } from "../utils/page";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
-import { calculatePagePadding, getPageNodePaperMargins } from "../utils/paperMargins";
 import { mm, px } from "../utils/units";
 import { calculatePageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { addNodeAttributes } from "../utils/node";
@@ -78,13 +76,11 @@ const PageNode = Node.create<PageNodeOptions>({
 
             const paperSize = getPageNodePaperSize(node) ?? DEFAULT_PAPER_SIZE;
             const paperOrientation = getPageNodePaperOrientation(node) ?? DEFAULT_PAPER_ORIENTATION;
-            const paperMargins = getPageNodePaperMargins(node) ?? DEFAULT_MARGIN_CONFIG;
             const pageBorders = getPageNodePageBorders(node) ?? DEFAULT_PAGE_BORDER_CONFIG;
             const { width, height } = getPaperDimensions(paperSize, paperOrientation);
 
             dom.style.width = mm(width);
             dom.style.height = mm(height);
-            dom.style.padding = calculatePagePadding(paperMargins);
 
             dom.style.borderWidth = calculatePageBorders(pageBorders);
             dom.style.borderStyle = "solid";

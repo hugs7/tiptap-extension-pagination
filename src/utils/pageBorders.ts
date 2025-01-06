@@ -12,7 +12,7 @@ import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { BorderConfig, MultiSide } from "../types/paper";
 import { Nullable } from "../types/record";
 import { px } from "./units";
-import { getPageAttribute } from "./page";
+import { getPageAttributeByPageNum } from "./page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "./setSideConfig";
 
 /**
@@ -67,7 +67,7 @@ export const calculatePageBorders = (pageBorders: BorderConfig): string => {
  */
 export const getPageNumPageBorders = (context: Editor | EditorState, pageNum: number): BorderConfig => {
     const getDefault = context instanceof Editor ? context.commands.getDefaultPageBorders : () => DEFAULT_PAGE_BORDER_CONFIG;
-    return getPageAttribute(context, pageNum, getDefault, getPageNodePageBorders);
+    return getPageAttributeByPageNum(context, pageNum, getDefault, getPageNodePageBorders);
 };
 
 /**

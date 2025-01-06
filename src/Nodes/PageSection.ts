@@ -13,7 +13,7 @@ import { getPageSectionType, isPageSectionNode } from "../utils/pageSection";
 import { addNodeAttributes } from "../utils/node";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
-import { getPageNodePaperMargins } from "../utils/paperMargins";
+import { calculatePageSectionMargins, getPageSectionNodePageMargins } from "../utils/pageSectionMargins";
 import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
@@ -68,34 +68,32 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
 
             const paperSize = getPageNodePaperSize(node) ?? DEFAULT_PAPER_SIZE;
             const paperOrientation = getPageNodePaperOrientation(node) ?? DEFAULT_PAPER_ORIENTATION;
-            const paperMargins = getPageNodePaperMargins(node) ?? DEFAULT_MARGIN_CONFIG;
+            const pageMargins = getPageSectionNodePageMargins(node) ?? DEFAULT_MARGIN_CONFIG;
             const { width: pageWidth, height: pageHeight } = getPaperDimensions(paperSize, paperOrientation);
 
-            dom.style.width = mm(pageWidth - paperMargins.left - paperMargins.right); // TODO have independent margins for header and footer
+            dom.style.width = mm(pageWidth - (pageMargins.left + pageMargins.right)); // TODO have independent margins for header and footer
 
             switch (sectionType) {
                 case "header":
-                    dom.style.height = mm(paperMargins.top);
+                    // TODO
+                    dom.style.height = mm(pageMargins.top);
 
                     dom.style.marginTop = mm(0);
-                    dom.style.marginLeft = mm(paperMargins.left); // TODO have independent margins for header
-                    dom.style.marginRight = mm(paperMargins.right); // TODO have independent margins for header
+                    dom.style.marginLeft = mm(pageMargins.left); // TODO have independent margins for header
+                    dom.style.marginRight = mm(pageMargins.right); // TODO have independent margins for header
                     dom.style.marginBottom = mm(0);
                     break;
                 case "body":
-                    dom.style.height = mm(pageHeight - paperMargins.top - paperMargins.bottom);
-
-                    dom.style.marginTop = mm(paperMargins.top);
-                    dom.style.marginLeft = mm(paperMargins.left);
-                    dom.style.marginRight = mm(paperMargins.right);
-                    dom.style.marginBottom = mm(paperMargins.bottom);
+                    dom.style.height = mm(pageHeight - (pageMargins.top + pageMargins.bottom));
+                    dom.style.margin = calculatePageSectionMargins(pageMargins);
                     break;
                 case "footer":
-                    dom.style.height = mm(paperMargins.bottom);
+                    // TODO
+                    dom.style.height = mm(pageMargins.bottom);
 
                     dom.style.marginTop = mm(0);
-                    dom.style.marginLeft = mm(paperMargins.left); // TODO have independent margins for footer
-                    dom.style.marginRight = mm(paperMargins.right); // TODO have independent margins for footer
+                    dom.style.marginLeft = mm(pageMargins.left); // TODO have independent margins for footer
+                    dom.style.marginRight = mm(pageMargins.right); // TODO have independent margins for footer
                     dom.style.marginBottom = mm(0);
                     break;
             }

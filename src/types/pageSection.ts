@@ -5,13 +5,15 @@
  */
 
 import { PageNodeAttributes } from "./page";
+import { MarginConfig } from "./paper";
 
 type PageSectionType = "header" | "body" | "footer";
 
 /**
  * Attributes for a page section node.
  */
-export type PageSectionNodeAttributes = Pick<PageNodeAttributes, "paperSize" | "paperOrientation" | "pageMargins"> & {
+export type PageSectionNodeAttributes = Pick<PageNodeAttributes, "paperSize" | "paperOrientation"> & {
+    pageMargins: MarginConfig;
     type: PageSectionType;
 };
 

@@ -7,15 +7,15 @@
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { AttributeConfig, PageNodeAttributes } from "../types/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./pageBorders";
-import { DEFAULT_MARGIN_CONFIG } from "./pageMargins";
 import { DEFAULT_PAPER_SIZE } from "./paperSize";
 import { DEFAULT_PAPER_COLOUR } from "./paperColours";
+
+export const PAGE_NODE_NAME = "page" as const;
 
 export const PAGE_NODE_ATTR_KEYS = {
     paperSize: "paperSize",
     paperColour: "paperColour",
     paperOrientation: "paperOrientation",
-    pageMargins: "pageMargins",
     pageBorders: "pageBorders",
 } as const;
 
@@ -25,11 +25,8 @@ export const PAGE_ATTRIBUTES: {
     paperSize: { default: DEFAULT_PAPER_SIZE },
     paperColour: { default: DEFAULT_PAPER_COLOUR },
     paperOrientation: { default: DEFAULT_PAPER_ORIENTATION },
-    pageMargins: { default: DEFAULT_MARGIN_CONFIG },
     pageBorders: { default: DEFAULT_PAGE_BORDER_CONFIG },
 };
-
-export const PAGE_NODE_NAME = "page" as const;
 
 // ====== Page Gap ======
 

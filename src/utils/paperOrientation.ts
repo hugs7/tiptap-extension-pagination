@@ -11,7 +11,7 @@ import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { Nullable } from "../types/record";
 import { PaperOrientation } from "../types/paper";
-import { getPageAttribute, isPageNode } from "./page";
+import { getPageAttributeByPageNum, isPageNode } from "./page";
 import { setPageNodeAttribute } from "./setPageAttributes";
 
 /**
@@ -34,7 +34,7 @@ export const getPageNodePaperOrientation = (pageNode: PMNode): Nullable<PaperOri
  */
 export const getPageNumPaperOrientation = (context: Editor | EditorState, pageNum: number): PaperOrientation => {
     const getDefault = context instanceof Editor ? context.commands.getDefaultPaperOrientation : () => DEFAULT_PAPER_ORIENTATION;
-    return getPageAttribute(context, pageNum, getDefault, getPageNodePaperOrientation);
+    return getPageAttributeByPageNum(context, pageNum, getDefault, getPageNodePaperOrientation);
 };
 
 /**
