@@ -27,7 +27,7 @@ type PageSectionNodeOptions = {};
 const PageSectionNode = Node.create<PageSectionNodeOptions>({
     name: PAGE_SECTION_NODE_NAME,
     group: PAGE_SECTION_NODE_NAME,
-    content: "block*",
+    content: "block+",
     defining: true,
     isolating: false,
 
