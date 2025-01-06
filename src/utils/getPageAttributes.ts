@@ -6,12 +6,12 @@
 
 import { EditorState } from "@tiptap/pm/state";
 import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
+import { PageSectionNodeAttributes } from "../types/pageSection";
 import { calculatePageContentPixelDimensions, getPageNumPaperSize } from "./paperSize";
 import { getPageNumPaperColour } from "./paperColour";
 import { getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNumPaperMargins } from "./paperMargins";
+import { getPageNumPageMargins } from "./pageSectionMargins";
 import { getPageNumPageBorders } from "./pageBorders";
-import { PageSectionNodeAttributes } from "../types/pageSection";
 
 /**
  * Retrieves page attributes from the editor state.
@@ -23,10 +23,9 @@ const getPageNodeAttributes = (state: EditorState, pageNum: number): PageNodeAtt
     const paperSize = getPageNumPaperSize(state, pageNum);
     const paperColour = getPageNumPaperColour(state, pageNum);
     const paperOrientation = getPageNumPaperOrientation(state, pageNum);
-    const pageMargins = getPageNumPaperMargins(state, pageNum);
     const pageBorders = getPageNumPageBorders(state, pageNum);
 
-    return { paperSize, paperColour, paperOrientation, pageMargins, pageBorders };
+    return { paperSize, paperColour, paperOrientation, pageBorders };
 };
 
 /**
@@ -38,10 +37,10 @@ const getPageNodeAttributes = (state: EditorState, pageNum: number): PageNodeAtt
 const getPageSectionNodeAttributes = (state: EditorState, pageNum: number): PageSectionNodeAttributes => {
     const paperSize = getPageNumPaperSize(state, pageNum);
     const paperOrientation = getPageNumPaperOrientation(state, pageNum);
-    const pageMargins = getPageNumPaperMargins(state, pageNum);
-    const type = "body"; // TODO
+    const sectionType = "body"; // TODO
+    const pageMargins = getPageNumPageMargins(state, pageNum, sectionType);
 
-    return { paperSize, paperOrientation, pageMargins, type };
+    return { paperSize, paperOrientation, pageMargins, type: sectionType };
 };
 
 /**

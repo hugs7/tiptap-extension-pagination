@@ -11,7 +11,7 @@ import { DEFAULT_PAPER_SIZE, paperDimensions } from "../constants/paperSize";
 import { PaperOrientation, PaperDimensions, PaperSize } from "../types/paper";
 import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
 import { Nullable } from "../types/record";
-import { getPageAttribute, isPageNode } from "./page";
+import { getPageAttributeByPageNum, isPageNode } from "./page";
 import { mmToPixels } from "./window";
 import { nodeHasAttribute } from "./node";
 import { setPageNodeAttribute } from "./setPageAttributes";
@@ -55,18 +55,20 @@ export const flipDimensions = (dimensions: PaperDimensions): PaperDimensions => 
 };
 
 /**
- * Calculates the pixel width and height of a given paper size. Excludes page
- * margins as we are only calculating the area where content can be added.
+ * Calculates the pixel width and height of a given paper size.
  * @param pageNodeAttributes - The attributes of the page node.
  * @returns {PageContentPixelDimensions} The height and width of the page in pixels.
  */
 export const calculatePageContentPixelDimensions = (pageNodeAttributes: PageNodeAttributes): PageContentPixelDimensions => {
-    const { paperSize, paperOrientation, pageMargins, pageBorders } = pageNodeAttributes;
-    const { top: topMargin, right: rightMargin, bottom: bottomMargin, left: leftMargin } = pageMargins;
+    const { paperSize, paperOrientation, pageBorders } = pageNodeAttributes;
     const { top: borderTop, right: borderRight, bottom: borderBottom, left: borderLeft } = pageBorders;
     const { width, height } = getPaperDimensions(paperSize, paperOrientation);
-    const pageContentHeight = mmToPixels(height - (topMargin + bottomMargin)) - (borderTop + borderBottom);
-    const pageContentWidth = mmToPixels(width - (leftMargin + rightMargin)) - (borderLeft + borderRight);
+
+    const verticalBorders = borderTop + borderBottom;
+    const horizontalBorders = borderLeft + borderRight;
+
+    const pageContentHeight = mmToPixels(height) - verticalBorders;
+    const pageContentWidth = mmToPixels(width) - horizontalBorders;
 
     return { pageContentHeight, pageContentWidth };
 };
@@ -100,7 +102,7 @@ export const getPageNodePaperSize = (pageNode: PMNode): Nullable<PaperSize> => {
  */
 export const getPageNumPaperSize = (context: Editor | EditorState, pageNum: number): PaperSize => {
     const getDefault = context instanceof Editor ? context.commands.getDefaultPaperSize : () => DEFAULT_PAPER_SIZE;
-    return getPageAttribute(context, pageNum, getDefault, getPageNodePaperSize);
+    return getPageAttributeByPageNum(context, pageNum, getDefault, getPageNodePaperSize);
 };
 
 /**

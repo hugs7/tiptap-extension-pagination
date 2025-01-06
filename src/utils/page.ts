@@ -6,11 +6,12 @@
 
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState } from "@tiptap/pm/state";
+import { Editor } from "@tiptap/core";
 import { PAGE_NODE_NAME } from "../constants/page";
 import { NodePos, NodePosArray } from "../types/node";
 import { Nullable } from "../types/record";
 import { inRange } from "./math";
-import { Editor } from "@tiptap/core";
+import { getStateFromContext } from "./editor";
 
 /**
  * Check if the given node is a page node.
@@ -139,7 +140,11 @@ export const getPageNodePosByPageNum = (doc: PMNode, pageNum: number): Nullable<
  * @param fallbackFn - A function to determine the fallback value based on the last page number.
  * @returns {T} The result of the fallback function.
  */
-const handleOutOfRangePageNum = <T>(state: EditorState, pageNum: number, fallbackFn: (state: EditorState, pageNum: number) => T): T => {
+export const handleOutOfRangePageNum = <T>(
+    state: EditorState,
+    pageNum: number,
+    fallbackFn: (state: EditorState, pageNum: number) => T
+): T => {
     console.warn("Page number:", pageNum, "is out of range for the document. Using last page.");
     const lastPageNum = getLastPageNum(state.doc);
     return fallbackFn(state, lastPageNum);
@@ -154,23 +159,25 @@ const handleOutOfRangePageNum = <T>(state: EditorState, pageNum: number, fallbac
  * @param getNodeAttribute - A function to extract the attribute from the page node.
  * @returns {T} The attribute of the specified page or default.
  */
-export const getPageAttribute = <T>(
+export const getPageAttributeByPageNum = <T>(
     context: Editor | EditorState,
     pageNum: number,
     getDefault: () => T,
     getNodeAttribute: (node: PMNode) => Nullable<T>
 ): T => {
-    const state = context instanceof Editor ? context.state : context;
+    const state = getStateFromContext(context);
 
     if (!doesDocHavePageNodes(state)) {
         return getDefault();
     }
 
-    if (!isPageNumInRange(state.doc, pageNum)) {
-        return handleOutOfRangePageNum(state, pageNum, (s, p) => getPageAttribute(s, p, getDefault, getNodeAttribute));
+    const { doc } = state;
+
+    if (!isPageNumInRange(doc, pageNum)) {
+        return handleOutOfRangePageNum(state, pageNum, (s, p) => getPageAttributeByPageNum(s, p, getDefault, getNodeAttribute));
     }
 
-    const pageNode = getPageNodeByPageNum(state.doc, pageNum);
+    const pageNode = getPageNodeByPageNum(doc, pageNum);
     if (!pageNode) {
         return getDefault();
     }

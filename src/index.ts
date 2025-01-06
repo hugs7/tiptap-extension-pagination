@@ -32,7 +32,7 @@ export { getPageNumber, getThisPageNodePosition } from "./utils/pagination";
 export { getPageNumPaperSize, getPageNodePaperSize } from "./utils/paperSize";
 export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
-export { getPageNumPaperMargins, getPageNodePaperMargins } from "./utils/paperMargins";
+export { getPageNumPageMargins, getPageSectionNodePageMargins } from "./utils/pageSectionMargins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
 export { doesDocHavePageNodes } from "./utils/page";
 

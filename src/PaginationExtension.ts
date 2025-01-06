@@ -11,8 +11,10 @@ import { DEFAULT_PAPER_COLOUR } from "./constants/paperColours";
 import { DEFAULT_MARGIN_CONFIG } from "./constants/pageMargins";
 import { DEFAULT_PAPER_ORIENTATION } from "./constants/paperOrientation";
 import { PAGE_NODE_ATTR_KEYS } from "./constants/page";
-import PaginationPlugin from "./Plugins/Pagination";
+import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
+import { PAGE_SECTION_NODE_ATTR_KEYS } from "./constants/pageSection";
 import { BorderConfig, MultiSide, MarginConfig, PaperOrientation, PaperSize } from "./types/paper";
+import PaginationPlugin from "./Plugins/Pagination";
 import {
     getNextParagraph,
     getParagraphNodeAndPosition,
@@ -42,10 +44,9 @@ import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPage
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
 import { setPageNodesAttribute } from "./utils/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPaperMargins, setPageNodePosPaperMargins, updatePaperMargin } from "./utils/paperMargins";
+import { isMarginValid, isValidPageMargins, setPageSectionNodePosPageMargins, updatePageSectionMargin } from "./utils/pageSectionMargins";
 import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
-import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
 
 export interface PaginationOptions {
     /**
@@ -198,11 +199,11 @@ declare module "@tiptap/core" {
             setPagePaperOrientation: (pageNum: number, paperOrientation: PaperOrientation) => ReturnType;
 
             /**
-             * Get the default paper margins
-             * @returns {MarginConfig} The default paper margins
-             * @example editor.commands.getDefaultPaperMargins()
+             * Get the default page margins
+             * @returns {MarginConfig} The default page margins
+             * @example editor.commands.getDefaultPageMargins()
              */
-            getDefaultPaperMargins: () => MarginConfig;
+            getDefaultPageMargins: () => MarginConfig;
 
             /**
              * Set the paper margins for the document
@@ -681,7 +682,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
 
-            getDefaultPaperMargins: () => {
+            getDefaultPageMargins: () => {
                 return this.options.defaultMarginConfig;
             },
 
