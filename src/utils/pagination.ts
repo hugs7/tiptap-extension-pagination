@@ -695,7 +695,9 @@ export const buildNewDocument = (
     let currentHeight = 0;
 
     const oldToNewPosMap: CursorMap = new Map<number, number>();
-    let cumulativeNewDocPos = 1;
+    const pageOffset = 1;
+    const bodyOffset = 1;
+    let cumulativeNewDocPos = pageOffset + bodyOffset;
 
     for (let i = 0; i < contentNodes.length; i++) {
         const { node, pos: oldPos } = contentNodes[i];
