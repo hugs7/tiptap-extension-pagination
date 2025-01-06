@@ -180,6 +180,7 @@ export const setPageNodePosSideConfig = <V, T extends SideConfig<V>>(
         return false;
     }
 
+    // TODO: Allow page section nodes when appropriate
     if (!isPageNode(pageNode)) {
         console.error("Unexpected! Node at pos:", pagePos, "is not a page node!");
         return false;
