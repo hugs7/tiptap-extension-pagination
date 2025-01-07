@@ -1,7 +1,7 @@
 /**
- * @file /src/types/pageSection.ts
- * @name PageSection
- * @description Type definitions for bodys in the editor.
+ * @file /src/types/body.ts
+ * @name Body
+ * @description Type definitions for body in the editor.
  */
 
 import { MarginConfig } from "./page";
