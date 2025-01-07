@@ -17,9 +17,9 @@ import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { PageRegionNodeAttributesObject } from "../types/pageRegions";
 import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
-import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
+import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
-import { getHeaderFooterNodeAttributes, getPageRegionNode } from "./pageRegion/pageRegion";
+import { getFooterNodeAttributes, getHeaderNodeAttributes, getPageRegionNode } from "./pageRegion/pageRegion";
 import { getBodyNodeAttributes } from "./pageRegion/body";
 
 /**
@@ -56,7 +56,7 @@ const getPageNodeAttributesByPageNum = (state: EditorState, pageNum: number): Pa
  * @returns {PageRegionNodeAttributesObject} The default attributes of the page regions.
  */
 const getDefaultPageRegionNodeAttributes = (): PageRegionNodeAttributesObject => {
-    return { header: HEADER_FOOTER_DEFAULT_ATTRIBUTES, body: BODY_DEFAULT_ATTRIBUTES, footer: HEADER_FOOTER_DEFAULT_ATTRIBUTES };
+    return { header: HEADER_DEFAULT_ATTRIBUTES, body: BODY_DEFAULT_ATTRIBUTES, footer: FOOTER_DEFAULT_ATTRIBUTES };
 };
 
 /**
@@ -79,9 +79,9 @@ const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageR
     const bodyNode = getPageRegionNode(pageNode, "body");
     const footerNode = getPageRegionNode(pageNode, "footer");
 
-    const headerAttributes = headerNode ? getHeaderFooterNodeAttributes(headerNode) : HEADER_FOOTER_DEFAULT_ATTRIBUTES;
+    const headerAttributes = headerNode ? getHeaderNodeAttributes(headerNode) : HEADER_DEFAULT_ATTRIBUTES;
     const bodyAttributes = bodyNode ? getBodyNodeAttributes(bodyNode) : BODY_DEFAULT_ATTRIBUTES;
-    const footerAttributes = footerNode ? getHeaderFooterNodeAttributes(footerNode) : HEADER_FOOTER_DEFAULT_ATTRIBUTES;
+    const footerAttributes = footerNode ? getFooterNodeAttributes(footerNode) : FOOTER_DEFAULT_ATTRIBUTES;
 
     return { body: bodyAttributes, header: headerAttributes, footer: footerAttributes };
 };

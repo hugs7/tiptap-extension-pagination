@@ -5,7 +5,7 @@
  */
 
 import { NodeAttributes } from "../types/node";
-import { HeaderFooterNodeAttributes } from "../types/pageRegions";
+import { FooterNodeAttributes, HeaderFooterNodeAttributes, HeaderNodeAttributes } from "../types/pageRegions";
 
 export const HEADER_FOOTER_NODE_NAME = "header-footer" as const;
 
@@ -13,6 +13,7 @@ export const HEADER_FOOTER_NODE_NAME = "header-footer" as const;
  * Key for the header footer node attributes.
  */
 export const HEADER_FOOTER_NODE_ATTR_KEYS = {
+    type: "type",
     start: "start",
     height: "height",
     xMargins: "xMargins",
@@ -21,17 +22,31 @@ export const HEADER_FOOTER_NODE_ATTR_KEYS = {
 /**
  * Default attributes for header and footer nodes.
  */
-export const HEADER_FOOTER_DEFAULT_ATTRIBUTES: HeaderFooterNodeAttributes = {
+export const HEADER_FOOTER_DEFAULT_ATTRIBUTES: Omit<HeaderFooterNodeAttributes<unknown>, "type"> = {
     start: 10,
     height: 10,
     xMargins: { left: 25.4, right: 25.4 },
 };
 
 /**
+ * Default attributes for header nodes
+ */
+export const HEADER_DEFAULT_ATTRIBUTES: HeaderNodeAttributes = {
+    type: "header",
+    ...HEADER_FOOTER_DEFAULT_ATTRIBUTES,
+};
+
+/**
+ * Default attributes for footer nodes
+ */
+export const FOOTER_DEFAULT_ATTRIBUTES: FooterNodeAttributes = {
+    type: "footer",
+    ...HEADER_FOOTER_DEFAULT_ATTRIBUTES,
+};
+
+/**
  * The header/footer node attributes.
  */
-export const HEADER_FOOTER_ATTRIBUTES: NodeAttributes<HeaderFooterNodeAttributes> = {
-    start: { default: HEADER_FOOTER_DEFAULT_ATTRIBUTES.start },
-    height: { default: HEADER_FOOTER_DEFAULT_ATTRIBUTES.height },
-    xMargins: { default: HEADER_FOOTER_DEFAULT_ATTRIBUTES.xMargins },
-};
+export const HEADER_FOOTER_ATTRIBUTES: NodeAttributes<HeaderFooterNodeAttributes<unknown>> = Object.fromEntries(
+    Object.entries(HEADER_DEFAULT_ATTRIBUTES).map(([key, value]) => [key, { default: value }])
+) as NodeAttributes<HeaderFooterNodeAttributes<unknown>>;

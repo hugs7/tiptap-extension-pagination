@@ -10,7 +10,7 @@ import { DEFAULT_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { Nullable } from "../../types/record";
 import { BodyNodeAttributes } from "../../types/body";
 import { MarginConfig } from "../../types/page";
-import { getHeaderFooterNodeAttributes, getPageRegionNode } from "./pageRegion";
+import { getHeaderNodeAttributes, getPageRegionNode } from "./pageRegion";
 
 /**
  * Check if the given node is a body node.
@@ -60,7 +60,7 @@ export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): Margin
     const headerNode = getPageRegionNode(pageNode, "header");
     const footerNode = getPageRegionNode(pageNode, "footer");
     if (headerNode) {
-        const { start, height } = getHeaderFooterNodeAttributes(headerNode);
+        const { start, height } = getHeaderNodeAttributes(headerNode);
         const headerTotalHeight = start + height;
         bodyMargins.top -= headerTotalHeight;
         bodyMargins.bottom -= headerTotalHeight;
