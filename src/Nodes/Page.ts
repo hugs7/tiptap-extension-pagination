@@ -19,7 +19,7 @@ import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
-import { constructChildOnlyClipboardSerialiser } from "../Plugins/PreventCopy";
+import { constructChildOnlyClipboardSerialiser } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;

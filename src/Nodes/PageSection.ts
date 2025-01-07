@@ -15,7 +15,7 @@ import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { calculatePageSectionDimensions } from "../utils/pageSection/dimensions";
 import { calculateCumulativePageSectionMargins } from "../utils/pageSection/cumulativeMargins";
-import { constructChildOnlyClipboardSerialiser } from "../Plugins/PreventCopy";
+import { constructChildOnlyClipboardSerialiser } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const pageSectionAttribute = "data-page-section" as const;

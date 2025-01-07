@@ -1,7 +1,7 @@
 /**
- * @file /src/Plugins/PreventCopy.ts
- * @name PreventCopy
- * @description Custom plugin for preventing copying of content.
+ * @file /src/utils/clipboard.ts
+ * @name Clipboard
+ * @description Utility functions for clipboard operations.
  */
 
 import { DOMSerializer, Fragment, Node as PMNode, Schema } from "@tiptap/pm/model";
