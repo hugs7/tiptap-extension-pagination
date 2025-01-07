@@ -39,6 +39,36 @@ export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
 };
 
 /**
+ * Calculate the effective DOM margins of the header node.
+ * @param headerNode - The header node to calculate the margins for.
+ * @param yMargins - The y margins to set.
+ * @returns {void}
+ */
+const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): void => {
+    const nodeStart = getHeaderFooterNodeStart(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+    yMargins.top = nodeStart;
+};
+
+/**
+ * Calculate the effective DOM margins of the footer node.
+ * @param pageNode - The page node containing the body node.
+ * @param footerNode - The footer node to calculate the margins for.
+ * @param yMargins - The y margins to set.
+ * @returns {void}
+ */
+const calculateFooterMargins = (pageNode: PMNode, footerNode: PMNode, yMargins: YMarginConfig): void => {
+    const footerNodeStart = getHeaderFooterNodeStart(footerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.start;
+    yMargins.top = footerNodeStart;
+
+    const bodyNode = getPageRegionNode(pageNode, "body");
+    if (bodyNode) {
+        const { top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+        const { height } = calculateBodyDimensions(pageNode, bodyNode);
+        yMargins.top -= top + height;
+    }
+};
+
+/**
  * Calculate the effective DOM margins of the header or footer node. Takes into account
  * what the margins should be to ensure the other page region nodes are
  * visible on the page.
@@ -52,22 +82,10 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
 
     switch (nodeType) {
         case "header":
-            const headerNode = headerFooterNode;
-            const nodeStart = getHeaderFooterNodeStart(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
-            yMargins.top = nodeStart;
+            calculateHeaderMargins(headerFooterNode, yMargins);
             break;
         case "footer":
-            const footerNode = headerFooterNode;
-            const footerNodeStart = getHeaderFooterNodeStart(footerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.start;
-            yMargins.top = footerNodeStart;
-
-            const bodyNode = getPageRegionNode(pageNode, "body");
-            if (bodyNode) {
-                const { top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
-                const { height } = calculateBodyDimensions(pageNode, bodyNode);
-                yMargins.top -= top + height;
-            }
-
+            calculateFooterMargins(pageNode, headerFooterNode, yMargins);
             break;
     }
 
