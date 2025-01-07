@@ -23,8 +23,9 @@ import { getPageSectionType } from "./pageSection";
 export const calculatePageSectionDimensions = (pageSectionNode: PMNode): PaperDimensions => {
     const paperSize = getPageNodePaperSize(pageSectionNode) ?? DEFAULT_PAPER_SIZE;
     const paperOrientation = getPageNodePaperOrientation(pageSectionNode) ?? DEFAULT_PAPER_ORIENTATION;
-    const sectionType = getPageSectionType(pageSectionNode) ?? DEFAULT_PAGE_SECTION_TYPE;
-    const { bottom, left, right, top } = getPageSectionNodePageMargins(pageSectionNode) ?? getDefaultPageSectionPageMargins(sectionType);
+    const { bottom, left, right, top } =
+        getPageSectionNodePageMargins(pageSectionNode) ??
+        getDefaultPageSectionPageMargins(getPageSectionType(pageSectionNode) ?? DEFAULT_PAGE_SECTION_TYPE);
 
     const { width: pageWidth, height: pageHeight } = getPaperDimensions(paperSize, paperOrientation);
     return { width: pageWidth - (left + right), height: pageHeight - (top + bottom) };
