@@ -11,8 +11,9 @@ import { DEFAULT_MARGIN_CONFIG } from "./constants/pageMargins";
 import { DEFAULT_PAPER_ORIENTATION } from "./constants/paperOrientation";
 import { PAGE_NODE_ATTR_KEYS } from "./constants/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
-import { PAGE_SECTION_NODE_ATTR_KEYS } from "./constants/body";
-import { BorderConfig, MultiSide, MarginConfig, PaperOrientation, PaperSize } from "./types/paper";
+import { BODY_NODE_ATTR_KEYS } from "./constants/body";
+import { PaperOrientation, PaperSize } from "./types/paper";
+import { BorderConfig, MultiSide, MarginConfig } from "./types/page";
 import KeymapPlugin from "./Plugins/Keymap";
 import PaginationPlugin from "./Plugins/Pagination";
 import { getPageNodePosByPageNum, isPageNode } from "./utils/page";
@@ -20,7 +21,7 @@ import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPage
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
 import { setPageNodesAttribute } from "./utils/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPageMargins, setPageSectionNodePosPageMargins, updatePageSectionMargin } from "./utils/pageSection/margins";
+import { isMarginValid, isValidPageMargins, setBodyNodePosPageMargins, updateBodyMargin } from "./utils/pageRegion/margins";
 import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
 
@@ -176,11 +177,10 @@ declare module "@tiptap/core" {
 
             /**
              * Get the default page margins
-             * @param sectionType The type of page section to get the margins for
              * @returns {MarginConfig} The default page margins
              * @example editor.commands.getDefaultPageMargins()
              */
-            getDefaultPageSectionMargins: (sectionType: PageSectionType) => MarginConfig;
+            getDefaultPageMargins: () => MarginConfig;
 
             /**
              * Set the page margins for the document
@@ -422,29 +422,21 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
 
-            getDefaultPageSectionMargins: (sectionType: PageSectionType) => {
-                switch (sectionType) {
-                    case "header":
-                    case "footer":
-                        return { ...this.options.defaultMarginConfig, top: 0, bottom: 0 };
-                    case "body":
-                        return this.options.defaultMarginConfig;
-                }
-            },
+            getDefaultPageMargins: () => this.options.defaultMarginConfig,
 
-            setDocumentPageMargins: setDocumentSideConfig(PAGE_SECTION_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
+            setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
 
             setDocumentDefaultPageMargins:
                 () =>
                 ({ editor }) =>
                     editor.commands.setDocumentPageMargins(this.options.defaultMarginConfig),
 
-            setPagePageMargins: setPageSideConfig(setPageSectionNodePosPageMargins),
+            setPagePageMargins: setPageSideConfig(setBodyNodePosPageMargins),
 
             setDocumentPageMargin:
                 (margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setDocumentSideValue(editor.commands.setDocumentPageMargins, isMarginValid, updatePageSectionMargin)(margin, value)({
+                    setDocumentSideValue(editor.commands.setDocumentPageMargins, isMarginValid, updateBodyMargin)(margin, value)({
                         tr,
                         dispatch,
                     }),
@@ -452,7 +444,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
             setPagePageMargin:
                 (pageNum: number, margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setPageSideValue(editor.commands.setPagePageMargins, isMarginValid, updatePageSectionMargin)(pageNum, margin, value)({
+                    setPageSideValue(editor.commands.setPagePageMargins, isMarginValid, updateBodyMargin)(pageNum, margin, value)({
                         tr,
                         dispatch,
                     }),

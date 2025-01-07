@@ -9,11 +9,12 @@ import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
-import { BorderConfig, MultiSide } from "../types/paper";
+import { BorderConfig } from "../types/page";
 import { Nullable } from "../types/record";
 import { px } from "./units";
 import { getPageAttributeByPageNum } from "./page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "./setSideConfig";
+import { MultiAxisSide } from "../types/page";
 
 /**
  * Checks if a (single) border is valid.
@@ -107,13 +108,7 @@ export const setPageNodePosPageBorders = (
  * @param value - The new value of the border.
  * @returns {boolean} True if the border was updated, false otherwise.
  */
-export const updatePageBorder = (
-    tr: Transaction,
-    pagePos: number,
-    pageNode: PMNode,
-    border: Exclude<MultiSide, "all">,
-    value: number
-): boolean => {
+export const updatePageBorder = (tr: Transaction, pagePos: number, pageNode: PMNode, border: MultiAxisSide, value: number): boolean => {
     return updatePageSideConfig(
         tr,
         pagePos,

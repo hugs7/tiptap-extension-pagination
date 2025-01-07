@@ -13,6 +13,7 @@ export type * from "./types/cursor";
 export type * from "./types/node";
 export type * from "./types/page";
 export type * from "./types/paper";
+export type * from "./types/body";
 
 // === Constants ===
 export { DEFAULT_PAPER_SIZE, paperSizes, paperDimensions } from "./constants/paperSize";
@@ -24,7 +25,8 @@ export { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
 
 // === Nodes ===
 import PageNode from "./Nodes/Page";
-import PageSectionNode from "./Nodes/PageSection";
+import HeaderFooterNode from "./Nodes/HeaderFooter";
+import BodyNode from "./Nodes/Body";
 
 // === Utils ===
 export { isPageNode } from "./utils/page";
@@ -32,11 +34,11 @@ export { getPageNumber, getThisPageNodePosition } from "./utils/pagination";
 export { getPageNumPaperSize, getPageNodePaperSize } from "./utils/paperSize";
 export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
-export { getPageNumSectionPageMargins, getPageSectionNodePageMargins } from "./utils/pageSection/margins";
+export { getPageNumBodyMargins, getBodyNodeMargins } from "./utils/pageRegion/margins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
 export { doesDocHavePageNodes } from "./utils/page";
 
 // === Exports ===
-export { PageNode, PageSectionNode };
+export { PageNode, HeaderFooterNode, BodyNode };
 
 export default PaginationExtension;

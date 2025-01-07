@@ -4,7 +4,5 @@
  * @description Defines constants for directions
  */
 
-export const ASCENDING = 1 as const;
-export const DESCENDING = -1 as const;
-
-export type Sign = typeof ASCENDING | typeof DESCENDING;
+export const POSITIVE_SIGN = 1 as const;
+export const NEGATIVE_SIGN = -1 as const;
