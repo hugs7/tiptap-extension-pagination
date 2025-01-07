@@ -89,7 +89,7 @@ export const getPageSectionAttributeByPageNum = <T>(
 
     const { doc } = state;
 
-    if (isPageNumInRange(doc, pageNum)) {
+    if (!isPageNumInRange(doc, pageNum)) {
         return handleOutOfRangePageNum(state, pageNum, (s, p) =>
             getPageSectionAttributeByPageNum(s, p, sectionType, getDefault, getNodeAttribute)
         );
