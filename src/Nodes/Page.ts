@@ -5,7 +5,6 @@
  */
 
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
@@ -19,7 +18,7 @@ import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
-import { constructChildOnlyClipboardSerialiser } from "../utils/clipboard";
+import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;
@@ -99,15 +98,9 @@ const PageNode = Node.create<PageNodeOptions>({
 
     addProseMirrorPlugins() {
         const paginationClipboardSerializer = constructChildOnlyClipboardSerialiser(this.editor.schema, isPageNode);
+        const clipboardPlugin = constructClipboardPlugin("pageClipboardPlugin", paginationClipboardSerializer);
 
-        return [
-            new Plugin({
-                key: new PluginKey("pageClipboardPlugin"),
-                props: {
-                    clipboardSerializer: paginationClipboardSerializer,
-                },
-            }),
-        ];
+        return [clipboardPlugin];
     },
 });
 

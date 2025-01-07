@@ -6,7 +6,6 @@
  */
 
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { getPageSectionType, isPageSectionNode } from "../utils/pageSection/pageSection";
 import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
@@ -15,7 +14,7 @@ import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { calculatePageSectionDimensions } from "../utils/pageSection/dimensions";
 import { calculateCumulativePageSectionMargins } from "../utils/pageSection/cumulativeMargins";
-import { constructChildOnlyClipboardSerialiser } from "../utils/clipboard";
+import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const pageSectionAttribute = "data-page-section" as const;
@@ -85,15 +84,9 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
 
     addProseMirrorPlugins() {
         const pageSectionClipboardSerializer = constructChildOnlyClipboardSerialiser(this.editor.schema, isPageSectionNode);
+        const clipboardPlugin = constructClipboardPlugin("pageSectionClipboardPlugin", pageSectionClipboardSerializer);
 
-        return [
-            new Plugin({
-                key: new PluginKey("pageSectionClipboardPlugin"),
-                props: {
-                    clipboardSerializer: pageSectionClipboardSerializer,
-                },
-            }),
-        ];
+        return [clipboardPlugin];
     },
 });
 
