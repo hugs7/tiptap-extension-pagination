@@ -5,9 +5,14 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { HeaderFooterNodeAttributes, PageRegion } from "../../types/pageRegions";
+import { HeaderNodeAttributes, FooterNodeAttributes, PageRegion } from "../../types/pageRegions";
 import { Nullable } from "../../types/record";
-import { HEADER_FOOTER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_NODE_ATTR_KEYS, HEADER_FOOTER_NODE_NAME } from "../../constants/pageRegions";
+import {
+    HEADER_DEFAULT_ATTRIBUTES,
+    FOOTER_DEFAULT_ATTRIBUTES,
+    HEADER_FOOTER_NODE_ATTR_KEYS,
+    HEADER_FOOTER_NODE_NAME,
+} from "../../constants/pageRegions";
 import { Editor } from "@tiptap/core";
 import { EditorState } from "@tiptap/pm/state";
 import { getStateFromContext } from "../editor";
@@ -72,13 +77,33 @@ export const getHeaderFooterNodeHeight = (headerFooterNode: PMNode): Nullable<nu
 };
 
 /**
- * Retrieves the page region node attributes, filling in any missing attributes with the default values.
+ * Retrieves the header node attributes, filling in any missing attributes with the default values.
  * @param headerFooterNode - The header or footer node to retrieve the attributes for.
- * @returns {HeaderFooterNodeAttributes} The attributes of the specified page region.
+ * @returns {HeaderNodeAttributes} The attributes of the specified header.
  */
-export const getHeaderFooterNodeAttributes = (headerFooterNode: PMNode): HeaderFooterNodeAttributes => {
+export const getHeaderNodeAttributes = (headerFooterNode: PMNode): HeaderNodeAttributes => {
     const { attrs } = headerFooterNode;
-    return { ...HEADER_FOOTER_DEFAULT_ATTRIBUTES, ...attrs };
+    const mergedAttrs = { ...HEADER_DEFAULT_ATTRIBUTES, ...attrs };
+    if (mergedAttrs.type !== "header") {
+        console.warn("Header node attributes are not of type 'header'");
+    }
+
+    return mergedAttrs;
+};
+
+/**
+ * Retrieves the footer node attributes, filling in any missing attributes with the default values.
+ * @param headerFooterNode - The header or footer node to retrieve the attributes for.
+ * @returns {FooterNodeAttributes} The attributes of the specified footer.
+ */
+export const getFooterNodeAttributes = (headerFooterNode: PMNode): FooterNodeAttributes => {
+    const { attrs } = headerFooterNode;
+    const mergedAttrs = { ...FOOTER_DEFAULT_ATTRIBUTES, ...attrs };
+    if (mergedAttrs.type !== "footer") {
+        console.warn("Footer node attributes are not of type 'footer'");
+    }
+
+    return mergedAttrs;
 };
 
 /**
