@@ -9,9 +9,7 @@ import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { HEADER_FOOTER_NODE_NAME } from "../constants/pageRegions";
 import { PAGE_NODE_NAME, DEFAULT_PAGE_GAP, PAGE_ATTRIBUTES } from "../constants/page";
-import { BODY_NODE_NAME } from "../constants/body";
 import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
 import { getPageNodePaperColour } from "../utils/paperColour";
 import { isPageNode } from "../utils/page";
@@ -31,7 +29,7 @@ type PageNodeOptions = {
 const PageNode = Node.create<PageNodeOptions>({
     name: PAGE_NODE_NAME,
     group: "block",
-    content: `(${HEADER_FOOTER_NODE_NAME}{0, 2})|(${BODY_NODE_NAME}))`, // We must have a body section and can optionally have a header and footer
+    content: `block{1,3}`, // We must have a body section and can optionally have a header and footer
     defining: true,
     isolating: false,
 
