@@ -105,7 +105,7 @@ export const calculateShorthandMargins = (pageMargins: MarginConfig): string => 
  * @param tr - The transaction to apply the change to.
  * @param dispatch - The dispatch function to apply the transaction.
  * @param pagePos - The position of the body node to set the page margins for.
- * @param pageSectionNode - The body node to set the page margins for.
+ * @param bodyNode - The body node to set the page margins for.
  * @param pageMargins - The page margins to set.
  * @returns {boolean} True if the page margins were set, false otherwise.
  */
@@ -113,14 +113,14 @@ export const setBodyNodePosPageMargins = (
     tr: Transaction,
     dispatch: Dispatch,
     pagePos: number,
-    pageSectionNode: PMNode,
+    bodyNode: PMNode,
     pageMargins: MarginConfig
 ): boolean => {
     return setPageNodePosSideConfig(
         tr,
         dispatch,
         pagePos,
-        pageSectionNode,
+        bodyNode,
         pageMargins,
         isValidPageMargins,
         getBodyNodeMargins,
@@ -132,22 +132,16 @@ export const setBodyNodePosPageMargins = (
  * Updates the margin on the given page. Does not dispatch the transaction.
  * @param tr - The transaction to apply the change to.
  * @param pagePos - The position of the body node to update the margin for.
- * @param pageSectionNode - The body node to update the margin for.
+ * @param bodyNode - The body node to update the margin for.
  * @param margin - The margin to update.
  * @param value - The new value of the margin.
  * @returns {boolean} True if the margin was updated, false otherwise.
  */
-export const updateBodyMargin = (
-    tr: Transaction,
-    pagePos: number,
-    pageSectionNode: PMNode,
-    margin: MultiAxisSide,
-    value: number
-): boolean => {
+export const updateBodyMargin = (tr: Transaction, pagePos: number, bodyNode: PMNode, margin: MultiAxisSide, value: number): boolean => {
     return updatePageSideConfig(
         tr,
         pagePos,
-        pageSectionNode,
+        bodyNode,
         margin,
         value,
         getBodyNodeMargins,
