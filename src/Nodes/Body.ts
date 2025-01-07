@@ -15,7 +15,7 @@ import { calculateBodyDimensions } from "../utils/pageRegion/dimensions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
-const pageSectionAttribute = "data-page-section" as const;
+const pageRegionAttribute = "data-page-region" as const;
 
 const BodyNode = Node.create({
     name: BODY_NODE_NAME,
@@ -29,11 +29,11 @@ const BodyNode = Node.create({
     },
 
     parseHTML() {
-        return [parseHTMLNode(baseElement, pageSectionAttribute, true)];
+        return [parseHTMLNode(baseElement, pageRegionAttribute, true)];
     },
 
     renderHTML({ HTMLAttributes }) {
-        return [baseElement, mergeAttributes(HTMLAttributes, { [pageSectionAttribute]: true, class: BODY_NODE_NAME }), 0];
+        return [baseElement, mergeAttributes(HTMLAttributes, { [pageRegionAttribute]: true, class: BODY_NODE_NAME }), 0];
     },
 
     addNodeView() {
@@ -47,7 +47,7 @@ const BodyNode = Node.create({
             }
 
             const dom = document.createElement(baseElement);
-            dom.setAttribute(pageSectionAttribute, String(true));
+            dom.setAttribute(pageRegionAttribute, String(true));
             dom.classList.add(BODY_NODE_NAME);
 
             const { width, height } = calculateBodyDimensions(pageNode, node);
@@ -73,7 +73,7 @@ const BodyNode = Node.create({
     },
 
     addProseMirrorPlugins() {
-        return [constructChildOnlyClipboardPlugin("pageSectionChildOnlyClipboardPlugin", this.editor.schema, isBodyNode)];
+        return [constructChildOnlyClipboardPlugin("pageRegionChildOnlyClipboardPlugin", this.editor.schema, isBodyNode)];
     },
 });
 
