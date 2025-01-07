@@ -8,7 +8,7 @@ import { NodeAttributes } from "../types/node";
 import { BodyNodeAttributes } from "../types/body";
 import { DEFAULT_MARGIN_CONFIG } from "./pageMargins";
 
-export const BODY_NODE_NAME = "pageSection" as const;
+export const BODY_NODE_NAME = "body" as const;
 
 /**
  * Lookup keys for body node attributes.
