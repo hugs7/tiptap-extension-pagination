@@ -6,7 +6,6 @@
 
 import { NodeAttributes } from "../types/node";
 import PageSectionType, { PageSectionNodeAttributes } from "../types/pageSection";
-import { PAGE_ATTRIBUTES } from "./page";
 import { DEFAULT_MARGIN_CONFIG } from "./pageMargins";
 
 export const PAGE_SECTION_NODE_NAME = "pageSection" as const;
@@ -34,7 +33,5 @@ export const PAGE_SECTION_NODE_ATTR_KEYS = {
  */
 export const PAGE_SECTION_ATTRIBUTES: NodeAttributes<PageSectionNodeAttributes> = {
     type: { default: DEFAULT_PAGE_SECTION_TYPE },
-    paperSize: PAGE_ATTRIBUTES.paperSize,
-    paperOrientation: PAGE_ATTRIBUTES.paperOrientation,
     pageMargins: { default: DEFAULT_MARGIN_CONFIG },
 };

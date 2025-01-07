@@ -37,11 +37,9 @@ const getPageNodeAttributes = (state: EditorState, pageNum: number): PageNodeAtt
  * @returns {PageNodeAttributes} The attributes of the specified page.
  */
 const getPageSectionNodeAttributes = (state: EditorState, pageNum: number, sectionType: PageSectionType): PageSectionNodeAttributes => {
-    const paperSize = getPageNumPaperSize(state, pageNum);
-    const paperOrientation = getPageNumPaperOrientation(state, pageNum);
     const pageMargins = getPageNumSectionPageMargins(state, pageNum, sectionType);
 
-    return { paperSize, paperOrientation, pageMargins, type: sectionType };
+    return { pageMargins, type: sectionType };
 };
 
 /**
