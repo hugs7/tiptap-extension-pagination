@@ -63,7 +63,7 @@ const getPageSectionsNodeAttributes = (state: EditorState, pageNum: number): Pag
  * @returns { PageNodeAttributes, PageSectionNodeAttributes, PagePixelDimensions } The attributes of the page node,
  * page section node and the pixel dimensions of the page.
  */
-export const getCalculatedPageNodeAttributes = (
+export const getPaginationNodeAttributes = (
     state: EditorState,
     pageNum: number
 ): {
