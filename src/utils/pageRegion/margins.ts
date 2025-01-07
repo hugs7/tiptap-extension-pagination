@@ -1,5 +1,5 @@
 /**
- * @file /src/utils/pageRegoin/margins.ts
+ * @file /src/utils/pageRegion/margins.ts
  * @name Margins
  * @description Utility functions for body margins
  */
