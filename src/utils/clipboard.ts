@@ -12,7 +12,7 @@ import { Plugin, PluginKey } from "@tiptap/pm/state";
  * @param schema - The schema to use for serialisation.
  * @returns {DOMSerializer} The constructed clipboard serialiser.
  */
-export const constructChildOnlyClipboardSerialiser = (schema: Schema, isNode: (node: PMNode) => boolean): DOMSerializer => {
+const constructChildOnlyClipboardSerialiser = (schema: Schema, isNode: (node: PMNode) => boolean): DOMSerializer => {
     // Extend DOMSerializer to override serializeFragment
     const clipboardSerialiser = Object.create(DOMSerializer.fromSchema(schema));
 
@@ -42,11 +42,23 @@ export const constructChildOnlyClipboardSerialiser = (schema: Schema, isNode: (n
  * @param serialiser - The serialiser to use for clipboard operations.
  * @returns {Plugin} The constructed clipboard plugin.
  */
-export const constructClipboardPlugin = (name: string, serialiser: DOMSerializer): Plugin => {
+const constructClipboardPlugin = (name: string, serialiser: DOMSerializer): Plugin => {
     return new Plugin({
         key: new PluginKey(name),
         props: {
             clipboardSerializer: serialiser,
         },
     });
+};
+
+/**
+ * Constructs a clipboard plugin that serialises only the children of the nodes of the specified schema.
+ * @param name - The plugin key.
+ * @param schema - The schema to use for serialisation.
+ * @param isNode - A function that returns true if the node is a page node.
+ * @returns {Plugin} The constructed clipboard plugin.
+ */
+export const constructChildOnlyClipboardPlugin = (name: string, schema: Schema, isNode: (node: PMNode) => boolean): Plugin => {
+    const clipboardSerialiser = constructChildOnlyClipboardSerialiser(schema, isNode);
+    return constructClipboardPlugin(name, clipboardSerialiser);
 };

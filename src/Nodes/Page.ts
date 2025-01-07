@@ -18,7 +18,7 @@ import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { addNodeAttributes, parseHTMLNode } from "../utils/node";
-import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
+import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;
@@ -92,10 +92,7 @@ const PageNode = Node.create<PageNodeOptions>({
     },
 
     addProseMirrorPlugins() {
-        const paginationClipboardSerializer = constructChildOnlyClipboardSerialiser(this.editor.schema, isPageNode);
-        const clipboardPlugin = constructClipboardPlugin("pageClipboardPlugin", paginationClipboardSerializer);
-
-        return [clipboardPlugin];
+        return [constructChildOnlyClipboardPlugin("pageClipboardPlugin", this.editor.schema, isPageNode)];
     },
 });
 
