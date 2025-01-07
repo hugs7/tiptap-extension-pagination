@@ -89,7 +89,7 @@ const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageR
 /**
  * Retrieves the page node attributes and calculates the pixel dimensions of the page.
  * @param pageNodeAttributes - The attributes of the page node.
- * @returns { PageNodeAttributes, PageSectionNodeAttributes, PagePixelDimensions } The attributes of the page node,
+ * @returns { PageNodeAttributes, PageRegionNodeAttributesObject, PagePixelDimensions } The attributes of the page node,
  * body node and the pixel dimensions of the page.
  */
 export const getPaginationNodeAttributes = (
