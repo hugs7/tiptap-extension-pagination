@@ -28,7 +28,7 @@ export const calculateCumulativePageSectionMargins = (
     const margins = getPageSectionNodePageMargins(pageSectionNode) ?? getDefaultPageSectionPageMargins(sectionType);
 
     const pageSectionIndex = getPageSectionIndex(sectionType);
-    const sectionsAbove = pageSectionTypes.slice(0, pageSectionIndex - 1);
+    const sectionsAbove = pageSectionTypes.slice(0, pageSectionIndex);
 
     return sectionsAbove.reduce<MarginConfig>((acc, aboveSectionType) => {
         const aboveSectionNode = getPageSectionNodeByType(parentPageNode, aboveSectionType);
