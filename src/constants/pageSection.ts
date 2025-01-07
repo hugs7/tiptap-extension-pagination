@@ -4,7 +4,7 @@
  * @description Constants for page sections in the editor.
  */
 
-import { AttributeConfig } from "../types/page";
+import { NodeAttributes } from "../types/node";
 import PageSectionType, { PageSectionNodeAttributes } from "../types/pageSection";
 import { PAGE_ATTRIBUTES } from "./page";
 import { DEFAULT_MARGIN_CONFIG } from "./pageMargins";
@@ -30,11 +30,9 @@ export const PAGE_SECTION_NODE_ATTR_KEYS = {
 } as const;
 
 /**
- * The default page section attributes.
+ * The page section node attributes.
  */
-export const PAGE_SECTION_ATTRIBUTES: {
-    [K in keyof PageSectionNodeAttributes]: AttributeConfig<PageSectionNodeAttributes[K]>;
-} = {
+export const PAGE_SECTION_ATTRIBUTES: NodeAttributes<PageSectionNodeAttributes> = {
     type: { default: DEFAULT_PAGE_SECTION_TYPE },
     paperSize: PAGE_ATTRIBUTES.paperSize,
     paperOrientation: PAGE_ATTRIBUTES.paperOrientation,

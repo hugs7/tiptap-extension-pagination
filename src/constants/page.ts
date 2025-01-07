@@ -5,7 +5,8 @@
  */
 
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { AttributeConfig, PageNodeAttributes } from "../types/page";
+import { PageNodeAttributes } from "../types/page";
+import { NodeAttributes } from "../types/node";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./pageBorders";
 import { DEFAULT_PAPER_SIZE } from "./paperSize";
 import { DEFAULT_PAPER_COLOUR } from "./paperColours";
@@ -19,9 +20,7 @@ export const PAGE_NODE_ATTR_KEYS = {
     pageBorders: "pageBorders",
 } as const;
 
-export const PAGE_ATTRIBUTES: {
-    [K in keyof PageNodeAttributes]: AttributeConfig<PageNodeAttributes[K]>;
-} = {
+export const PAGE_ATTRIBUTES: NodeAttributes<PageNodeAttributes> = {
     paperSize: { default: DEFAULT_PAPER_SIZE },
     paperColour: { default: DEFAULT_PAPER_COLOUR },
     paperOrientation: { default: DEFAULT_PAPER_ORIENTATION },
