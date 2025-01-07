@@ -47,6 +47,21 @@ export const getPageSectionNodePageMargins = (pageSectionNode: PMNode): Nullable
 };
 
 /**
+ * Retrieves the default page margin config of a specific page section.
+ * @param sectionType - The type of the page section node to retrieve the default page margin config for.
+ * @returns {MarginConfig} The default page margin config of the specified page section.
+ */
+export const getDefaultPageSectionPageMargins = (sectionType: PageSectionType): MarginConfig => {
+    switch (sectionType) {
+        case "header":
+        case "footer":
+            return { ...DEFAULT_MARGIN_CONFIG, top: 0, bottom: 0 };
+        case "body":
+            return DEFAULT_MARGIN_CONFIG;
+    }
+};
+
+/**
  * Retrieves the page margin config of a specific page section using the editor instance.
  * Falls back to the default page margin config if the page number is invalid.
  * @param context - The current editor instance or editor state.
@@ -59,8 +74,24 @@ export const getPageNumSectionPageMargins = (
     pageNum: number,
     sectionType: PageSectionType
 ): MarginConfig => {
-    const getDefault = context instanceof Editor ? context.commands.getDefaultPageMargins : () => DEFAULT_MARGIN_CONFIG;
-    return getPageSectionAttributeByPageNum(context, pageNum, sectionType, getDefault, getPageSectionNodePageMargins);
+    const getDefault = () =>
+        context instanceof Editor
+            ? context.commands.getDefaultPageSectionMargins(sectionType)
+            : getDefaultPageSectionPageMargins(sectionType);
+    const marginConfig = getPageSectionAttributeByPageNum(context, pageNum, sectionType, getDefault, getPageSectionNodePageMargins);
+
+    if (sectionType !== "body") {
+        // Ensure top and bottom margins are 0 for header and footer sections
+        if (marginConfig.top !== 0) {
+            marginConfig.top = 0;
+        }
+
+        if (marginConfig.bottom !== 0) {
+            marginConfig.bottom = 0;
+        }
+    }
+
+    return marginConfig;
 };
 
 /**
