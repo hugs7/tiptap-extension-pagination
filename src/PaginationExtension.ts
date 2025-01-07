@@ -14,6 +14,7 @@ import { PAGE_NODE_ATTR_KEYS } from "./constants/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
 import { PAGE_SECTION_NODE_ATTR_KEYS } from "./constants/pageSection";
 import { BorderConfig, MultiSide, MarginConfig, PaperOrientation, PaperSize } from "./types/paper";
+import PageSectionType from "./types/pageSection";
 import PaginationPlugin from "./Plugins/Pagination";
 import {
     getNextParagraph,
@@ -200,10 +201,11 @@ declare module "@tiptap/core" {
 
             /**
              * Get the default page margins
+             * @param sectionType The type of page section to get the margins for
              * @returns {MarginConfig} The default page margins
              * @example editor.commands.getDefaultPageMargins()
              */
-            getDefaultPageMargins: () => MarginConfig;
+            getDefaultPageSectionMargins: (sectionType: PageSectionType) => MarginConfig;
 
             /**
              * Set the page margins for the document
@@ -684,8 +686,14 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
 
-            getDefaultPageMargins: () => {
-                return this.options.defaultMarginConfig;
+            getDefaultPageSectionMargins: (sectionType: PageSectionType) => {
+                switch (sectionType) {
+                    case "header":
+                    case "footer":
+                        return { ...this.options.defaultMarginConfig, top: 0, bottom: 0 };
+                    case "body":
+                        return this.options.defaultMarginConfig;
+                }
             },
 
             setDocumentPageMargins: setDocumentSideConfig(PAGE_SECTION_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
