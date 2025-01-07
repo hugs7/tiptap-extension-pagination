@@ -17,7 +17,7 @@ import { isPageNode } from "../utils/page";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
-import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
+import { addNodeAttributes, parseHTMLNode } from "../utils/node";
 import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
@@ -45,12 +45,7 @@ const PageNode = Node.create<PageNodeOptions>({
     },
 
     parseHTML() {
-        return [
-            {
-                tag: `${baseElement}[${dataPageAttribute}]`,
-                getAttrs: parseHTMLNodeGetAttrs(dataPageAttribute, true),
-            },
-        ];
+        return [parseHTMLNode(baseElement, dataPageAttribute, true)];
     },
 
     renderHTML({ HTMLAttributes }) {
