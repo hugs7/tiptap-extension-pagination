@@ -81,7 +81,7 @@ export const calculatePageSectionMargins = (pageMargins: MarginConfig): string =
  * @param tr - The transaction to apply the change to.
  * @param dispatch - The dispatch function to apply the transaction.
  * @param pagePos - The position of the page section node to set the page margins for.
- * @param pageNode - The page section node to set the page margins for.
+ * @param pageSectionNode - The page section node to set the page margins for.
  * @param pageMargins - The page margins to set.
  * @returns {boolean} True if the page margins were set, false otherwise.
  */
@@ -89,14 +89,14 @@ export const setPageSectionNodePosPageMargins = (
     tr: Transaction,
     dispatch: Dispatch,
     pagePos: number,
-    pageNode: PMNode,
+    pageSectionNode: PMNode,
     pageMargins: MarginConfig
 ): boolean => {
     return setPageNodePosSideConfig(
         tr,
         dispatch,
         pagePos,
-        pageNode,
+        pageSectionNode,
         pageMargins,
         isValidPageMargins,
         getPageSectionNodePageMargins,
@@ -108,7 +108,7 @@ export const setPageSectionNodePosPageMargins = (
  * Updates the margin on the given page. Does not dispatch the transaction.
  * @param tr - The transaction to apply the change to.
  * @param pagePos - The position of the page section node to update the margin for.
- * @param pageNode - The page section node to update the margin for.
+ * @param pageSectionNode - The page section node to update the margin for.
  * @param margin - The margin to update.
  * @param value - The new value of the margin.
  * @returns {boolean} True if the margin was updated, false otherwise.
@@ -116,14 +116,14 @@ export const setPageSectionNodePosPageMargins = (
 export const updatePageSectionMargin = (
     tr: Transaction,
     pagePos: number,
-    pageNode: PMNode,
+    pageSectionNode: PMNode,
     margin: Exclude<MultiSide, "all">,
     value: number
 ): boolean => {
     return updatePageSideConfig(
         tr,
         pagePos,
-        pageNode,
+        pageSectionNode,
         margin,
         value,
         getPageSectionNodePageMargins,
