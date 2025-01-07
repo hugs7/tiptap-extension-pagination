@@ -83,7 +83,7 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
  * @returns {MarginConfig} The page margin config of the specified page or default.
  */
 export const getPageNumBodyMargins = (context: Editor | EditorState, pageNum: number): MarginConfig => {
-    const getDefault = () => (context instanceof Editor ? context.commands.getDefaultPageMargins() : DEFAULT_MARGIN_CONFIG);
+    const getDefault = () => DEFAULT_MARGIN_CONFIG;
     return getPageRegionAttributeByPageNum(context, pageNum, "body", getDefault, getBodyNodeMargins);
 };
 
