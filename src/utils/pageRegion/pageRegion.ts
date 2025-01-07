@@ -12,6 +12,7 @@ import { Editor } from "@tiptap/core";
 import { EditorState } from "@tiptap/pm/state";
 import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
+import { XMarginConfig } from "../../types/page";
 
 /**
  * Determines if the given node is a header node.
@@ -20,6 +21,16 @@ import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, is
  */
 export const isHeaderFooterNode = (node: PMNode): boolean => {
     return node.type.name === HEADER_FOOTER_NODE_NAME;
+};
+
+/**
+ * Get the x margins from a header or footer node.
+ * @param headerFooterNode - The header or footer node.
+ * @returns {Nullable<XMarginConfig>} The x margins of the specified header or footer.
+ */
+export const getHeaderFooterNodeXMargins = (headerFooterNode: PMNode): Nullable<XMarginConfig> => {
+    const { attrs } = headerFooterNode;
+    return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.xMargins];
 };
 
 /**
