@@ -176,13 +176,6 @@ declare module "@tiptap/core" {
             setPagePaperOrientation: (pageNum: number, paperOrientation: PaperOrientation) => ReturnType;
 
             /**
-             * Get the default page margins
-             * @returns {MarginConfig} The default page margins
-             * @example editor.commands.getDefaultPageMargins()
-             */
-            getDefaultPageMargins: () => MarginConfig;
-
-            /**
              * Set the page margins for the document
              * @param pageMargins The page margins (top, right, bottom, left)
              * @example editor.commands.setDocumentPageMargins({ top: 10, right: 15, bottom: 10, left: 15 })
@@ -421,8 +414,6 @@ const PaginationExtension = Extension.create<PaginationOptions>({
 
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
-
-            getDefaultPageMargins: () => this.options.defaultMarginConfig,
 
             setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
 
