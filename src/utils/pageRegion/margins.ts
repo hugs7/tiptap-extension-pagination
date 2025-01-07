@@ -10,10 +10,15 @@ import { EditorState, Transaction } from "@tiptap/pm/state";
 import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
-import { HeaderFooter } from "../../types/pageRegions";
 import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import { getHeaderFooterNodeStart, getHeaderFooterNodeXMargins, getPageRegionAttributeByPageNum, getPageRegionNode } from "./pageRegion";
+import {
+    getHeaderFooterNodeStart,
+    getHeaderFooterNodeType,
+    getHeaderFooterNodeXMargins,
+    getPageRegionAttributeByPageNum,
+    getPageRegionNode,
+} from "./pageRegion";
 import { mm } from "../units";
 import { calculateBodyDimensions } from "./dimensions";
 import { getBodyNodeMargins } from "./body";
@@ -76,7 +81,7 @@ const calculateFooterMargins = (pageNode: PMNode, footerNode: PMNode, yMargins: 
  * @param headerFooterNode - The header or footer node to calculate the margins for.
  */
 export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode: PMNode): MarginConfig => {
-    const nodeType = headerFooterNode.type.name as HeaderFooter;
+    const nodeType = getHeaderFooterNodeType(headerFooterNode);
 
     let yMargins: YMarginConfig = { top: 0, bottom: 0 };
 
@@ -87,6 +92,8 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
         case "footer":
             calculateFooterMargins(pageNode, headerFooterNode, yMargins);
             break;
+        default:
+            console.error(`Unknown header/footer node type: ${nodeType}`);
     }
 
     const xMargins = getHeaderFooterNodeXMargins(headerFooterNode) ?? DEFAULT_X_MARGIN_CONFIG;
