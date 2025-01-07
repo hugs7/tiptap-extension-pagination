@@ -6,8 +6,6 @@
  */
 
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
-import { DOMSerializer, Fragment } from "@tiptap/pm/model";
-import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { getPageSectionType, isPageSectionNode } from "../utils/pageSection/pageSection";
 import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
@@ -16,6 +14,7 @@ import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { calculatePageSectionDimensions } from "../utils/pageSection/dimensions";
 import { calculateCumulativePageSectionMargins } from "../utils/pageSection/cumulativeMargins";
+import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const pageSectionAttribute = "data-page-section" as const;
@@ -84,40 +83,10 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     },
 
     addProseMirrorPlugins() {
-        const schema = this.editor.schema;
+        const pageSectionClipboardSerializer = constructChildOnlyClipboardSerialiser(this.editor.schema, isPageSectionNode);
+        const clipboardPlugin = constructClipboardPlugin("pageSectionClipboardPlugin", pageSectionClipboardSerializer);
 
-        // Extend DOMSerializer to override serializeFragment
-        const pageSectionClipboardSerializer = Object.create(DOMSerializer.fromSchema(schema));
-
-        // Override serializeFragment
-        pageSectionClipboardSerializer.serializeFragment = (
-            fragment: Fragment,
-            options = {},
-            target = document.createDocumentFragment()
-        ) => {
-            const serializer = DOMSerializer.fromSchema(schema);
-
-            fragment.forEach((node) => {
-                if (isPageSectionNode(node)) {
-                    // Serialize only the children of the page section node
-                    serializer.serializeFragment(node.content, options, target);
-                } else {
-                    // Serialize non-page section nodes directly
-                    serializer.serializeNode(node, options);
-                }
-            });
-
-            return target;
-        };
-
-        return [
-            new Plugin({
-                key: new PluginKey("pageSectionClipboardPlugin"),
-                props: {
-                    clipboardSerializer: pageSectionClipboardSerializer,
-                },
-            }),
-        ];
+        return [clipboardPlugin];
     },
 });
 
