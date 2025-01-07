@@ -18,7 +18,7 @@ import { getPageNodePaperColour } from "../utils/paperColour";
 import { isPageNode } from "../utils/page";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
-import { calculatePageBorders, getPageNodePageBorders } from "../utils/pageBorders";
+import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { addNodeAttributes } from "../utils/node";
 
 const baseElement = "div" as const;
@@ -82,7 +82,7 @@ const PageNode = Node.create<PageNodeOptions>({
             dom.style.width = mm(width);
             dom.style.height = mm(height);
 
-            dom.style.borderWidth = calculatePageBorders(pageBorders);
+            dom.style.borderWidth = calculateShorthandPageBorders(pageBorders);
             dom.style.borderStyle = "solid";
             dom.style.borderColor = "#ccc";
 

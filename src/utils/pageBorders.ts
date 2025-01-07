@@ -51,7 +51,7 @@ export const getPageNodePageBorders = (pageNode: PMNode): Nullable<BorderConfig>
  * @returns {string} The CSS string representation of the page borders. Remember MDN says
  * order is (top, right, bottom, left). See https://developer.mozilla.org/en-US/docs/Web/CSS/border.
  */
-export const calculatePageBorders = (pageBorders: BorderConfig): string => {
+export const calculateShorthandPageBorders = (pageBorders: BorderConfig): string => {
     const { top, right, bottom, left } = pageBorders;
 
     const borders = [top, right, bottom, left].map(px).join(" ");
