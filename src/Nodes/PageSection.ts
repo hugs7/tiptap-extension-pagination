@@ -14,7 +14,7 @@ import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { calculatePageSectionDimensions } from "../utils/pageSection/dimensions";
 import { calculateCumulativePageSectionMargins } from "../utils/pageSection/cumulativeMargins";
-import { constructChildOnlyClipboardSerialiser, constructClipboardPlugin } from "../utils/clipboard";
+import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 
 const baseElement = "div" as const;
 const pageSectionAttribute = "data-page-section" as const;
@@ -78,10 +78,7 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     },
 
     addProseMirrorPlugins() {
-        const pageSectionClipboardSerializer = constructChildOnlyClipboardSerialiser(this.editor.schema, isPageSectionNode);
-        const clipboardPlugin = constructClipboardPlugin("pageSectionClipboardPlugin", pageSectionClipboardSerializer);
-
-        return [clipboardPlugin];
+        return [constructChildOnlyClipboardPlugin("pageSectionChildOnlyClipboardPlugin", this.editor.schema, isPageSectionNode)];
     },
 });
 
