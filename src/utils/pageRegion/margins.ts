@@ -52,8 +52,9 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
 
     switch (nodeType) {
         case "header":
-            const nodeHeight = getHeaderFooterNodeStart(headerFooterNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
-            yMargins.top = nodeHeight;
+            const headerNode = headerFooterNode;
+            const nodeStart = getHeaderFooterNodeStart(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+            yMargins.top = nodeStart;
             break;
         case "footer":
             const footerNode = headerFooterNode;
