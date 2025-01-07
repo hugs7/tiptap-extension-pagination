@@ -8,7 +8,7 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { Dispatch } from "@tiptap/core";
 import { pageSides } from "../constants/pageSides";
-import { MultiSide, PageSide } from "../types/paper";
+import { PageSide, MultiSide, MultiAxisSide } from "../types/page";
 import { Nullable } from "../types/record";
 import { getPageNodePosByPageNum, isPageNode } from "./page";
 import { setPageNodeAttribute, setPageNodesAttribute } from "./setPageAttributes";
@@ -74,7 +74,7 @@ export const setDocumentSideValue =
     <V, T extends SideConfig<V>>(
         setDocumentSideConfig: (sideConfig: T) => boolean,
         isValueValid: (value: V) => boolean,
-        updateSideConfig: (tr: Transaction, pagePos: number, pageNode: PMNode, side: Exclude<MultiSide, "all">, value: V) => boolean
+        updateSideConfig: (tr: Transaction, pagePos: number, pageNode: PMNode, side: MultiAxisSide, value: V) => boolean
     ) =>
     (side: MultiSide, value: V) =>
     ({ tr, dispatch }: { tr: Transaction; dispatch: Dispatch }): boolean => {
@@ -118,7 +118,7 @@ export const setPageSideValue =
     <V, T extends SideConfig<V>>(
         setPageSideConfig: (pageNum: number, sideConfig: T) => boolean,
         isValueValid: (value: V) => boolean,
-        updateSideConfig: (tr: Transaction, pagePos: number, pageNode: PMNode, side: Exclude<MultiSide, "all">, value: V) => boolean
+        updateSideConfig: (tr: Transaction, pagePos: number, pageNode: PMNode, side: MultiAxisSide, value: V) => boolean
     ) =>
     (pageNum: number, side: MultiSide, value: V) =>
     ({ tr, dispatch }: { tr: Transaction; dispatch: Dispatch }): boolean => {
@@ -180,7 +180,7 @@ export const setPageNodePosSideConfig = <V, T extends SideConfig<V>>(
         return false;
     }
 
-    // TODO: Allow page section nodes when appropriate
+    // TODO: Allow body nodes when appropriate
     if (!isPageNode(pageNode)) {
         console.error("Unexpected! Node at pos:", pagePos, "is not a page node!");
         return false;
@@ -216,7 +216,7 @@ export const updatePageSideConfig = <V, T extends SideConfig<V>>(
     tr: Transaction,
     pagePos: number,
     pageNode: PMNode,
-    configObj: Exclude<MultiSide, "all">,
+    configObj: MultiAxisSide,
     value: V,
     getExistingConfig: (pageNode: PMNode) => Nullable<T>,
     isValidConfig: (config: T) => boolean,

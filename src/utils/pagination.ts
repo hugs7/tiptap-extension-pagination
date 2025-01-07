@@ -7,12 +7,12 @@
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
-import { MIN_PARAGRAPH_HEIGHT } from "../constants/tiptap";
+import { MIN_PARAGRAPH_HEIGHT } from "../constants/pagination";
 import { PAGE_NODE_NAME } from "../constants/page";
 import { NodePosArray } from "../types/node";
 import { CursorMap } from "../types/cursor";
 import { Nullable } from "../types/record";
-import { MarginConfig } from "../types/paper";
+import { MarginConfig } from "../types/page";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
@@ -681,10 +681,10 @@ export const buildNewDocument = (
     const pageSectionType = nodes.pageSection;
 
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
 
     const constructPageSections = (currentPageContent: PMNode[]): PMNode[] => {
-        const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageSectionsNodeAttributes;
+        const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageRegionNodeAttributes;
         const pageHeader = pageSectionType.create(headerAttrs, []);
         const pageBody = pageSectionType.create(bodyAttrs, currentPageContent);
         const pageFooter = pageSectionType.create(footerAttrs, []);
@@ -719,7 +719,7 @@ export const buildNewDocument = (
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum));
             }
         }
 

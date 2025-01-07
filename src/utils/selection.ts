@@ -6,7 +6,7 @@
 
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { EditorState, Selection, TextSelection, Transaction } from "@tiptap/pm/state";
-import { Sign } from "../constants/direction";
+import { Sign } from "../types/direction";
 import { Nullable } from "../types/record";
 import { isNodeEmpty } from "./node";
 

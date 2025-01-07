@@ -75,24 +75,3 @@ export type PaperSize = APaperSize | BPaperSize | CPaperSize | USPaperSize;
 
 export type PaperOrientation = "portrait" | "landscape";
 export type PaperOrientationSelect = { orientation: PaperOrientation; label: string };
-
-// ====== Margins ======
-
-export type PageSide = "top" | "right" | "bottom" | "left";
-export type Axis = "x" | "y";
-export type MultiSide = PageSide | Axis | "all";
-
-/**
- * Margins on the page in millimeters.
- */
-export type MarginConfig = {
-    [key in PageSide]: number;
-};
-
-export type CommonMarginName = "normal" | "narrow" | "moderate" | "wide";
-
-// ====== Page Borders ======
-
-export type BorderConfig = {
-    [key in PageSide]: number;
-};

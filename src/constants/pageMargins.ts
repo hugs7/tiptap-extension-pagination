@@ -4,7 +4,7 @@
  * @description Constants for page margins in the editor.
  */
 
-import { CommonMarginName, MarginConfig } from "../types/paper";
+import { CommonMarginName, MarginConfig, XMarginConfig } from "../types/page";
 
 /**
  * Common margin configurations for different margin sizes.
@@ -25,3 +25,11 @@ export const DEFAULT_PAGE_MARGIN_NAME: CommonMarginName = "normal";
  * Standard margins are 1 inch or 25.4mm on all sides.
  */
 export const DEFAULT_MARGIN_CONFIG: MarginConfig = commonMarginConfigs[DEFAULT_PAGE_MARGIN_NAME];
+
+/**
+ * Default x margin configuration.
+ */
+export const DEFAULT_X_MARGIN_CONFIG: XMarginConfig = {
+    left: DEFAULT_MARGIN_CONFIG.left,
+    right: DEFAULT_MARGIN_CONFIG.right,
+};
