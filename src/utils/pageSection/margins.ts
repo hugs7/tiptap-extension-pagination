@@ -80,14 +80,16 @@ export const getPageNumSectionPageMargins = (
             : getDefaultPageSectionPageMargins(sectionType);
     const marginConfig = getPageSectionAttributeByPageNum(context, pageNum, sectionType, getDefault, getPageSectionNodePageMargins);
 
-    if (sectionType !== "body") {
-        // Ensure top and bottom margins are 0 for header and footer sections
-        if (marginConfig.top !== 0) {
-            marginConfig.top = 0;
-        }
-
-        if (marginConfig.bottom !== 0) {
-            marginConfig.bottom = 0;
+    if (marginConfig.bottom !== 0) {
+        switch (sectionType) {
+            case "header":
+                // Any gap will be handled by the body top margin
+                marginConfig.bottom = 0;
+                break;
+            case "body":
+                // Any gap will be handled by the footer top margin
+                marginConfig.bottom = 0;
+                break;
         }
     }
 
