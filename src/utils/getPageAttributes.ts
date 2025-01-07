@@ -16,7 +16,7 @@ import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { PageRegionNodeAttributesObject } from "../types/pageRegions";
-import { getPageNodeByPageNum } from "./page";
+import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
 import { getHeaderFooterNodeAttributes, getPageRegionNode } from "./pageRegion/pageRegion";
@@ -52,15 +52,27 @@ const getPageNodeAttributesByPageNum = (state: EditorState, pageNum: number): Pa
 };
 
 /**
+ * Retrieves the default page region node attributes.
+ * @returns {PageRegionNodeAttributesObject} The default attributes of the page regions.
+ */
+const getDefaultPageRegionNodeAttributes = (): PageRegionNodeAttributesObject => {
+    return { header: HEADER_FOOTER_DEFAULT_ATTRIBUTES, body: BODY_DEFAULT_ATTRIBUTES, footer: HEADER_FOOTER_DEFAULT_ATTRIBUTES };
+};
+
+/**
  * Retrieves body attributes from the editor state.
  * @param state - The current editor state.
  * @param pageNum - The page number to retrieve the attributes for.
  * @returns {PageNodeAttributes} The attributes of the specified page.
  */
 const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageRegionNodeAttributesObject => {
+    if (!doesDocHavePageNodes(state)) {
+        return getDefaultPageRegionNodeAttributes();
+    }
+
     const pageNode = getPageNodeByPageNum(state.doc, pageNum);
     if (!pageNode) {
-        return { header: HEADER_FOOTER_DEFAULT_ATTRIBUTES, body: BODY_DEFAULT_ATTRIBUTES, footer: HEADER_FOOTER_DEFAULT_ATTRIBUTES };
+        return getDefaultPageRegionNodeAttributes();
     }
 
     const headerNode = getPageRegionNode(pageNode, "header");
