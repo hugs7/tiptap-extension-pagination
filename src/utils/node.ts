@@ -6,8 +6,8 @@
 
 import { Attrs, Node, ResolvedPos, TagParseRule } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
-import { AttributeConfig } from "../types/page";
 import { Attributes } from "@tiptap/core";
+import { NodeAttributes } from "../types/node";
 
 /**
  * Get the type of the node at the specified position.
@@ -113,9 +113,7 @@ export const nodeHasAttribute = (node: Node, attr: string): boolean => {
  * @param attributes - The attributes to add to the node.
  * @returns {Attributes} The attributes to add to the node.
  */
-export const addNodeAttributes = <T extends Record<string, any>>(attributes: {
-    [K in keyof T]: AttributeConfig<T[K]>;
-}): Attributes => {
+export const addNodeAttributes = <T extends Record<string, any>>(attributes: NodeAttributes<T>): Attributes => {
     return Object.entries(attributes).reduce(
         (attributes, [key, config]) => ({
             ...attributes,
