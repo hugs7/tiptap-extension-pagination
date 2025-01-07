@@ -45,7 +45,7 @@ import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPage
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
 import { setPageNodesAttribute } from "./utils/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPageMargins, setPageSectionNodePosPageMargins, updatePageSectionMargin } from "./utils/pageSectionMargins";
+import { isMarginValid, isValidPageMargins, setPageSectionNodePosPageMargins, updatePageSectionMargin } from "./utils/pageSection/margins";
 import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
 

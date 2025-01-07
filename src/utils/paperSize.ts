@@ -27,7 +27,7 @@ export const isValidPaperSize = (paperSize: PaperSize): boolean => {
 };
 
 /**
- * Given a paper size, return the dimensions of the paper
+ * Given a paper size, return the dimensions of the paper in millimeters.
  * @param paperSize - The paper size
  * @param orientation - The orientation of the paper
  * @returns {PaperDimensions} - The dimensions of the paper
