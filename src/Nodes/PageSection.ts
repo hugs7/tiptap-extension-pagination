@@ -8,7 +8,7 @@
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { getPageSectionType, isPageSectionNode } from "../utils/pageSection/pageSection";
-import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
+import { addNodeAttributes, parseHTMLNode } from "../utils/node";
 import { calculateShorthandPageSectionMargins } from "../utils/pageSection/margins";
 import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
@@ -33,12 +33,7 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
     },
 
     parseHTML() {
-        return [
-            {
-                tag: `${baseElement}[${pageSectionAttribute}]`,
-                getAttrs: parseHTMLNodeGetAttrs(pageSectionAttribute, true),
-            },
-        ];
+        return [parseHTMLNode(baseElement, pageSectionAttribute, true)];
     },
 
     renderHTML({ HTMLAttributes }) {
