@@ -4,15 +4,18 @@
  * @description Utility functions for paginating the editor content.
  */
 
-import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
+import { Node as PMNode, ResolvedPos, Schema } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
 import { MIN_PARAGRAPH_HEIGHT } from "../constants/pagination";
 import { PAGE_NODE_NAME } from "../constants/page";
+import { BODY_NODE_NAME } from "../constants/body";
+import { HEADER_FOOTER_NODE_NAME } from "../constants/pageRegions";
 import { NodePosArray } from "../types/node";
 import { CursorMap } from "../types/cursor";
 import { Nullable } from "../types/record";
 import { MarginConfig } from "../types/page";
+import { PaginationNodeTypes } from "../types/pagination";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
@@ -583,26 +586,45 @@ export const getPageNumber = (doc: PMNode, $pos: ResolvedPos | number, zeroIndex
 };
 
 /**
+ * Collect the node types for pagination.
+ * @param schema - The schema of the editor.
+ * @returns {PaginationNodeTypes} The node types for pagination.
+ * @throws {Error} Throws an error if the page, body, or header/footer node types are not found in the schema.
+ */
+export const getPaginationNodeTypes = (schema: Schema): PaginationNodeTypes => {
+    const { nodes } = schema;
+
+    const pageType = nodes[PAGE_NODE_NAME];
+    const headerFooterType = nodes[HEADER_FOOTER_NODE_NAME];
+    const bodyType = nodes[BODY_NODE_NAME];
+
+    if (!pageType || !headerFooterType || !bodyType) {
+        throw new Error("Page, body, or header/footer node type not found in schema");
+    }
+
+    return { pageType, headerFooterType, bodyType };
+};
+
+/**
  * Collect content nodes and their existing positions
  * @param state - The editor state.
  * @returns {NodePosArray} The content nodes and their positions.
  */
 export const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
-    const { nodes } = schema;
-    const pageType = nodes.page;
-    const pageSectionType = nodes.pageSection;
+    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
+    const contentNodeTypes = [headerFooterType, bodyType];
 
     const contentNodes: NodePosArray = [];
     state.doc.forEach((pageNode, offset) => {
         if (pageNode.type === pageType) {
-            pageNode.forEach((pageSectionNode, pageSectionOffset) => {
-                if (pageSectionNode.type === pageSectionType) {
-                    pageSectionNode.forEach((child, childOffset) => {
-                        contentNodes.push({ node: child, pos: offset + pageSectionOffset + childOffset + 1 });
+            pageNode.forEach((pageRegionNode, pageRegionOffset) => {
+                if (contentNodeTypes.includes(pageRegionNode.type)) {
+                    pageRegionNode.forEach((child, childOffset) => {
+                        contentNodes.push({ node: child, pos: offset + pageRegionOffset + childOffset + 1 });
                     });
                 } else {
-                    contentNodes.push({ node: pageSectionNode, pos: offset + pageSectionOffset + 1 });
+                    contentNodes.push({ node: pageRegionNode, pos: offset + pageRegionOffset + 1 });
                 }
             });
         } else {
@@ -674,26 +696,24 @@ export const buildNewDocument = (
     nodeHeights: number[]
 ): { newDoc: PMNode; oldToNewPosMap: CursorMap } => {
     const { schema, doc } = state;
-    const { nodes } = schema;
     let pageNum = 0;
 
-    const pageType = nodes.page;
-    const pageSectionType = nodes.pageSection;
+    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
 
     const pages: PMNode[] = [];
     let { pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
 
-    const constructPageSections = (currentPageContent: PMNode[]): PMNode[] => {
+    const constructPageRegions = (currentPageContent: PMNode[]): PMNode[] => {
         const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageRegionNodeAttributes;
-        const pageHeader = pageSectionType.create(headerAttrs, []);
-        const pageBody = pageSectionType.create(bodyAttrs, currentPageContent);
-        const pageFooter = pageSectionType.create(footerAttrs, []);
+        const pageHeader = headerFooterType.create(headerAttrs, []); // TODO - Add header content
+        const pageBody = bodyType.create(bodyAttrs, currentPageContent);
+        const pageFooter = headerFooterType.create(footerAttrs, []); // TODO - Add footer content
 
         return [pageHeader, pageBody, pageFooter];
     };
 
     const addPage = (currentPageContent: PMNode[]): PMNode => {
-        const pageNodeContents = constructPageSections(currentPageContent);
+        const pageNodeContents = constructPageRegions(currentPageContent);
         const pageNode = pageType.create(pageNodeAttributes, pageNodeContents);
         pages.push(pageNode);
         return pageNode;
