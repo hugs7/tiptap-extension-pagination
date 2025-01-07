@@ -226,22 +226,22 @@ export const updatePageSideConfig = <V, T extends SideConfig<V>>(
         return false;
     }
 
-    const existingMargins = getExistingConfig(pageNode);
-    let updatedMargins: T = { ...defaultConfig };
-    if (existingMargins && isValidConfig(existingMargins)) {
-        updatedMargins = { ...existingMargins };
+    const existingConfig = getExistingConfig(pageNode);
+    let updatedConfig: T = { ...defaultConfig };
+    if (existingConfig && isValidConfig(existingConfig)) {
+        updatedConfig = { ...existingConfig };
     } else {
         if ((pageSides as MultiSide[]).includes(configObj)) {
-            updatedMargins[configObj as PageSide] = value;
+            updatedConfig[configObj as PageSide] = value;
         } else {
             switch (configObj) {
                 case "x":
-                    updatedMargins.left = value;
-                    updatedMargins.right = value;
+                    updatedConfig.left = value;
+                    updatedConfig.right = value;
                     break;
                 case "y":
-                    updatedMargins.top = value;
-                    updatedMargins.bottom = value;
+                    updatedConfig.top = value;
+                    updatedConfig.bottom = value;
                     break;
                 default:
                     console.error("Unhanded margin side", configObj);
@@ -249,5 +249,5 @@ export const updatePageSideConfig = <V, T extends SideConfig<V>>(
         }
     }
 
-    return setPageNodeAttribute(tr, pagePos, pageNode, attrKey, updatedMargins);
+    return setPageNodeAttribute(tr, pagePos, pageNode, attrKey, updatedConfig);
 };
