@@ -17,7 +17,7 @@ import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
-import { getCalculatedPageNodeAttributes } from "./getPageAttributes";
+import { getPaginationNodeAttributes } from "./getPageAttributes";
 
 /**
  * Check if the given node is a paragraph node.
@@ -681,7 +681,7 @@ export const buildNewDocument = (
     const pageSectionType = nodes.pageSection;
 
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
 
     const constructPageSections = (currentPageContent: PMNode[]): PMNode[] => {
         const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageSectionsNodeAttributes;
@@ -719,7 +719,7 @@ export const buildNewDocument = (
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageSectionsNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum));
             }
         }
 
