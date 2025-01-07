@@ -5,7 +5,7 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { HeaderNodeAttributes, FooterNodeAttributes, PageRegion } from "../../types/pageRegions";
+import { HeaderNodeAttributes, FooterNodeAttributes, PageRegion, HeaderFooter } from "../../types/pageRegions";
 import { Nullable } from "../../types/record";
 import {
     HEADER_DEFAULT_ATTRIBUTES,
@@ -26,6 +26,16 @@ import { XMarginConfig } from "../../types/page";
  */
 export const isHeaderFooterNode = (node: PMNode): boolean => {
     return node.type.name === HEADER_FOOTER_NODE_NAME;
+};
+
+/**
+ * Get the type of the header or footer node.
+ * @param headerFooterNode - The header or footer node to retrieve the type for.
+ * @returns {Nullable<HeaderFooter>} The type of the specified header or footer node or null if not found.
+ */
+export const getHeaderFooterNodeType = (headerFooterNode: PMNode): Nullable<HeaderFooter> => {
+    const { attrs } = headerFooterNode;
+    return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.type];
 };
 
 /**
