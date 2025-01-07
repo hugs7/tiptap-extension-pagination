@@ -18,6 +18,7 @@ import { EditorState } from "@tiptap/pm/state";
 import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
 import { XMarginConfig } from "../../types/page";
+import { isBodyNode } from "./body";
 
 /**
  * Determines if the given node is a header node.
@@ -51,19 +52,25 @@ export const getHeaderFooterNodeXMargins = (headerFooterNode: PMNode): Nullable<
 /**
  * Get the page region node of the current page by the page region type.
  * @param pageNode - The page node to search for the neighbouring page region.
- * @param pageRegion - The type of the page region to search for.
+ * @param regionType - The type of the page region to search for.
  * @returns {Nullable<PMNode>} The neighbouring page region node or null if not found.
  */
-export const getPageRegionNode = (pageNode: PMNode, pageRegion: PageRegion): Nullable<PMNode> => {
-    let neighbouringPageRegionNode: Nullable<PMNode> = null;
+export const getPageRegionNode = (pageNode: PMNode, regionType: PageRegion): Nullable<PMNode> => {
+    let pageRegionNode: Nullable<PMNode> = null;
 
     pageNode.forEach((node) => {
-        if (node.type.name === pageRegion) {
-            neighbouringPageRegionNode = node;
+        if (isHeaderFooterNode(node)) {
+            if (getHeaderFooterNodeType(node) === regionType) {
+                pageRegionNode = node;
+            }
+        } else if (isBodyNode(node)) {
+            if (node.type.name === regionType) {
+                pageRegionNode = node;
+            }
         }
     });
 
-    return neighbouringPageRegionNode;
+    return pageRegionNode;
 };
 
 /**
