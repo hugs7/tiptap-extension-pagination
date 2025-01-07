@@ -9,15 +9,13 @@ import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { DOMSerializer, Fragment } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
-import { getPageSectionType, isPageSectionNode } from "../utils/pageSection";
+import { getPageSectionType, isPageSectionNode } from "../utils/pageSection/pageSection";
 import { addNodeAttributes } from "../utils/node";
-import { getPageNodePaperSize, getPaperDimensions } from "../utils/paperSize";
-import { getPageNodePaperOrientation } from "../utils/paperOrientation";
-import { calculatePageSectionMargins, getPageSectionNodePageMargins } from "../utils/pageSectionMargins";
-import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
-import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
+import { calculateShorthandPageSectionMargins } from "../utils/pageSection/margins";
 import { mm } from "../utils/units";
+import { getPageNodeAndPosition } from "../utils/pagination";
+import { calculatePageSectionDimensions } from "../utils/pageSection/dimensions";
+import { calculateCumulativePageSectionMargins } from "../utils/pageSection/cumulativeMargins";
 
 const baseElement = "div" as const;
 const pageSectionAttribute = "data-page-section" as const;
@@ -59,44 +57,25 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
 
     addNodeView() {
         return (props: NodeViewRendererProps) => {
-            const { node } = props;
+            const { editor, node, getPos } = props;
+            const pos = getPos();
             const sectionType = getPageSectionType(node) ?? DEFAULT_PAGE_SECTION_TYPE;
+
+            const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
+            if (!pageNode) {
+                throw new Error("Page node not found from page section node at position " + pos);
+            }
 
             const dom = document.createElement(baseElement);
             dom.setAttribute(pageSectionAttribute, String(true));
             dom.classList.add(PAGE_SECTION_NODE_NAME);
 
-            const paperSize = getPageNodePaperSize(node) ?? DEFAULT_PAPER_SIZE;
-            const paperOrientation = getPageNodePaperOrientation(node) ?? DEFAULT_PAPER_ORIENTATION;
-            const pageMargins = getPageSectionNodePageMargins(node) ?? DEFAULT_MARGIN_CONFIG;
-            const { width: pageWidth, height: pageHeight } = getPaperDimensions(paperSize, paperOrientation);
+            const { width: sectionWidth, height: sectionHeight } = calculatePageSectionDimensions(node);
+            const margins = calculateCumulativePageSectionMargins(pageNode, node, sectionType);
 
-            dom.style.width = mm(pageWidth - (pageMargins.left + pageMargins.right)); // TODO have independent margins for header and footer
-
-            switch (sectionType) {
-                case "header":
-                    // TODO
-                    dom.style.height = mm(pageMargins.top);
-
-                    dom.style.marginTop = mm(0);
-                    dom.style.marginLeft = mm(pageMargins.left); // TODO have independent margins for header
-                    dom.style.marginRight = mm(pageMargins.right); // TODO have independent margins for header
-                    dom.style.marginBottom = mm(0);
-                    break;
-                case "body":
-                    dom.style.height = mm(pageHeight - (pageMargins.top + pageMargins.bottom));
-                    dom.style.margin = calculatePageSectionMargins(pageMargins);
-                    break;
-                case "footer":
-                    // TODO
-                    dom.style.height = mm(pageMargins.bottom);
-
-                    dom.style.marginTop = mm(0);
-                    dom.style.marginLeft = mm(pageMargins.left); // TODO have independent margins for footer
-                    dom.style.marginRight = mm(pageMargins.right); // TODO have independent margins for footer
-                    dom.style.marginBottom = mm(0);
-                    break;
-            }
+            dom.style.height = mm(sectionHeight);
+            dom.style.width = mm(sectionWidth);
+            dom.style.margin = calculateShorthandPageSectionMargins(margins);
 
             dom.style.border = "1px solid #ccc";
 

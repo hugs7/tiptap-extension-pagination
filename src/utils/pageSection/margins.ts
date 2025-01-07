@@ -7,14 +7,14 @@
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
-import { DEFAULT_MARGIN_CONFIG } from "../constants/pageMargins";
-import { PAGE_SECTION_NODE_ATTR_KEYS } from "../constants/pageSection";
-import { MultiSide, MarginConfig } from "../types/paper";
-import { Nullable } from "../types/record";
-import { setPageNodePosSideConfig, updatePageSideConfig } from "./setSideConfig";
-import { mm } from "./units";
+import { DEFAULT_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { PAGE_SECTION_NODE_ATTR_KEYS } from "../../constants/pageSection";
+import { MultiSide, MarginConfig } from "../../types/paper";
+import { Nullable } from "../../types/record";
+import PageSectionType from "../../types/pageSection";
+import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
+import { mm } from "../units";
 import { getPageSectionAttributeByPageNum } from "./pageSection";
-import PageSectionType from "../types/pageSection";
 
 /**
  * Checks if a (single) margin is valid.
@@ -100,7 +100,7 @@ export const getPageNumSectionPageMargins = (
  * @returns {string} The CSS string representation of the page margins. Remember MDN says
  * order is (top, right, bottom, left). See https://developer.mozilla.org/en-US/docs/Web/CSS/padding.
  */
-export const calculatePageSectionMargins = (pageMargins: MarginConfig): string => {
+export const calculateShorthandPageSectionMargins = (pageMargins: MarginConfig): string => {
     const { top, right, bottom, left } = pageMargins;
 
     const padding = [top, right, bottom, left].map(mm).join(" ");

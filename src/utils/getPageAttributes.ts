@@ -10,7 +10,7 @@ import PageSectionType, { PageSectionNodeAttributes, PageSectionNoteAttributesOb
 import { calculatePageContentPixelDimensions, getPageNumPaperSize } from "./paperSize";
 import { getPageNumPaperColour } from "./paperColour";
 import { getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNumSectionPageMargins } from "./pageSectionMargins";
+import { getPageNumSectionPageMargins } from "./pageSection/margins";
 import { getPageNumPageBorders } from "./pageBorders";
 import { pageSectionTypes } from "../constants/pageSection";
 

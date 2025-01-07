@@ -5,13 +5,13 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import PageSectionType from "../types/pageSection";
-import { Nullable } from "../types/record";
-import { PAGE_SECTION_NODE_ATTR_KEYS, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
+import PageSectionType from "../../types/pageSection";
+import { Nullable } from "../../types/record";
+import { PAGE_SECTION_NODE_ATTR_KEYS, PAGE_SECTION_NODE_NAME, pageSectionTypes } from "../../constants/pageSection";
 import { EditorState } from "@tiptap/pm/state";
 import { Editor } from "@tiptap/core";
-import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "./page";
-import { getStateFromContext } from "./editor";
+import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
+import { getStateFromContext } from "../editor";
 
 /**
  * Check if the given node is a page section node.
@@ -35,6 +35,15 @@ export const isPageSectionNode = (node: Nullable<PMNode>): boolean => {
 export const getPageSectionType = (node: PMNode): Nullable<PageSectionType> => {
     const { attrs } = node;
     return attrs[PAGE_SECTION_NODE_ATTR_KEYS.type];
+};
+
+/**
+ * Get the index of the page section type in the list of page section types.
+ * @param sectionType - The page section type to get the index of.
+ * @returns {number} The index of the page section type.
+ */
+export const getPageSectionIndex = (sectionType: PageSectionType): number => {
+    return pageSectionTypes.indexOf(sectionType);
 };
 
 /**
