@@ -19,7 +19,7 @@ import { isPageNode } from "../utils/page";
 import { getPageNodePaperOrientation } from "../utils/paperOrientation";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
-import { addNodeAttributes } from "../utils/node";
+import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;
@@ -49,16 +49,7 @@ const PageNode = Node.create<PageNodeOptions>({
         return [
             {
                 tag: `${baseElement}[${dataPageAttribute}]`,
-                getAttrs: (node) => {
-                    const parent = (node as HTMLElement).parentElement;
-
-                    // Prevent nested page nodes
-                    if (parent && parent.hasAttribute(dataPageAttribute)) {
-                        return false;
-                    }
-
-                    return {};
-                },
+                getAttrs: parseHTMLNodeGetAttrs(dataPageAttribute, true),
             },
         ];
     },

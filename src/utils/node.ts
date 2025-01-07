@@ -4,7 +4,7 @@
  * @description Utility functions for creating custom nodes in the editor.
  */
 
-import { Node, ResolvedPos } from "@tiptap/pm/model";
+import { Attrs, Node, ResolvedPos } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { AttributeConfig } from "../types/page";
 import { Attributes } from "@tiptap/core";
@@ -157,4 +157,28 @@ const renderHTMLAttribute =
         return {
             [attr]: JSON.stringify(value),
         } as { [key in keyof T]: string };
+    };
+
+/**
+ * A function used to compute the attributes for the node or mark
+ * created by this rule. Can also be used to describe further
+ * conditions the DOM element or style must match.
+ * @param nodeTagAttribute - The attribute of the node tag.
+ * @param preventNestedNodes - True if nested nodes should be prevented, false otherwise.
+ * @returns {Attrs | false | null} When it returns `false`, the rule won't match.
+ * When it returns null or undefined, that is interpreted as an empty/default set of
+ * attributes.
+ */
+export const parseHTMLNodeGetAttrs =
+    (nodeTagAttribute: string, preventNestedNodes: boolean) =>
+    (node: HTMLElement): Attrs | false | null => {
+        const parent = node.parentElement;
+
+        if (preventNestedNodes) {
+            if (parent && parent.hasAttribute(nodeTagAttribute)) {
+                return false;
+            }
+        }
+
+        return {};
     };
