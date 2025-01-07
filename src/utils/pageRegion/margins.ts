@@ -9,14 +9,14 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
-import { HEADER_FOOTER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_NODE_ATTR_KEYS } from "../../constants/pageRegions";
-import { Nullable } from "../../types/record";
-import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import { MarginConfig, MultiAxisSide, XMarginConfig, YMarginConfig } from "../../types/page";
-import { getHeaderFooterNodeStart, getPageRegionAttributeByPageNum, getPageRegionNode } from "./pageRegion";
-import { mm } from "../units";
+import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { HeaderFooter } from "../../types/pageRegions";
+import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
+import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
+import { getHeaderFooterNodeStart, getHeaderFooterNodeXMargins, getPageRegionAttributeByPageNum, getPageRegionNode } from "./pageRegion";
+import { mm } from "../units";
 import { calculateBodyDimensions } from "./dimensions";
+import { getBodyNodeMargins } from "./body";
 
 /**
  * Checks if a (single) margin is valid.
@@ -36,26 +36,6 @@ export const isMarginValid = (margin: number): boolean => {
  */
 export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
     return Object.values(pageMargins).every(isMarginValid);
-};
-
-/**
- * Get the page margins from a body node.
- * @param bodyNode - The body node to get the page margins from.
- * @returns {Nullable<MarginConfig>} The page margins of the specified page.
- */
-export const getBodyNodeMargins = (bodyNode: PMNode): Nullable<MarginConfig> => {
-    const { attrs } = bodyNode;
-    return attrs[BODY_NODE_ATTR_KEYS.pageMargins];
-};
-
-/**
- * Get the x margins from a header or footer node.
- * @param headerFooterNode - The header or footer node.
- * @returns {Nullable<XMarginConfig>} The x margins of the specified header or footer.
- */
-export const getHeaderFooterNodeXMargins = (headerFooterNode: PMNode): Nullable<XMarginConfig> => {
-    const { attrs } = headerFooterNode;
-    return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.xMargins];
 };
 
 /**

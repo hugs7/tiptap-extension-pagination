@@ -7,11 +7,11 @@
 import { Node as PMNode } from "@tiptap/pm/model";
 import { PaperDimensions } from "../../types/paper";
 import { getPaperDimensions } from "../paperSize";
-import { getBodyNodeMargins, getHeaderFooterNodeXMargins } from "./margins";
 import { getPageNodeAttributes } from "../getPageAttributes";
 import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
-import { getHeaderFooterNodeHeight } from "./pageRegion";
+import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "./pageRegion";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
+import { getBodyNodeMargins } from "./body";
 
 /**
  * Calculates the dimensions in millimetres of a header or footer node based on its paper size

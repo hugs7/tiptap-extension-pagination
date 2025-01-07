@@ -5,13 +5,12 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { Nullable } from "../../types/record";
-import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_NAME } from "../../constants/body";
+import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_ATTR_KEYS, BODY_NODE_NAME } from "../../constants/body";
 import { DEFAULT_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { Nullable } from "../../types/record";
+import { BodyNodeAttributes } from "../../types/body";
 import { MarginConfig } from "../../types/page";
 import { getHeaderFooterNodeAttributes, getPageRegionNode } from "./pageRegion";
-import { getBodyNodeMargins } from "./margins";
-import { BodyNodeAttributes } from "../../types/body";
 
 /**
  * Check if the given node is a body node.
@@ -35,6 +34,16 @@ export const isBodyNode = (node: Nullable<PMNode>): boolean => {
 export const getBodyNodeAttributes = (bodyNode: PMNode): BodyNodeAttributes => {
     const { attrs } = bodyNode;
     return { ...BODY_DEFAULT_ATTRIBUTES, ...attrs };
+};
+
+/**
+ * Get the page margins from a body node.
+ * @param bodyNode - The body node to get the page margins from.
+ * @returns {Nullable<MarginConfig>} The page margins of the specified page.
+ */
+export const getBodyNodeMargins = (bodyNode: PMNode): Nullable<MarginConfig> => {
+    const { attrs } = bodyNode;
+    return attrs[BODY_NODE_ATTR_KEYS.pageMargins];
 };
 
 /**
