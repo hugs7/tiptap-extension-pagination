@@ -10,7 +10,7 @@ import { DOMSerializer, Fragment } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { DEFAULT_PAGE_SECTION_TYPE, PAGE_SECTION_ATTRIBUTES, PAGE_SECTION_NODE_NAME } from "../constants/pageSection";
 import { getPageSectionType, isPageSectionNode } from "../utils/pageSection/pageSection";
-import { addNodeAttributes } from "../utils/node";
+import { addNodeAttributes, parseHTMLNodeGetAttrs } from "../utils/node";
 import { calculateShorthandPageSectionMargins } from "../utils/pageSection/margins";
 import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
@@ -37,16 +37,7 @@ const PageSectionNode = Node.create<PageSectionNodeOptions>({
         return [
             {
                 tag: `${baseElement}[${pageSectionAttribute}]`,
-                getAttrs: (node) => {
-                    const parent = (node as HTMLElement).parentElement;
-
-                    // Prevent nested page section nodes
-                    if (parent && parent.hasAttribute(pageSectionAttribute)) {
-                        return false;
-                    }
-
-                    return {};
-                },
+                getAttrs: parseHTMLNodeGetAttrs(pageSectionAttribute, true),
             },
         ];
     },
