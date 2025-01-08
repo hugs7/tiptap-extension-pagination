@@ -606,11 +606,46 @@ export const getPaginationNodeTypes = (schema: Schema): PaginationNodeTypes => {
 };
 
 /**
+ * Renders a new document with paginated content.
+ * @param view - The editor view.
+ * @returns {void}
+ */
+export const renderPageView = (view: EditorView): void => {
+    const { state, dispatch } = view;
+    const { doc } = state;
+
+    try {
+        const contentNodes = collectContentNodes(state);
+        const nodeHeights = measureNodeHeights(view, contentNodes);
+
+        // Record the cursor's old position
+        const { tr, selection } = state;
+        const oldCursorPos = selection.from;
+
+        const { newDoc, oldToNewPosMap } = buildNewDocument(state, contentNodes, nodeHeights);
+
+        // Compare the content of the documents
+        if (!newDoc.content.eq(doc.content)) {
+            tr.replaceWith(0, doc.content.size, newDoc.content);
+            tr.setMeta("pagination", true);
+
+            const newDocContentSize = newDoc.content.size;
+            const newCursorPos = mapCursorPosition(contentNodes, oldCursorPos, oldToNewPosMap, newDocContentSize);
+            paginationUpdateCursorPosition(tr, newCursorPos);
+        }
+
+        dispatch(tr);
+    } catch (error) {
+        console.error("Error updating page view. Details:", error);
+    }
+};
+
+/**
  * Collect content nodes and their existing positions
  * @param state - The editor state.
  * @returns {NodePosArray} The content nodes and their positions.
  */
-export const collectContentNodes = (state: EditorState): NodePosArray => {
+const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
     const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
     const contentNodeTypes = [headerFooterType, bodyType];
@@ -656,7 +691,7 @@ const calculateElementMargins = (element: HTMLElement): MarginConfig => {
  * @param contentNodes - The content nodes and their positions.
  * @returns {number[]} The heights of the content nodes.
  */
-export const measureNodeHeights = (view: EditorView, contentNodes: NodePosArray): number[] => {
+const measureNodeHeights = (view: EditorView, contentNodes: NodePosArray): number[] => {
     const paragraphType = view.state.schema.nodes.paragraph;
 
     const nodeHeights = contentNodes.map(({ pos, node }) => {
@@ -690,7 +725,7 @@ export const measureNodeHeights = (view: EditorView, contentNodes: NodePosArray)
  * @param nodeHeights - The heights of the content nodes.
  * @returns {newDoc: PMNode, oldToNewPosMap: CursorMap} The new document and the mapping from old positions to new positions.
  */
-export const buildNewDocument = (
+const buildNewDocument = (
     state: EditorState,
     contentNodes: NodePosArray,
     nodeHeights: number[]
@@ -789,12 +824,7 @@ const limitMappedCursorPositions = (oldToNewPosMap: CursorMap, docSize: number):
  * @param newDocContentSize - The size of the new document. Serves as maximum limit for cursor position.
  * @returns {number} The new cursor position.
  */
-export const mapCursorPosition = (
-    contentNodes: NodePosArray,
-    oldCursorPos: number,
-    oldToNewPosMap: CursorMap,
-    newDocContentSize: number
-) => {
+const mapCursorPosition = (contentNodes: NodePosArray, oldCursorPos: number, oldToNewPosMap: CursorMap, newDocContentSize: number) => {
     let newCursorPos: Nullable<number> = null;
     for (let i = 0; i < contentNodes.length; i++) {
         const { node, pos: oldNodePos } = contentNodes[i];
@@ -842,7 +872,7 @@ const isNodeAfterAvailable = ($pos: ResolvedPos): boolean => {
  * @param tr - The current transaction.
  * @returns {void}
  */
-export const paginationUpdateCursorPosition = (tr: Transaction, newCursorPos: Nullable<number>): void => {
+const paginationUpdateCursorPosition = (tr: Transaction, newCursorPos: Nullable<number>): void => {
     if (newCursorPos !== null) {
         const $pos = tr.doc.resolve(newCursorPos);
         let selection;
