@@ -91,6 +91,15 @@ export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: any)
     return setNodesTypeAttribute(tr, attr, value, setBodyNodeAttribute);
 };
 
+/**
+ * Set a body node attribute to the given value.
+ * @param tr - The transaction to apply the change to.
+ * @param pos - The position of the node to set the attribute for.
+ * @param node - The node to set the attribute for.
+ * @param attr - The attribute to set.
+ * @param value - The value to set the attribute to.
+ * @returns {boolean} True if the attribute was changed, false otherwise.
+ */
 export const setBodyNodeAttribute = (tr: Transaction, pos: number, node: PMNode, attr: string, value: any): boolean => {
     if (!isBodyNode(node)) {
         return false;
