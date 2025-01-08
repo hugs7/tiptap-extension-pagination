@@ -8,6 +8,8 @@ import { EditorState, Transaction } from "@tiptap/pm/state";
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { DEFAULT_PAPER_SIZE, paperDimensions } from "../constants/paperSize";
+import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
+import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { PaperOrientation, PaperDimensions, PaperSize } from "../types/paper";
 import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
 import { Nullable } from "../types/record";
@@ -15,7 +17,7 @@ import { getPageAttributeByPageNum, isPageNode } from "./page";
 import { mmToPixels } from "./window";
 import { nodeHasAttribute } from "./node";
 import { setPageNodeAttribute } from "./setPageAttributes";
-import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
+import { getPageNodePaperOrientation } from "./paperOrientation";
 
 /**
  * Check if the given paper size is valid.
@@ -43,6 +45,17 @@ export const getPaperDimensions = (paperSize: PaperSize, orientation: PaperOrien
     } else {
         return dimensions;
     }
+};
+
+/**
+ * Gets the paper dimensions of a page node
+ * @param pageNode - The page node to get the paper dimensions from
+ * @returns {PaperDimensions} - The dimensions of the paper
+ */
+export const getPaperDimensionsFromPageNode = (pageNode: PMNode): PaperDimensions => {
+    const paperSize = getPageNodePaperSize(pageNode) ?? DEFAULT_PAPER_SIZE;
+    const paperOrientation = getPageNodePaperOrientation(pageNode) ?? DEFAULT_PAPER_ORIENTATION;
+    return getPaperDimensions(paperSize, paperOrientation);
 };
 
 /**

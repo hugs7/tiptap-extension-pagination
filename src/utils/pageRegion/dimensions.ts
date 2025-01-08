@@ -6,8 +6,7 @@
 
 import { Node as PMNode } from "@tiptap/pm/model";
 import { PaperDimensions } from "../../types/paper";
-import { getPaperDimensions } from "../paperSize";
-import { getPageNodeAttributes } from "../getPageAttributes";
+import { getPaperDimensionsFromPageNode } from "../paperSize";
 import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "./pageRegion";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
@@ -20,8 +19,7 @@ import { getBodyNodeMargins } from "./body";
  * @returns {PaperDimensions} The dimensions of the header or footer node.
  */
 export const calculateHeaderFooterDimensions = (pageNode: PMNode, headerFooterNode: PMNode): PaperDimensions => {
-    const { paperSize, paperOrientation } = getPageNodeAttributes(pageNode);
-    const { width: pageWidth } = getPaperDimensions(paperSize, paperOrientation);
+    const { width: pageWidth } = getPaperDimensionsFromPageNode(pageNode);
     const { left, right } = getHeaderFooterNodeXMargins(headerFooterNode) ?? DEFAULT_X_MARGIN_CONFIG;
 
     const width = pageWidth - (left + right);
@@ -37,8 +35,7 @@ export const calculateHeaderFooterDimensions = (pageNode: PMNode, headerFooterNo
  * @returns {PaperDimensions} The dimensions of the body node.
  */
 export const calculateBodyDimensions = (pageNode: PMNode, bodyNode: PMNode): PaperDimensions => {
-    const { paperSize, paperOrientation } = getPageNodeAttributes(pageNode);
-    const { width: pageWidth, height: pageHeight } = getPaperDimensions(paperSize, paperOrientation);
+    const { width: pageWidth, height: pageHeight } = getPaperDimensionsFromPageNode(pageNode);
     const { bottom, left, right, top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
 
     const width = pageWidth - (left + right);
