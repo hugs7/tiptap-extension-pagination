@@ -54,16 +54,18 @@ export const getPageRegionNodeAndPos = (pagePos: number, pageNode: PMNode, regio
         return { node: null, pos: -1 };
     }
 
-    pageNode.forEach((node, index) => {
-        if (isHeaderFooterNode(node)) {
-            if (getHeaderFooterNodeType(node) === regionType) {
-                pageRegionNode = node;
-                pos += index;
-            }
-        } else if (isBodyNode(node)) {
-            if (node.type.name === regionType) {
-                pageRegionNode = node;
-                pos += index;
+    pageNode.forEach((node, offset) => {
+        if (!pageRegionNode) {
+            if (isHeaderFooterNode(node)) {
+                if (getHeaderFooterNodeType(node) === regionType) {
+                    pageRegionNode = node;
+                    pos += offset + 1;
+                }
+            } else if (isBodyNode(node)) {
+                if (node.type.name === regionType) {
+                    pageRegionNode = node;
+                    pos += offset + 1;
+                }
             }
         }
     });
