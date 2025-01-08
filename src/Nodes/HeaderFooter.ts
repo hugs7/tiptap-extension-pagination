@@ -12,7 +12,7 @@ import { getPageNodeAndPosition } from "../utils/pagination";
 import { mm } from "../utils/units";
 import { calculateHeaderFooterDimensions } from "../utils/pageRegion/dimensions";
 import { calculateHeaderFooterMargins, calculateShorthandMargins } from "../utils/pageRegion/margins";
-import { isHeaderFooterNode } from "../utils/pageRegion/pageRegion";
+import { getHeaderFooterNodeType, isHeaderFooterNode } from "../utils/pageRegion/pageRegion";
 
 const baseElement = "div" as const;
 const headerFooterAttribute = "data-page-header-footer" as const;
@@ -43,7 +43,8 @@ const HeaderFooterNode = Node.create({
 
             const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
             if (!pageNode) {
-                throw new Error(`Page node not found from ${HEADER_FOOTER_NODE_NAME} node at position ${pos}`);
+                const pageRegionType = getHeaderFooterNodeType(node);
+                throw new Error(`Page node not found from ${pageRegionType ?? HEADER_FOOTER_NODE_NAME} node at position ${pos}`);
             }
 
             const dom = document.createElement(baseElement);
