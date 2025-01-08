@@ -8,7 +8,7 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { isPageNode } from "./page";
 import { isBodyNode } from "./pageRegion/body";
-import { getPageRegionNode } from "./pageRegion/pageRegion";
+import { getPageRegionNode } from "./pageRegion/getAttributes";
 
 /**
  * Set a node attribute to the given value for the nodes of the type handled by the setNodeTypeAttribute callback.

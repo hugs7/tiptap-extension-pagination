@@ -12,16 +12,11 @@ import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import {
-    getHeaderFooterNodeStart,
-    getHeaderFooterNodeType,
-    getHeaderFooterNodeXMargins,
-    getPageRegionAttributeByPageNum,
-    getPageRegionNode,
-} from "./pageRegion";
+import { getHeaderFooterNodeStart, getHeaderFooterNodeType, getHeaderFooterNodeXMargins, getHeaderNodeAttributes } from "./pageRegion";
 import { mm } from "../units";
 import { calculateBodyDimensions } from "./dimensions";
 import { getBodyNodeMargins } from "./body";
+import { getPageRegionAttributeByPageNum, getPageRegionNode } from "./getAttributes";
 
 /**
  * Checks if a (single) margin is valid.
@@ -111,6 +106,33 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
 export const getPageNumBodyMargins = (context: Editor | EditorState, pageNum: number): MarginConfig => {
     const getDefault = () => DEFAULT_MARGIN_CONFIG;
     return getPageRegionAttributeByPageNum(context, pageNum, "body", getDefault, getBodyNodeMargins);
+};
+
+/**
+ * Calculate the effective DOM margins of the body node. Takes into account
+ * what the margins should be to ensure the header and footer nodes are
+ * visible on the page.
+ * @param pageNode - The page node containing the body node.
+ * @param bodyNode - The body node to calculate the margins for.
+ * @returns {MarginConfig} The effective margins of the body node.
+ */
+export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): MarginConfig => {
+    const bodyMargins = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+
+    const headerNode = getPageRegionNode(pageNode, "header");
+    const footerNode = getPageRegionNode(pageNode, "footer");
+    if (headerNode) {
+        const { start, height } = getHeaderNodeAttributes(headerNode);
+        const headerTotalHeight = start + height;
+        bodyMargins.top -= headerTotalHeight;
+        bodyMargins.bottom -= headerTotalHeight;
+    }
+
+    if (footerNode) {
+        bodyMargins.bottom = 0;
+    }
+
+    return bodyMargins;
 };
 
 /**
