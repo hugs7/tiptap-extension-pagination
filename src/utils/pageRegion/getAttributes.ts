@@ -5,10 +5,11 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { PageRegion } from "../../types/pageRegions";
-import { Nullable } from "../../types/record";
 import { Editor } from "@tiptap/core";
 import { EditorState } from "@tiptap/pm/state";
+import { PageRegion } from "../../types/pageRegions";
+import { Nullable } from "../../types/record";
+import { NullableNodePos } from "../../types/node";
 import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
 import { getHeaderFooterNodeType, isHeaderFooterNode } from "./pageRegion";
@@ -36,6 +37,38 @@ export const getPageRegionNode = (pageNode: PMNode, regionType: PageRegion): Nul
     });
 
     return pageRegionNode;
+};
+
+/**
+ * Get the page region node and position of the current page by the page region type.
+ * @param pagePos - The position of the page node to search for the neighbouring page region.
+ * @param pageNode - The page node to search for the neighbouring page region.
+ * @param regionType - The type of the page region to search for.
+ * @returns {NullableNodePos} The neighbouring page region node and position or null if not found.
+ */
+export const getPageRegionNodeAndPos = (pagePos: number, pageNode: PMNode, regionType: PageRegion): NullableNodePos => {
+    let pageRegionNode: Nullable<PMNode> = null;
+    let pos = pagePos;
+
+    if (!pageNode) {
+        return { node: null, pos: -1 };
+    }
+
+    pageNode.forEach((node, index) => {
+        if (isHeaderFooterNode(node)) {
+            if (getHeaderFooterNodeType(node) === regionType) {
+                pageRegionNode = node;
+                pos += index;
+            }
+        } else if (isBodyNode(node)) {
+            if (node.type.name === regionType) {
+                pageRegionNode = node;
+                pos += index;
+            }
+        }
+    });
+
+    return { node: pageRegionNode, pos: pageRegionNode ? pos : -1 };
 };
 
 /**
