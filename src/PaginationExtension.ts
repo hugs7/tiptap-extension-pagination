@@ -415,14 +415,14 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
 
-            setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins),
+            setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins, setPageNodesAttribute),
 
             setDocumentDefaultPageMargins:
                 () =>
                 ({ editor }) =>
                     editor.commands.setDocumentPageMargins(this.options.defaultMarginConfig),
 
-            setPagePageMargins: setPageSideConfig(setBodyNodePosPageMargins),
+            setPagePageMargins: setPageSideConfig(getPageNodePosByPageNum, setBodyNodePosPageMargins),
 
             setDocumentPageMargin:
                 (margin: MultiSide, value: number) =>
@@ -444,7 +444,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                 return this.options.defaultPageBorders;
             },
 
-            setDocumentPageBorders: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageBorders, isValidPageBorders),
+            setDocumentPageBorders: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageBorders, isValidPageBorders, setPageNodesAttribute),
 
             setDocumentDefaultPageBorders:
                 () =>
@@ -452,7 +452,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return editor.commands.setDocumentPageBorders(this.options.defaultPageBorders);
                 },
 
-            setPageBorders: setPageSideConfig(setPageNodePosPageBorders),
+            setPageBorders: setPageSideConfig(getPageNodePosByPageNum, setPageNodePosPageBorders),
 
             setDocumentPageBorder:
                 (border: MultiSide, value: number) =>
