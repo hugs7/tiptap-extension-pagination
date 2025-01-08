@@ -20,14 +20,14 @@ type SideConfig<V> = { [key in PageSide]: V };
  * Generic helper to set the side configuration of a document.
  * @param attrKey - The key of the attribute to update.
  * @param isValidConfig - A function to validate the side configuration.
- * @param setNodeAttribute - A function to set the attribute of a node.
+ * @param setNodesAttribute - A function to set the attribute nodes.
  * @returns
  */
 export const setDocumentSideConfig =
     <V, T extends SideConfig<V>>(
         attrKey: string,
         isValidConfig: (config: T) => boolean,
-        setNodeAttribute: (tr: Transaction, attr: string, value: any) => boolean
+        setNodesAttribute: (tr: Transaction, attr: string, value: any) => boolean
     ) =>
     (sideConfig: T) =>
     ({ tr, dispatch }: { tr: Transaction; dispatch: Dispatch }): boolean => {
@@ -38,7 +38,7 @@ export const setDocumentSideConfig =
             return false;
         }
 
-        setNodeAttribute(tr, attrKey, sideConfig);
+        setNodesAttribute(tr, attrKey, sideConfig);
 
         dispatch(tr);
         return true;
