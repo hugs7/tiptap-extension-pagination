@@ -8,7 +8,7 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { isPageNode } from "./page";
 import { isBodyNode } from "./pageRegion/body";
-import { getPageRegionNode } from "./pageRegion/getAttributes";
+import { getPageRegionNodeAndPos } from "./pageRegion/getAttributes";
 
 /**
  * Set a node attribute to the given value for the nodes of the type handled by the setNodeTypeAttribute callback.
@@ -95,21 +95,21 @@ export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: any)
 /**
  * Set a body node attribute to the given value.
  * @param tr - The transaction to apply the change to.
- * @param pos - The position of the node to set the attribute for.
+ * @param pagePos - The position of the node to set the attribute for.
  * @param pageNode - The page node (parent of the body nody).
  * @param attr - The attribute to set.
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if the attribute was changed, false otherwise.
  */
-export const setBodyNodeAttribute = (tr: Transaction, pos: number, pageNode: PMNode, attr: string, value: any): boolean => {
+export const setBodyNodeAttribute = (tr: Transaction, pagePos: number, pageNode: PMNode, attr: string, value: any): boolean => {
     if (!isPageNode(pageNode)) {
         return false;
     }
 
-    const bodyNode = getPageRegionNode(pageNode, "body");
+    const { node: bodyNode, pos: bodyPos } = getPageRegionNodeAndPos(pagePos, pageNode, "body");
     if (!bodyNode || !isBodyNode(bodyNode)) {
         return false;
     }
 
-    return setNodeAttribute(tr, pos, bodyNode, attr, value);
+    return setNodeAttribute(tr, bodyPos, bodyNode, attr, value);
 };
