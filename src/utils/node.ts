@@ -8,6 +8,7 @@ import { Attrs, Node, ResolvedPos, TagParseRule } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { Attributes } from "@tiptap/core";
 import { NodeAttributes } from "../types/node";
+import { wrapJSONParse } from "./object";
 
 /**
  * Get the type of the node at the specified position.
@@ -178,7 +179,20 @@ const parseHTMLNodeGetAttrs =
             }
         }
 
-        return {};
+        const attrs = Array.from(node.attributes);
+
+        return attrs.reduce((acc, attribute) => {
+            const { name, value } = attribute;
+
+            if (name in acc) {
+                return acc;
+            }
+
+            return {
+                ...acc,
+                [name]: wrapJSONParse(value),
+            };
+        }, {});
     };
 
 /**
