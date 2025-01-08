@@ -6,11 +6,9 @@
 
 import { Node as PMNode } from "@tiptap/pm/model";
 import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_ATTR_KEYS, BODY_NODE_NAME } from "../../constants/body";
-import { DEFAULT_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { Nullable } from "../../types/record";
 import { BodyNodeAttributes } from "../../types/body";
 import { MarginConfig } from "../../types/page";
-import { getHeaderNodeAttributes, getPageRegionNode } from "./pageRegion";
 
 /**
  * Check if the given node is a body node.
@@ -44,31 +42,4 @@ export const getBodyNodeAttributes = (bodyNode: PMNode): BodyNodeAttributes => {
 export const getBodyNodeMargins = (bodyNode: PMNode): Nullable<MarginConfig> => {
     const { attrs } = bodyNode;
     return attrs[BODY_NODE_ATTR_KEYS.pageMargins];
-};
-
-/**
- * Calculate the effective DOM margins of the body node. Takes into account
- * what the margins should be to ensure the header and footer nodes are
- * visible on the page.
- * @param pageNode - The page node containing the body node.
- * @param bodyNode - The body node to calculate the margins for.
- * @returns {MarginConfig} The effective margins of the body node.
- */
-export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): MarginConfig => {
-    const bodyMargins = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
-
-    const headerNode = getPageRegionNode(pageNode, "header");
-    const footerNode = getPageRegionNode(pageNode, "footer");
-    if (headerNode) {
-        const { start, height } = getHeaderNodeAttributes(headerNode);
-        const headerTotalHeight = start + height;
-        bodyMargins.top -= headerTotalHeight;
-        bodyMargins.bottom -= headerTotalHeight;
-    }
-
-    if (footerNode) {
-        bodyMargins.bottom = 0;
-    }
-
-    return bodyMargins;
 };

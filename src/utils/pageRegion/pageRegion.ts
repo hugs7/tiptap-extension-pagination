@@ -5,7 +5,7 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { HeaderNodeAttributes, FooterNodeAttributes, PageRegion, HeaderFooter } from "../../types/pageRegions";
+import { HeaderNodeAttributes, FooterNodeAttributes, HeaderFooter } from "../../types/pageRegions";
 import { Nullable } from "../../types/record";
 import {
     HEADER_DEFAULT_ATTRIBUTES,
@@ -13,12 +13,7 @@ import {
     HEADER_FOOTER_NODE_ATTR_KEYS,
     HEADER_FOOTER_NODE_NAME,
 } from "../../constants/pageRegions";
-import { Editor } from "@tiptap/core";
-import { EditorState } from "@tiptap/pm/state";
-import { getStateFromContext } from "../editor";
-import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
 import { XMarginConfig } from "../../types/page";
-import { isBodyNode } from "./body";
 
 /**
  * Determines if the given node is a header node.
@@ -47,30 +42,6 @@ export const getHeaderFooterNodeType = (headerFooterNode: PMNode): Nullable<Head
 export const getHeaderFooterNodeXMargins = (headerFooterNode: PMNode): Nullable<XMarginConfig> => {
     const { attrs } = headerFooterNode;
     return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.xMargins];
-};
-
-/**
- * Get the page region node of the current page by the page region type.
- * @param pageNode - The page node to search for the neighbouring page region.
- * @param regionType - The type of the page region to search for.
- * @returns {Nullable<PMNode>} The neighbouring page region node or null if not found.
- */
-export const getPageRegionNode = (pageNode: PMNode, regionType: PageRegion): Nullable<PMNode> => {
-    let pageRegionNode: Nullable<PMNode> = null;
-
-    pageNode.forEach((node) => {
-        if (isHeaderFooterNode(node)) {
-            if (getHeaderFooterNodeType(node) === regionType) {
-                pageRegionNode = node;
-            }
-        } else if (isBodyNode(node)) {
-            if (node.type.name === regionType) {
-                pageRegionNode = node;
-            }
-        }
-    });
-
-    return pageRegionNode;
 };
 
 /**
@@ -121,48 +92,4 @@ export const getFooterNodeAttributes = (headerFooterNode: PMNode): FooterNodeAtt
     }
 
     return mergedAttrs;
-};
-
-/**
- * Retrieves a specific attribute of a the body node of specified type of a given page number.
- * Falls back to the default value if the page number is invalid or the attribute is missing.
- * @param context - The current editor instance or editor state.
- * @param pageNum - The page number to retrieve the attribute for.
- * @param regionType - The type of the region to retrieve the attribute for.
- * @param getDefault - A function to retrieve the default value of the attribute.
- * @param getNodeAttribute - A function to retrieve the attribute from a body node.
- * @returns {T} The attribute of the specified body node or default.
- */
-export const getPageRegionAttributeByPageNum = <T>(
-    context: Editor | EditorState,
-    pageNum: number,
-    regionType: PageRegion,
-    getDefault: () => T,
-    getNodeAttribute: (node: PMNode) => Nullable<T>
-): T => {
-    const state = getStateFromContext(context);
-
-    if (!doesDocHavePageNodes(state)) {
-        return getDefault();
-    }
-
-    const { doc } = state;
-
-    if (!isPageNumInRange(doc, pageNum)) {
-        return handleOutOfRangePageNum(state, pageNum, (s, p) =>
-            getPageRegionAttributeByPageNum(s, p, regionType, getDefault, getNodeAttribute)
-        );
-    }
-
-    const pageNode = getPageNodeByPageNum(doc, pageNum);
-    if (!pageNode) {
-        return getDefault();
-    }
-
-    const pageRegionNode = getPageRegionNode(pageNode, regionType);
-    if (!pageRegionNode) {
-        return getDefault();
-    }
-
-    return getNodeAttribute(pageRegionNode) ?? getDefault();
 };
