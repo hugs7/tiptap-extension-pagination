@@ -45,13 +45,13 @@ export const getHeaderFooterNodeXMargins = (headerFooterNode: PMNode): Nullable<
 };
 
 /**
- * Get the start position of the header or footer node.
- * @param headerFooterNode - The header or footer node to retrieve the start position for.
- * @returns {Nullable<number>} The start position of the specified header or footer node or null if not found.
+ * Get the page end offset of the header or footer node.
+ * @param headerFooterNode - The header or footer node to retrieve the page end offset for.
+ * @returns {Nullable<number>} The page end offset of the specified header or footer node or null if not found.
  */
-export const getHeaderFooterNodeStart = (headerFooterNode: PMNode): Nullable<number> => {
+export const getHeaderFooterNodePageEndOffset = (headerFooterNode: PMNode): Nullable<number> => {
     const { attrs } = headerFooterNode;
-    return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.start];
+    return attrs[HEADER_FOOTER_NODE_ATTR_KEYS.pageEndOffset];
 };
 
 /**
