@@ -6,13 +6,7 @@
 
 import { Plugin, PluginKey, EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
-import {
-    buildNewDocument,
-    collectContentNodes,
-    mapCursorPosition,
-    measureNodeHeights,
-    paginationUpdateCursorPosition,
-} from "../utils/pagination";
+import { renderPageView } from "../utils/pagination";
 import { isNodeEmpty } from "../utils/node";
 import { doesDocHavePageNodes } from "../utils/page";
 
@@ -25,7 +19,7 @@ const PaginationPlugin = new Plugin({
             update(view: EditorView, prevState: EditorState) {
                 if (isPaginating) return;
 
-                const { state, dispatch } = view;
+                const { state } = view;
                 const { doc, schema } = state;
                 const pageType = schema.nodes.page;
 
@@ -39,30 +33,7 @@ const PaginationPlugin = new Plugin({
 
                 isPaginating = true;
 
-                try {
-                    const contentNodes = collectContentNodes(state);
-                    const nodeHeights = measureNodeHeights(view, contentNodes);
-
-                    // Record the cursor's old position
-                    const { tr, selection } = state;
-                    const oldCursorPos = selection.from;
-
-                    const { newDoc, oldToNewPosMap } = buildNewDocument(state, contentNodes, nodeHeights);
-
-                    // Compare the content of the documents
-                    if (!newDoc.content.eq(doc.content)) {
-                        tr.replaceWith(0, doc.content.size, newDoc.content);
-                        tr.setMeta("pagination", true);
-
-                        const newDocContentSize = newDoc.content.size;
-                        const newCursorPos = mapCursorPosition(contentNodes, oldCursorPos, oldToNewPosMap, newDocContentSize);
-                        paginationUpdateCursorPosition(tr, newCursorPos);
-                    }
-
-                    dispatch(tr);
-                } catch (error) {
-                    console.error("Error updating page view. Details:", error);
-                }
+                renderPageView(view);
 
                 // Reset paginating flag regardless of success or failure because we do not want to get
                 // stuck out of this loop.
