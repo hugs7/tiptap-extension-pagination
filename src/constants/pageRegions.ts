@@ -14,7 +14,7 @@ export const HEADER_FOOTER_NODE_NAME = "header-footer" as const;
  */
 export const HEADER_FOOTER_NODE_ATTR_KEYS = {
     type: "type",
-    start: "start",
+    pageEndOffset: "pageEndOffset",
     height: "height",
     xMargins: "xMargins",
 } as const;
@@ -22,8 +22,7 @@ export const HEADER_FOOTER_NODE_ATTR_KEYS = {
 /**
  * Default attributes for header and footer nodes.
  */
-export const HEADER_FOOTER_DEFAULT_ATTRIBUTES: Omit<HeaderFooterNodeAttributes<unknown>, "type"> = {
-    start: 10,
+export const HEADER_FOOTER_DEFAULT_ATTRIBUTES: Omit<HeaderFooterNodeAttributes<unknown>, "type" | "pageEndOffset"> = {
     height: 10,
     xMargins: { left: 25.4, right: 25.4 },
 };
@@ -33,6 +32,7 @@ export const HEADER_FOOTER_DEFAULT_ATTRIBUTES: Omit<HeaderFooterNodeAttributes<u
  */
 export const HEADER_DEFAULT_ATTRIBUTES: HeaderNodeAttributes = {
     type: "header",
+    pageEndOffset: 10,
     ...HEADER_FOOTER_DEFAULT_ATTRIBUTES,
 };
 
@@ -41,6 +41,7 @@ export const HEADER_DEFAULT_ATTRIBUTES: HeaderNodeAttributes = {
  */
 export const FOOTER_DEFAULT_ATTRIBUTES: FooterNodeAttributes = {
     type: "footer",
+    pageEndOffset: -10,
     ...HEADER_FOOTER_DEFAULT_ATTRIBUTES,
 };
 

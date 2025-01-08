@@ -9,14 +9,21 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
-import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
+import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import { getHeaderFooterNodeStart, getHeaderFooterNodeType, getHeaderFooterNodeXMargins, getHeaderNodeAttributes } from "./pageRegion";
+import {
+    getHeaderFooterNodeHeight,
+    getHeaderFooterNodePageEndOffset,
+    getHeaderFooterNodeType,
+    getHeaderFooterNodeXMargins,
+    getHeaderNodeAttributes,
+} from "./pageRegion";
 import { mm } from "../units";
 import { calculateBodyDimensions } from "./dimensions";
 import { getBodyNodeMargins } from "./body";
 import { getPageRegionAttributeByPageNum, getPageRegionNode } from "./getAttributes";
+import { getPaperDimensionsFromPageNode } from "../paperSize";
 
 /**
  * Checks if a (single) margin is valid.
@@ -45,8 +52,8 @@ export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
  * @returns {void}
  */
 const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): void => {
-    const nodeStart = getHeaderFooterNodeStart(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
-    yMargins.top = nodeStart;
+    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+    yMargins.top = startOffset;
 };
 
 /**
@@ -57,8 +64,11 @@ const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): vo
  * @returns {void}
  */
 const calculateFooterMargins = (pageNode: PMNode, footerNode: PMNode, yMargins: YMarginConfig): void => {
-    const footerNodeStart = getHeaderFooterNodeStart(footerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.start;
-    yMargins.top = footerNodeStart;
+    const { height: pageHeight } = getPaperDimensionsFromPageNode(pageNode);
+
+    const footerHeight = getHeaderFooterNodeHeight(footerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+    const endOffset = getHeaderFooterNodePageEndOffset(footerNode) ?? FOOTER_DEFAULT_ATTRIBUTES.pageEndOffset;
+    yMargins.top = pageHeight - (footerHeight + endOffset);
 
     const bodyNode = getPageRegionNode(pageNode, "body");
     if (bodyNode) {
@@ -123,7 +133,7 @@ export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): Margin
     const headerNode = getPageRegionNode(pageNode, "header");
     const footerNode = getPageRegionNode(pageNode, "footer");
     if (headerNode) {
-        const { start, height } = getHeaderNodeAttributes(headerNode);
+        const { pageEndOffset: start, height } = getHeaderNodeAttributes(headerNode);
         const headerTotalHeight = start + height;
         bodyMargins.top -= headerTotalHeight;
         bodyMargins.bottom -= headerTotalHeight;

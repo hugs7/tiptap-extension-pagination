@@ -20,10 +20,13 @@ export type HeaderFooterNodeAttributes<T extends HeaderFooter | unknown> = {
     type: T;
 
     /**
-     * The start position of the header in millimeters. That is, the distance from the top of
-     * the page to the top of the header.
+     * The offset of the header or footer in millimeters. For the header, that is
+     * the distance from the top of the page to the top of the header. For the footer,
+     * that is the distance from the bottom of the page to the bottom of the footer.
+     * Doing things this way allows for this value to be agnostic of the paper size
+     * and orientation.
      */
-    start: number;
+    pageEndOffset: number;
 
     /**
      * Height of the header in millimeters.
