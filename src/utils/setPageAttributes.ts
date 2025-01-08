@@ -14,20 +14,20 @@ import { isBodyNode } from "./pageRegion/body";
  * @param tr - The transaction to apply the change to.
  * @param attr - The attribute to set.
  * @param value - The value to set the attribute to.
- * @param setNodeTypeAttribute - The callback to set the attribute for a node of the type handled by the callback.
+ * @param setNodesTypeAttribute - The callback to set the attribute for a node of the type handled by the callback.
  * @returns {boolean} True if any attribute was changed, false otherwise.
  */
 const setNodesTypeAttribute = <V>(
     tr: Transaction,
     attr: string,
     value: V,
-    setNodeTypeAttribute: (tr: Transaction, pos: number, node: PMNode, attr: string, value: V) => boolean
+    setNodesTypeAttribute: (tr: Transaction, pos: number, node: PMNode, attr: string, value: V) => boolean
 ): boolean => {
     const { doc } = tr;
     const transactions: boolean[] = [];
 
     doc.forEach((node, pos) => {
-        transactions.push(setNodeTypeAttribute(tr, pos, node, attr, value));
+        transactions.push(setNodesTypeAttribute(tr, pos, node, attr, value));
     });
 
     return transactions.some((changed) => changed);
