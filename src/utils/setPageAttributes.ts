@@ -101,7 +101,7 @@ export const setBodyNodesAttribute = (tr: Transaction, attr: string, value: any)
  * @param value - The value to set the attribute to.
  * @returns {boolean} True if the attribute was changed, false otherwise.
  */
-export const setBodyNodeAttribute = (tr: Transaction, pagePos: number, pageNode: PMNode, attr: string, value: any): boolean => {
+export const setBodyNodeAttribute = <T>(tr: Transaction, pagePos: number, pageNode: PMNode, attr: string, value: T): boolean => {
     if (!isPageNode(pageNode)) {
         return false;
     }

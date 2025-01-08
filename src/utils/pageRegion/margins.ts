@@ -117,7 +117,8 @@ export const getPageNumBodyMargins = (context: Editor | EditorState, pageNum: nu
  * @returns {MarginConfig} The effective margins of the body node.
  */
 export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): MarginConfig => {
-    const bodyMargins = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+    // Copy the default margin config to avoid modifying the original.
+    const { ...bodyMargins } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
 
     const headerNode = getPageRegionNode(pageNode, "header");
     const footerNode = getPageRegionNode(pageNode, "footer");
