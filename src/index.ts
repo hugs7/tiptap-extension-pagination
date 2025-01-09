@@ -20,7 +20,7 @@ export { DEFAULT_PAPER_SIZE, paperSizes, paperDimensions } from "./constants/pap
 export { LIGHT_PAPER_COLOUR, DARK_PAPER_COLOUR, DEFAULT_PAPER_COLOUR } from "./constants/paperColours";
 export { DEFAULT_PAPER_ORIENTATION, paperOrientationsSelect } from "./constants/paperOrientation";
 export { pageSides } from "./constants/pageSides";
-export { DEFAULT_PAGE_MARGIN_NAME, DEFAULT_MARGIN_CONFIG, commonMarginConfigs } from "./constants/pageMargins";
+export { DEFAULT_PAGE_MARGIN_NAME, DEFAULT_PAGE_MARGIN_CONFIG, commonMarginConfigs } from "./constants/pageMargins";
 export { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
 
 // === Nodes ===
@@ -32,11 +32,10 @@ import BodyNode from "./Nodes/Body";
 export { isPageNode } from "./utils/page";
 export { getPageNumber, getThisPageNodePosition } from "./utils/pagination";
 export { getPageNumPaperSize, getPageNodePaperSize } from "./utils/paperSize";
-export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
-export { getPageNumBodyMargins } from "./utils/pageRegion/margins";
+export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
+export { getPageNumPageMargins, getPageNodePageMargins } from "./utils/pageMargins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
-export { getBodyNodeMargins } from "./utils/pageRegion/body";
 export { doesDocHavePageNodes } from "./utils/page";
 
 // === Exports ===
