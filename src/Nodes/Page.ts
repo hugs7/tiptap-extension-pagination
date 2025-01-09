@@ -10,9 +10,9 @@ import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { PAGE_NODE_NAME, DEFAULT_PAGE_GAP, PAGE_ATTRIBUTES } from "../constants/page";
 import { getPaperDimensionsFromPageNode } from "../utils/paperSize";
 import { getPageNodePaperColour } from "../utils/paperColour";
-import { isPageNode } from "../utils/page";
+import { isPageNode } from "../utils/nodes/page/page";
 import { mm, px } from "../utils/units";
-import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
+import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/borders/pageBorders";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 import { addNodeAttributes, parseHTMLNode } from "../utils/node";
 

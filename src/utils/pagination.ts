@@ -19,8 +19,8 @@ import { PaginationNodeTypes } from "../types/pagination";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
-import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
-import { getPaginationNodeAttributes } from "./getPageAttributes";
+import { collectPageNodes, isPageNode, isPageNumInRange } from "./nodes/page/page";
+import { getPaginationNodeAttributes } from "./nodes/page/getPageAttributes";
 
 /**
  * Check if the given node is a paragraph node.

@@ -11,8 +11,8 @@ import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { Nullable } from "../types/record";
 import { PaperOrientation } from "../types/paper";
-import { getPageAttributeByPageNum, isPageNode } from "./page";
-import { setPageNodeAttribute } from "./setPageAttributes";
+import { getPageAttributeByPageNum, isPageNode } from "./nodes/page/page";
+import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
 
 /**
  * Get the paper orientation of a particular page node in the document.

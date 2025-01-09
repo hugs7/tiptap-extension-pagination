@@ -13,10 +13,10 @@ import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { PaperOrientation, PaperDimensions, PaperSize } from "../types/paper";
 import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
 import { Nullable } from "../types/record";
-import { getPageAttributeByPageNum, isPageNode } from "./page";
+import { getPageAttributeByPageNum, isPageNode } from "./nodes/page/page";
 import { mmToPixels } from "./window";
 import { nodeHasAttribute } from "./node";
-import { setPageNodeAttribute } from "./setPageAttributes";
+import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
 import { getPageNodePaperOrientation } from "./paperOrientation";
 
 /**

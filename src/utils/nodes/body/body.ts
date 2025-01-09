@@ -5,9 +5,9 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_NAME } from "../../constants/body";
-import { Nullable } from "../../types/record";
-import { BodyNodeAttributes } from "../../types/body";
+import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_NAME } from "../../../constants/body";
+import { Nullable } from "../../../types/record";
+import { BodyNodeAttributes } from "../../../types/body";
 
 /**
  * Check if the given node is a body node.

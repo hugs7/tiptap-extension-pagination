@@ -15,15 +15,14 @@ import { PaperOrientation, PaperSize } from "./types/paper";
 import { BorderConfig, MultiSide, MarginConfig } from "./types/page";
 import KeymapPlugin from "./Plugins/Keymap";
 import PaginationPlugin from "./Plugins/Pagination";
-import { getPageNodePosByPageNum, isPageNode } from "./utils/page";
+import { getPageNodePosByPageNum, isPageNode } from "./utils/nodes/page/page";
 import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPagePaperSize } from "./utils/paperSize";
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
-import { setPageNodesAttribute } from "./utils/setPageAttributes";
+import { setPageNodesAttribute } from "./utils/nodes/page/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPageMargins } from "./utils/pageRegion/margins";
-import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
+import { isMarginValid, isValidPageMargins, setPageNodePosPageMargins, updatePageMargin } from "./utils/margins/pageMargins";
+import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/borders/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
-import { setPageNodePosPageMargins, updatePageMargin } from "./utils/pageMargins";
 
 export interface PaginationOptions {
     /**

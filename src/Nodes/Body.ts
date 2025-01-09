@@ -6,13 +6,14 @@
 
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { BODY_ATTRIBUTES, BODY_NODE_NAME } from "../constants/body";
-import { isBodyNode } from "../utils/pageRegion/body";
+import { isBodyNode } from "../utils/nodes/body/body";
 import { addNodeAttributes, parseHTMLNode } from "../utils/node";
-import { calculateShorthandMargins, calculateBodyMargins } from "../utils/pageRegion/margins";
+import { calculateShorthandMargins } from "../utils/margins/pageMargins";
 import { mm } from "../utils/units";
 import { getPageNodeAndPosition } from "../utils/pagination";
-import { calculateBodyDimensions } from "../utils/pageRegion/dimensions";
+import { calculateBodyDimensions } from "../utils/nodes/body/dimensions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
+import { calculateBodyMargins } from "../utils/margins/bodyMargins";
 
 const baseElement = "div" as const;
 const pageRegionAttribute = "data-page-region" as const;
