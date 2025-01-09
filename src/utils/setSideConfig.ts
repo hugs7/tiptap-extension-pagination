@@ -138,7 +138,7 @@ export const setPageSideValue =
         }
 
         if (!isValueValid(value)) {
-            console.warn("Invalid border value", value);
+            console.warn("Invalid side value", value);
             return false;
         }
 
