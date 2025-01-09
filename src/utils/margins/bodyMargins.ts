@@ -9,7 +9,7 @@ import { MarginConfig } from "../../types/page";
 import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { getPageNodePageMargins } from "./pageMargins";
 import { getHeaderNodeAttributes } from "./headerFooter";
-import { getPageRegionNode } from "../nodes/pageRegion/getAttributes";
+import { getPageRegionNode } from "../nodes/headerFooter/getAttributes";
 
 /**
  * Calculate the effective DOM margins of the body node. Takes into account

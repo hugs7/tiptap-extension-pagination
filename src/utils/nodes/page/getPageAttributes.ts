@@ -23,7 +23,7 @@ import { getPageNodePageBorders, getPageNumPageBorders } from "../../borders/pag
 import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
 import { getFooterNodeAttributes, getHeaderNodeAttributes } from "../../margins/headerFooter";
 import { getBodyNodeAttributes } from "../body/body";
-import { getPageRegionNode } from "../pageRegion/getAttributes";
+import { getPageRegionNode } from "../headerFooter/getAttributes";
 
 /**
  * Retrieves the page node attributes from the editor state.

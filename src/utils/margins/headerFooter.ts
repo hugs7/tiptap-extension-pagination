@@ -15,11 +15,11 @@ import {
 } from "../../constants/pageRegions";
 import { MarginConfig, XMarginConfig, YMarginConfig } from "../../types/page";
 import { getPaperDimensionsFromPageNode } from "../paperSize";
-import { getPageRegionNode } from "../nodes/pageRegion/getAttributes";
+import { getPageRegionNode } from "../nodes/headerFooter/getAttributes";
 import { getPageNodePageMargins } from "./pageMargins";
 import { calculateBodyDimensions } from "../nodes/body/dimensions";
 import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
-import { getHeaderFooterNodeType } from "../nodes/pageRegion/headerFooter";
+import { getHeaderFooterNodeType } from "../nodes/headerFooter/headerFooter";
 
 /**
  * Get the x margins from a header or footer node.
