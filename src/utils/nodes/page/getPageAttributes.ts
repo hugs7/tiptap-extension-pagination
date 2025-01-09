@@ -6,24 +6,24 @@
 
 import { EditorState } from "@tiptap/pm/state";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
-import { DEFAULT_PAGE_MARGIN_CONFIG } from "../constants/pageMargins";
-import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
-import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
-import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
-import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
-import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
-import { PageRegionNodeAttributesObject } from "../types/pageRegions";
-import { calculatePageContentPixelDimensions, getPageNodePaperSize, getPageNumPaperSize } from "./paperSize";
-import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
-import { getPageNodePageMargins, getPageNumPageMargins } from "./pageMargins";
-import { getPageNodePageBorders, getPageNumPageBorders } from "./pageBorders";
+import { DEFAULT_PAPER_SIZE } from "../../../constants/paperSize";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../../constants/pageMargins";
+import { DEFAULT_PAPER_ORIENTATION } from "../../../constants/paperOrientation";
+import { DEFAULT_PAPER_COLOUR } from "../../../constants/paperColours";
+import { DEFAULT_PAGE_BORDER_CONFIG } from "../../../constants/pageBorders";
+import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../../../constants/pageRegions";
+import { BODY_DEFAULT_ATTRIBUTES } from "../../../constants/body";
+import { PageNodeAttributes, PageContentPixelDimensions } from "../../../types/page";
+import { PageRegionNodeAttributesObject } from "../../../types/pageRegions";
+import { calculatePageContentPixelDimensions, getPageNodePaperSize, getPageNumPaperSize } from "../../paperSize";
+import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "../../paperOrientation";
+import { getPageNodePaperColour, getPageNumPaperColour } from "../../paperColour";
+import { getPageNodePageMargins, getPageNumPageMargins } from "../../margins/pageMargins";
+import { getPageNodePageBorders, getPageNumPageBorders } from "../../borders/pageBorders";
 import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
-import { getFooterNodeAttributes, getHeaderNodeAttributes } from "./pageRegion/pageRegion";
-import { getBodyNodeAttributes } from "./pageRegion/body";
-import { getPageRegionNode } from "./pageRegion/getAttributes";
+import { getFooterNodeAttributes, getHeaderNodeAttributes } from "../../margins/headerFooter";
+import { getBodyNodeAttributes } from "../body/body";
+import { getPageRegionNode } from "../pageRegion/getAttributes";
 
 /**
  * Retrieves the page node attributes from the editor state.

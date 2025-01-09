@@ -5,15 +5,15 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { Nullable } from "../types/record";
-import { MarginConfig, MultiAxisSide } from "../types/page";
-import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
+import { Nullable } from "../../types/record";
+import { MarginConfig, MultiAxisSide } from "../../types/page";
+import { PAGE_NODE_ATTR_KEYS } from "../../constants/page";
 import { Dispatch, Editor } from "@tiptap/core";
 import { EditorState, Transaction } from "@tiptap/pm/state";
-import { DEFAULT_PAGE_MARGIN_CONFIG } from "../constants/pageMargins";
-import { getPageAttributeByPageNum } from "./page";
-import { setPageNodePosSideConfig, updatePageSideConfig } from "./setSideConfig";
-import { isValidPageMargins } from "./pageRegion/margins";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { getPageAttributeByPageNum } from "../nodes/page/page";
+import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
+import { mm } from "../units";
 
 /**
  * Get the page margins from a page node.
@@ -86,4 +86,37 @@ export const updatePageMargin = (tr: Transaction, pagePos: number, pageNode: PMN
         DEFAULT_PAGE_MARGIN_CONFIG,
         PAGE_NODE_ATTR_KEYS.pageMargins
     );
+};
+
+/**
+ * Checks if a (single) margin is valid.
+ * Margins must be non-negative and finite to be considered valid.
+ * @param margin - The margin to check.
+ * @returns {boolean} True if the margin is valid, false otherwise.
+ */
+export const isMarginValid = (margin: number): boolean => {
+    return margin >= 0 && isFinite(margin);
+};
+
+/**
+ * Checks if the page margins are valid.
+ * Margins must be non-negative and finite to be considered valid.
+ * @param pageMargins - The page margins to check.
+ * @returns {boolean} True if the page margins are valid, false otherwise.
+ */
+export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
+    return Object.values(pageMargins).every(isMarginValid);
+};
+
+/**
+ * Converts a margin config to a CSS string using millimeters as the unit.
+ * @param pageMargins - The page margins to convert to a CSS string.
+ * @returns {string} The CSS string representation of the page margins. Remember MDN says
+ * order is (top, right, bottom, left). See https://developer.mozilla.org/en-US/docs/Web/CSS/padding.
+ */
+export const calculateShorthandMargins = (pageMargins: MarginConfig): string => {
+    const { top, right, bottom, left } = pageMargins;
+
+    const padding = [top, right, bottom, left].map(mm).join(" ");
+    return padding;
 };

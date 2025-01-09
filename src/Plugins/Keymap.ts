@@ -30,7 +30,7 @@ import {
 } from "../utils/pagination";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/node";
-import { getPageNodeByPageNum, isPageNode } from "../utils/page";
+import { getPageNodeByPageNum, isPageNode } from "../utils/nodes/page/page";
 
 const KeymapPlugin = keymap({
     Enter: (state, dispatch) => {

@@ -7,13 +7,13 @@
 import { Node as PMNode } from "@tiptap/pm/model";
 import { Editor } from "@tiptap/core";
 import { EditorState } from "@tiptap/pm/state";
-import { PageRegion } from "../../types/pageRegions";
-import { Nullable } from "../../types/record";
-import { NullableNodePos } from "../../types/node";
-import { getStateFromContext } from "../editor";
-import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
-import { getHeaderFooterNodeType, isHeaderFooterNode } from "./pageRegion";
-import { isBodyNode } from "./body";
+import { PageRegion } from "../../../types/pageRegions";
+import { Nullable } from "../../../types/record";
+import { NullableNodePos } from "../../../types/node";
+import { getStateFromContext } from "../../editor";
+import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page/page";
+import { getHeaderFooterNodeType, isHeaderFooterNode } from "./headerFooter";
+import { isBodyNode } from "../body/body";
 
 /**
  * Get the page region node of the current page by the page region type.
