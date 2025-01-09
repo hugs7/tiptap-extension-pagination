@@ -88,7 +88,7 @@ export const getFooterNodeAttributes = (headerFooterNode: PMNode): FooterNodeAtt
  * @returns {void}
  */
 const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): void => {
-    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_DEFAULT_ATTRIBUTES.pageEndOffset;
     yMargins.top = startOffset;
 };
 
