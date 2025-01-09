@@ -9,7 +9,7 @@ import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
-import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
+import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
 import {
@@ -51,7 +51,7 @@ export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
  * @returns {void}
  */
 const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): void => {
-    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
+    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_DEFAULT_ATTRIBUTES.pageEndOffset;
     yMargins.top = startOffset;
 };
 
