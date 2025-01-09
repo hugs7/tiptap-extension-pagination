@@ -10,10 +10,10 @@ import { addNodeAttributes, parseHTMLNode } from "../utils/node";
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { mm } from "../utils/units";
-import { calculateHeaderFooterDimensions } from "../utils/nodes/pageRegion/dimensions";
+import { calculateHeaderFooterDimensions } from "../utils/nodes/headerFooter/dimensions";
 import { calculateShorthandMargins } from "../utils/margins/pageMargins";
 import { calculateHeaderFooterMargins } from "../utils/margins/headerFooter";
-import { isHeaderFooterNode, getHeaderFooterNodeType } from "../utils/nodes/pageRegion/headerFooter";
+import { isHeaderFooterNode, getHeaderFooterNodeType } from "../utils/nodes/headerFooter/headerFooter";
 
 const baseElement = "div" as const;
 const headerFooterAttribute = "data-page-header-footer" as const;
