@@ -7,11 +7,10 @@
 import { Extension } from "@tiptap/core";
 import { DEFAULT_PAPER_SIZE } from "./constants/paperSize";
 import { DEFAULT_PAPER_COLOUR } from "./constants/paperColours";
-import { DEFAULT_MARGIN_CONFIG } from "./constants/pageMargins";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "./constants/pageMargins";
 import { DEFAULT_PAPER_ORIENTATION } from "./constants/paperOrientation";
 import { PAGE_NODE_ATTR_KEYS } from "./constants/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
-import { BODY_NODE_ATTR_KEYS } from "./constants/body";
 import { PaperOrientation, PaperSize } from "./types/paper";
 import { BorderConfig, MultiSide, MarginConfig } from "./types/page";
 import KeymapPlugin from "./Plugins/Keymap";
@@ -19,11 +18,12 @@ import PaginationPlugin from "./Plugins/Pagination";
 import { getPageNodePosByPageNum, isPageNode } from "./utils/page";
 import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPagePaperSize } from "./utils/paperSize";
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
-import { setBodyNodesAttribute, setPageNodesAttribute } from "./utils/setPageAttributes";
+import { setPageNodesAttribute } from "./utils/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPageMargins, setBodyNodePosPageMargins, updateBodyMargin } from "./utils/pageRegion/margins";
+import { isMarginValid, isValidPageMargins } from "./utils/pageRegion/margins";
 import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
+import { setPageNodePosPageMargins, updatePageMargin } from "./utils/pageMargins";
 
 export interface PaginationOptions {
     /**
@@ -176,6 +176,13 @@ declare module "@tiptap/core" {
             setPagePaperOrientation: (pageNum: number, paperOrientation: PaperOrientation) => ReturnType;
 
             /**
+             * Get the default page margins
+             * @returns {MarginConfig} The default page margins
+             * @example editor.commands.getDefaultPageMargins()
+             */
+            getDefaultPageMargins: () => MarginConfig;
+
+            /**
              * Set the page margins for the document
              * @param pageMargins The page margins (top, right, bottom, left)
              * @example editor.commands.setDocumentPageMargins({ top: 10, right: 15, bottom: 10, left: 15 })
@@ -268,7 +275,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
             defaultPaperColour: DEFAULT_PAPER_COLOUR,
             useDeviceThemeForPaperColour: false,
             defaultPaperOrientation: DEFAULT_PAPER_ORIENTATION,
-            defaultMarginConfig: DEFAULT_MARGIN_CONFIG,
+            defaultMarginConfig: DEFAULT_PAGE_MARGIN_CONFIG,
             defaultPageBorders: DEFAULT_PAGE_BORDER_CONFIG,
         };
     },
@@ -415,19 +422,21 @@ const PaginationExtension = Extension.create<PaginationOptions>({
                     return setPageNodePosPaperOrientation(tr, dispatch, pagePos, pageNode, paperOrientation);
                 },
 
-            setDocumentPageMargins: setDocumentSideConfig(BODY_NODE_ATTR_KEYS.pageMargins, isValidPageMargins, setBodyNodesAttribute),
+            getDefaultPageMargins: () => this.options.defaultMarginConfig,
+
+            setDocumentPageMargins: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageMargins, isValidPageMargins, setPageNodesAttribute),
 
             setDocumentDefaultPageMargins:
                 () =>
                 ({ editor }) =>
                     editor.commands.setDocumentPageMargins(this.options.defaultMarginConfig),
 
-            setPagePageMargins: setPageSideConfig(getPageNodePosByPageNum, setBodyNodePosPageMargins),
+            setPagePageMargins: setPageSideConfig(getPageNodePosByPageNum, setPageNodePosPageMargins),
 
             setDocumentPageMargin:
                 (margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setDocumentSideValue(editor.commands.setDocumentPageMargins, isMarginValid, updateBodyMargin)(margin, value)({
+                    setDocumentSideValue(editor.commands.setDocumentPageMargins, isMarginValid, updatePageMargin)(margin, value)({
                         tr,
                         dispatch,
                     }),
@@ -435,14 +444,12 @@ const PaginationExtension = Extension.create<PaginationOptions>({
             setPagePageMargin:
                 (pageNum: number, margin: MultiSide, value: number) =>
                 ({ tr, dispatch, editor }) =>
-                    setPageSideValue(editor.commands.setPagePageMargins, isMarginValid, updateBodyMargin)(pageNum, margin, value)({
+                    setPageSideValue(editor.commands.setPagePageMargins, isMarginValid, updatePageMargin)(pageNum, margin, value)({
                         tr,
                         dispatch,
                     }),
 
-            getDefaultPageBorders: () => {
-                return this.options.defaultPageBorders;
-            },
+            getDefaultPageBorders: () => this.options.defaultPageBorders,
 
             setDocumentPageBorders: setDocumentSideConfig(PAGE_NODE_ATTR_KEYS.pageBorders, isValidPageBorders, setPageNodesAttribute),
 

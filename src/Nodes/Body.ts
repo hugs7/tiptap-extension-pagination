@@ -38,7 +38,7 @@ const BodyNode = Node.create({
 
     addNodeView() {
         return (props: NodeViewRendererProps) => {
-            const { editor, node, getPos } = props;
+            const { editor, getPos } = props;
             const pos = getPos();
 
             const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
@@ -50,8 +50,8 @@ const BodyNode = Node.create({
             dom.setAttribute(pageRegionAttribute, String(true));
             dom.classList.add(BODY_NODE_NAME);
 
-            const { width, height } = calculateBodyDimensions(pageNode, node);
-            const calculatedMargins = calculateBodyMargins(pageNode, node);
+            const { width, height } = calculateBodyDimensions(pageNode);
+            const calculatedMargins = calculateBodyMargins(pageNode);
 
             dom.style.height = mm(height);
             dom.style.width = mm(width);

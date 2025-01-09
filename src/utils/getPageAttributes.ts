@@ -6,19 +6,21 @@
 
 import { EditorState } from "@tiptap/pm/state";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
-import { calculatePageContentPixelDimensions, getPageNodePaperSize, getPageNumPaperSize } from "./paperSize";
-import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
-import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNodePageBorders, getPageNumPageBorders } from "./pageBorders";
 import { DEFAULT_PAPER_SIZE } from "../constants/paperSize";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "../constants/pageMargins";
 import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
-import { PageRegionNodeAttributesObject } from "../types/pageRegions";
-import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
 import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
+import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
+import { PageRegionNodeAttributesObject } from "../types/pageRegions";
+import { calculatePageContentPixelDimensions, getPageNodePaperSize, getPageNumPaperSize } from "./paperSize";
+import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
+import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
+import { getPageNodePageMargins, getPageNumPageMargins } from "./pageMargins";
+import { getPageNodePageBorders, getPageNumPageBorders } from "./pageBorders";
+import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
 import { getFooterNodeAttributes, getHeaderNodeAttributes } from "./pageRegion/pageRegion";
 import { getBodyNodeAttributes } from "./pageRegion/body";
 import { getPageRegionNode } from "./pageRegion/getAttributes";
@@ -32,9 +34,10 @@ export const getPageNodeAttributes = (pageNode: PMNode): PageNodeAttributes => {
     const paperSize = getPageNodePaperSize(pageNode) ?? DEFAULT_PAPER_SIZE;
     const paperOrientation = getPageNodePaperOrientation(pageNode) ?? DEFAULT_PAPER_ORIENTATION;
     const paperColour = getPageNodePaperColour(pageNode) ?? DEFAULT_PAPER_COLOUR;
+    const pageMargins = getPageNodePageMargins(pageNode) ?? DEFAULT_PAGE_MARGIN_CONFIG;
     const pageBorders = getPageNodePageBorders(pageNode) ?? DEFAULT_PAGE_BORDER_CONFIG;
 
-    return { paperSize, paperOrientation, paperColour, pageBorders };
+    return { paperSize, paperOrientation, paperColour, pageMargins, pageBorders };
 };
 
 /**
@@ -47,9 +50,10 @@ const getPageNodeAttributesByPageNum = (state: EditorState, pageNum: number): Pa
     const paperSize = getPageNumPaperSize(state, pageNum);
     const paperColour = getPageNumPaperColour(state, pageNum);
     const paperOrientation = getPageNumPaperOrientation(state, pageNum);
+    const pageMargins = getPageNumPageMargins(state, pageNum);
     const pageBorders = getPageNumPageBorders(state, pageNum);
 
-    return { paperSize, paperColour, paperOrientation, pageBorders };
+    return { paperSize, paperColour, paperOrientation, pageMargins, pageBorders };
 };
 
 /**

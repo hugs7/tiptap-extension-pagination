@@ -17,8 +17,9 @@ export type PageContentPixelDimensions = { pageContentHeight: number; pageConten
  */
 export type PageNodeAttributes = {
     paperSize: PaperSize;
-    paperColour: string;
     paperOrientation: PaperOrientation;
+    paperColour: string;
+    pageMargins: MarginConfig;
     pageBorders: BorderConfig;
 };
 
