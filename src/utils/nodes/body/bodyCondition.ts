@@ -85,11 +85,12 @@ export const isPosMatchingStartOfBodyCondition = (doc: PMNode, $pos: ResolvedPos
     }
 
     // Determine the condition to check
+    // First position of paragraph will always be 1 more than the body position
     const isFirstParagraph = startOfBodyPos + 1 === startOfParagraphPos;
     if (checkExactStart) {
         // Check if position is exactly at the start of the body
-        // First position of body will always be 1 more than the paragraph position
-        const isPosAtStartOfParagraph = $pos.pos - 1 === startOfParagraphPos;
+        // First position of text will always be 1 more than the first paragraph position
+        const isPosAtStartOfParagraph = startOfParagraphPos + 1 === $pos.pos;
         if (isFirstParagraph && isPosAtStartOfParagraph) {
             console.log("At the start of the body");
             return true;
@@ -143,9 +144,13 @@ export const isPosMatchingEndOfBodyCondition = (doc: PMNode, $pos: ResolvedPos |
     }
 
     // Determine the condition to check
+    // Last position of paragraph will always be 1 less than the end of the last body position
+    const isLastParagraph = endOfParagraphPos + 1 === endOfBodyPos;
     if (checkExactEnd) {
         // Check if position is exactly at the end of the body
-        if ($pos.pos === endOfBodyPos) {
+        // Last position of text will always be 1 less than the end of the last paragraph position
+        const isPosAtEndOfParagraph = endOfParagraphPos + 1 === $pos.pos;
+        if (isLastParagraph && isPosAtEndOfParagraph) {
             console.log("At the end of the body");
             return true;
         }
@@ -153,7 +158,7 @@ export const isPosMatchingEndOfBodyCondition = (doc: PMNode, $pos: ResolvedPos |
         return false;
     } else {
         // Check if position is at the last child of the body
-        if (endOfParagraphPos + 1 === endOfBodyPos) {
+        if (isLastParagraph) {
             console.log("In the last child of the body");
             return true;
         }
