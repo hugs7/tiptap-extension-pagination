@@ -15,3 +15,13 @@ export type NullableNodePos = { node: Nullable<PMNode>; pos: number };
 export type NodeAttributes<NA extends Record<string, any>> = {
     [K in keyof NA]: AttributeConfig<NA[K]>;
 };
+
+/**
+ * From built in type of Tiptap. The (direct) child node of a parent node, if any,
+ * along with its index and offset relative to the parent node.
+ */
+export type DirectChild = {
+    node: Nullable<PMNode>;
+    index: number;
+    offset: number;
+};

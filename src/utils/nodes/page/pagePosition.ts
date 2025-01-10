@@ -8,7 +8,7 @@ import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { PAGE_NODE_NAME } from "../../../constants/page";
 import { getParentNodePosOfType } from "../node";
 import { isPageNode } from "./page";
-import { NullableNodePos } from "../../../types/node";
+import { DirectChild, NullableNodePos } from "../../../types/node";
 
 /**
  * Get the page node (parent of the current node) position.
@@ -39,6 +39,20 @@ export const getPageNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): 
     }
 
     return { pos: pagePos, node: pageNode };
+};
+
+/**
+ * Get the child of the page node at the specified position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {DirectChild} The child of the page node at the specified position.
+ */
+export const getPageChild = (doc: PMNode, pos: ResolvedPos | number): DirectChild => {
+    if (typeof pos !== "number") {
+        return getPageChild(doc, pos.pos);
+    }
+
+    return doc.childAfter(pos);
 };
 
 /**
