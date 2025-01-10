@@ -29,7 +29,7 @@ import {
     getPreviousParagraph,
     isAtStartOrEndOfParagraph,
     isParagraphNode,
-} from "../utils/paragraph";
+} from "../utils/nodes/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/nodes/node";
 import { getPageNodeByPageNum, isPageNode } from "../utils/nodes/page";

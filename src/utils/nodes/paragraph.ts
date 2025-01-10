@@ -5,10 +5,10 @@
  */
 
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
-import { Nullable } from "../types/record";
-import { getParentNodePosOfType, isNodeEmpty } from "./nodes/node";
-import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./pagination";
-import { inRange } from "./math";
+import { Nullable } from "../../types/record";
+import { getParentNodePosOfType, isNodeEmpty } from "./node";
+import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "../pagination";
+import { inRange } from "../math";
 
 /**
  * Check if the given node is a paragraph node.

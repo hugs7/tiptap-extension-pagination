@@ -21,7 +21,7 @@ import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, se
 import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./nodes/page";
 import { getPaginationNodeAttributes } from "./getPageAttributes";
-import { getParagraphNodeAndPosition, isParagraphNode } from "./paragraph";
+import { getParagraphNodeAndPosition, isParagraphNode } from "./nodes/paragraph";
 
 /**
  * Check if the given node is a text node.
