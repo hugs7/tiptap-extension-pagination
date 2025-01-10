@@ -770,7 +770,7 @@ const buildNewDocument = (
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
-        const isPageFull = currentHeight + nodeHeight > bodyPixelDimensions.pageContentHeight;
+        const isPageFull = currentHeight + nodeHeight > bodyPixelDimensions.bodyHeight;
         if (isPageFull && currentPageContent.length > 0) {
             const pageNode = addPage(currentPageContent);
             cumulativeNewDocPos += pageNode.nodeSize;

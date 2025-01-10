@@ -79,7 +79,7 @@ export const calculatePageContentPixelDimensions = (
     bodyNodeAttributes: BodyNodeAttributes
 ): PageContentPixelDimensions => {
     const { paperSize, paperOrientation, pageBorders } = pageNodeAttributes;
-    const { width, height } = getPaperDimensions(paperSize, paperOrientation);
+    const { width: paperWidth, height: paperHeight } = getPaperDimensions(paperSize, paperOrientation);
 
     const { top: marginTop, left: marginLeft, right: marginRight, bottom: marginBottom } = bodyNodeAttributes.pageMargins;
     const verticalMargins = marginTop + marginBottom;
@@ -89,10 +89,10 @@ export const calculatePageContentPixelDimensions = (
     const verticalBorders = borderTop + borderBottom;
     const horizontalBorders = borderLeft + borderRight;
 
-    const pageContentHeight = mmToPixels(height - verticalMargins) - verticalBorders;
-    const pageContentWidth = mmToPixels(width - horizontalMargins) - horizontalBorders;
+    const bodyHeight = mmToPixels(paperHeight - verticalMargins) - verticalBorders;
+    const bodyWidth = mmToPixels(paperWidth - horizontalMargins) - horizontalBorders;
 
-    return { pageContentHeight, pageContentWidth };
+    return { bodyHeight, bodyWidth };
 };
 
 /**
