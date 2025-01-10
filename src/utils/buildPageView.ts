@@ -14,7 +14,7 @@ import { Nullable } from "../types/record";
 import { MarginConfig } from "../types/page";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
-import { getPaginationNodeAttributes } from "./nodes/page/getPageAttributes";
+import { getPaginationNodeAttributes } from "./nodes/page/attributes/getPageAttributes";
 import { isParagraphNode } from "./nodes/paragraph";
 import { isTextNode } from "./nodes/text";
 import { getPaginationNodeTypes } from "./pagination";

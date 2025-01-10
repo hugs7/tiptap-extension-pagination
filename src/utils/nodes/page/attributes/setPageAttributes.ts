@@ -6,10 +6,10 @@
 
 import { Node as PMNode } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
-import { isPageNode } from "./page";
-import { isBodyNode } from "../body";
-import { getPageRegionNodeAndPos } from "../../pageRegion/getAttributes";
-import { setNodeAttribute, setNodesTypeAttribute } from "../../attributes/setAttributes";
+import { isPageNode } from "../page";
+import { isBodyNode } from "../../body";
+import { getPageRegionNodeAndPos } from "../../../pageRegion/getAttributes";
+import { setNodeAttribute, setNodesTypeAttribute } from "../../../attributes/setAttributes";
 
 /**
  * Set a page node attribute to the given value for all page nodes in the document.

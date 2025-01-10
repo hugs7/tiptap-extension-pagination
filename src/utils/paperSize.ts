@@ -17,7 +17,7 @@ import { isPageNode } from "./nodes/page/page";
 import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
 import { mmToPixels } from "./window";
 import { nodeHasAttribute } from "./attributes/getAttributes";
-import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
+import { setPageNodeAttribute } from "./nodes/page/attributes/setPageAttributes";
 import { getPageNodePaperOrientation } from "./paperOrientation";
 import { BodyNodeAttributes } from "../types/body";
 

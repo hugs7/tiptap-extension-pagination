@@ -13,7 +13,7 @@ import { Nullable } from "../types/record";
 import { PaperOrientation } from "../types/paper";
 import { isPageNode } from "./nodes/page/page";
 import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
-import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
+import { setPageNodeAttribute } from "./nodes/page/attributes/setPageAttributes";
 
 /**
  * Get the paper orientation of a particular page node in the document.
