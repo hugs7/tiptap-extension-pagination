@@ -92,18 +92,18 @@ export const isPosMatchingStartOfBodyCondition = (doc: PMNode, $pos: ResolvedPos
         // First position of text will always be 1 more than the first paragraph position
         const isPosAtStartOfParagraph = startOfParagraphPos + 1 === $pos.pos;
         if (isFirstParagraph && isPosAtStartOfParagraph) {
-            console.log("At the start of the body");
+            console.log("At the start of the page body");
             return true;
         }
-        console.log("Not at the start of the body");
+        console.log("Not at the start of the page body");
         return false;
     } else {
         // Check if position is at the first child of the body
         if (isFirstParagraph) {
-            console.log("In the first child of the body");
+            console.log("In the first child of the page body");
             return true;
         }
-        console.log("Not in the first child of the body");
+        console.log("Not in the first child of the page body");
         return false;
     }
 };
@@ -151,10 +151,10 @@ export const isPosMatchingEndOfBodyCondition = (doc: PMNode, $pos: ResolvedPos |
         // Last position of text will always be 1 less than the end of the last paragraph position
         const isPosAtEndOfParagraph = endOfParagraphPos + 1 === $pos.pos;
         if (isLastParagraph && isPosAtEndOfParagraph) {
-            console.log("At the end of the body body");
+            console.log("At the end of the page body");
             return true;
         }
-        console.log("Not at the end of the body body");
+        console.log("Not at the end of the page body");
         return false;
     } else {
         // Check if position is at the last child of the body
