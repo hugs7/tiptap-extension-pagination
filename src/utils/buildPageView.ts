@@ -18,7 +18,7 @@ import { getPaginationNodeAttributes } from "./nodes/page/attributes/getPageAttr
 import { isParagraphNode } from "./nodes/paragraph";
 import { isTextNode } from "./nodes/text";
 import { getPaginationNodeTypes } from "./pagination";
-import { isPageNumInRange } from "./nodes/page/pageNumber";
+import { isPageNumInRange } from "./nodes/page/pageRange";
 
 /**
  * Builds a new document with paginated content.

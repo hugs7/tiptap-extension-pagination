@@ -14,7 +14,8 @@ import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes } from "../nodes/page/page";
 import { getHeaderFooterNodeType, isHeaderFooterNode } from "../nodes/headerFooter/headerFooter";
 import { isBodyNode } from "../nodes/body/body";
-import { getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../nodes/page/pageNumber";
+import { getPageNodeByPageNum } from "../nodes/page/pageNumber";
+import { isPageNumInRange, handleOutOfRangePageNum } from "../nodes/page/pageRange";
 
 /**
  * Get the page region node of the current page by the page region type.
