@@ -9,7 +9,9 @@ import { Nullable } from "../../../types/record";
 import { isBodyNode } from "./body";
 import { BODY_NODE_NAME } from "../../../constants/body";
 import { getParentNodePosOfType } from "../node";
+import { getPageAfterPos, getPageBeforePos } from "../page/pagePosition";
 import { NullableNodePos } from "../../../types/node";
+import { getPageRegionNodeAndPos } from "../../pageRegion/getAttributes";
 
 /**
  * Get the body node (parent of the current node) position.
@@ -75,4 +77,38 @@ export const getEndOfBodyPosition = (doc: PMNode, pos: ResolvedPos | number): nu
     }
 
     return bodyPos + bodyNode.content.size;
+};
+
+/**
+ * Gets the previous page's body and positiom, if any, after the given position.
+ * @param doc - The current document.
+ * @param pos - Any position within the current page's body
+ * @returns {NullableNodePos} The previous page's body and position, if any.
+ */
+export const getBodyBeforePos = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
+    const previousPage = getPageBeforePos(doc, pos);
+    if (!previousPage.node) {
+        console.warn("No previous page found");
+        return previousPage;
+    }
+
+    const { node: previousPageNode, pos: previousPagePos } = previousPage;
+    return getPageRegionNodeAndPos(previousPagePos, previousPageNode, "body");
+};
+
+/**
+ * Gets the next page's body and positiom, if any, after the given position.
+ * @param doc - The current document.
+ * @param pos - Any position within the current page's body
+ * @returns {NullableNodePos} The next page's body and position, if any.
+ */
+export const getBodyAfterPos = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
+    const nextPage = getPageAfterPos(doc, pos);
+    if (!nextPage.node) {
+        console.warn("No next page found");
+        return nextPage;
+    }
+
+    const { node: nextPageNode, pos: nextPagePos } = nextPage;
+    return getPageRegionNodeAndPos(nextPagePos, nextPageNode, "body");
 };
