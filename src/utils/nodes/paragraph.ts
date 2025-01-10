@@ -10,7 +10,7 @@ import { NullableNodePos } from "../../types/node";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./document";
 import { inRange } from "../math";
-import { getBodyAfterPos, getBodyBeforePos } from "./body/bodyPosition";
+import { getBodyAfterPos, getBodyBeforePos, getEndOfBodyPosition } from "./body/bodyPosition";
 
 /**
  * Check if the given node is a paragraph node.
@@ -265,7 +265,8 @@ export const getLastParagraphInPreviousPageBodyBeforePos = (doc: PMNode, pos: Re
         return previousPageBody;
     }
 
-    return getPreviousParagraph(doc, previousPageBody.pos);
+    const endOfPrevPgBodyPos = getEndOfBodyPosition(doc, previousPageBody.pos);
+    return getPreviousParagraph(doc, endOfPrevPgBodyPos);
 };
 
 /**
