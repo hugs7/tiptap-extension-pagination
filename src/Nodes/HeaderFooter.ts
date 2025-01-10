@@ -17,7 +17,7 @@ import {
 } from "../utils/pageRegion/pageRegion";
 import { addNodeAttributes } from "../utils/attributes/addAttributes";
 import { parseHTMLNode } from "../utils/nodes/node";
-import { getPageNodeAndPosition } from "../utils/nodes/page/page";
+import { getPageNodeAndPosition } from "../utils/nodes/page/pagePosition";
 
 const baseElement = "div" as const;
 const headerFooterAttribute = "data-page-header-footer" as const;

@@ -13,7 +13,7 @@ import { mm } from "../utils/units";
 import { calculateBodyDimensions } from "../utils/pageRegion/dimensions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 import { addNodeAttributes } from "../utils/attributes/addAttributes";
-import { getPageNodeAndPosition } from "../utils/nodes/page/page";
+import { getPageNodeAndPosition } from "../utils/nodes/page/pagePosition";
 
 const baseElement = "div" as const;
 const bodyAttribute = "data-page-body" as const;

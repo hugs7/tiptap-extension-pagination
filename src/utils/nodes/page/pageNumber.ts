@@ -10,7 +10,8 @@ import { Editor } from "@tiptap/core";
 import { NodePos } from "../../../types/node";
 import { Nullable } from "../../../types/record";
 import { getStateFromContext } from "../../editor";
-import { collectPageNodes, doesDocHavePageNodes, getPageNodeAndPosition, isPageNode } from "./page";
+import { collectPageNodes, doesDocHavePageNodes, isPageNode } from "./page";
+import { getPageNodeAndPosition } from "./pagePosition";
 import { inRange } from "../../math";
 
 /**
