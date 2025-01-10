@@ -26,11 +26,12 @@ import {
 } from "../utils/nodes/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/nodes/node";
-import { isPageNode, isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page/page";
+import { isPageNode } from "../utils/nodes/page/page";
 import { isPosAtStartOfDocument } from "../utils/nodes/document";
-import { getThisPageNodePosition } from "..";
+import { getThisPageNodePosition } from "../utils/nodes/page/pagePosition";
 import { isTextNode } from "../utils/nodes/text";
 import { getPageNodeByPageNum } from "../utils/nodes/page/pageNumber";
+import { isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page/pageCondition";
 
 const KeymapPlugin = keymap({
     ArrowLeft: (state, dispatch) => {
