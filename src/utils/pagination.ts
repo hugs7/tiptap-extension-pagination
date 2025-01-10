@@ -16,7 +16,7 @@ import { CursorMap } from "../types/cursor";
 import { Nullable } from "../types/record";
 import { MarginConfig } from "../types/page";
 import { PaginationNodeTypes } from "../types/pagination";
-import { getParentNodePosOfType, getPositionNodeType } from "./node";
+import { getParentNodePosOfType, getPositionNodeType } from "./nodes/node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";

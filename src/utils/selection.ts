@@ -8,7 +8,7 @@ import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { EditorState, Selection, TextSelection, Transaction } from "@tiptap/pm/state";
 import { Sign } from "../types/direction";
 import { Nullable } from "../types/record";
-import { isNodeEmpty } from "./node";
+import { isNodeEmpty } from "./nodes/node";
 
 /**
  * Check if the editor is currently highlighting text.

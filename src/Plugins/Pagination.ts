@@ -7,7 +7,7 @@
 import { Plugin, PluginKey, EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
 import { renderPageView } from "../utils/pagination";
-import { isNodeEmpty } from "../utils/node";
+import { isNodeEmpty } from "../utils/nodes/node";
 import { doesDocHavePageNodes } from "../utils/page";
 
 const PaginationPlugin = new Plugin({

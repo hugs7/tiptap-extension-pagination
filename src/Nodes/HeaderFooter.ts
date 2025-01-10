@@ -6,7 +6,7 @@
 
 import { HEADER_FOOTER_NODE_NAME, HEADER_FOOTER_ATTRIBUTES, FOOTER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
-import { addNodeAttributes, parseHTMLNode } from "../utils/node";
+import { addNodeAttributes, parseHTMLNode } from "../utils/nodes/node";
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { mm } from "../utils/units";

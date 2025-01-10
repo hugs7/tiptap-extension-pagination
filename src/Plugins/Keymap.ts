@@ -31,7 +31,7 @@ import {
     isParagraphNode,
 } from "../utils/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
-import { appendAndReplaceNode, deleteNode } from "../utils/node";
+import { appendAndReplaceNode, deleteNode } from "../utils/nodes/node";
 import { getPageNodeByPageNum, isPageNode } from "../utils/page";
 
 const KeymapPlugin = keymap({
