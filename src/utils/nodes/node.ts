@@ -4,11 +4,9 @@
  * @description Utility functions for creating custom nodes in the editor.
  */
 
-import { Attrs, Node, ResolvedPos, TagParseRule } from "@tiptap/pm/model";
+import { Node, ResolvedPos, TagParseRule } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
-import { Attributes } from "@tiptap/core";
-import { NodeAttributes } from "../../types/node";
-import { wrapJSONParse } from "../object";
+import { parseHTMLNodeGetAttrs } from "../attributes/getAttributes";
 
 /**
  * Get the type of the node at the specified position.
@@ -97,103 +95,6 @@ export const deleteNode = (tr: Transaction, pos: number, node: Node): void => {
 export const isNodeEmpty = (node: Node): boolean => {
     return node.content.size === 0;
 };
-
-/**
- * Check if the node has the specified attribute.
- * @param node - The node to check.
- * @param attr - The attribute to check for.
- * @returns {boolean} True if the node has the specified attribute, false otherwise.
- */
-export const nodeHasAttribute = (node: Node, attr: string): boolean => {
-    const { attrs } = node;
-    return attr in attrs && attrs[attr] !== undefined && attrs[attr] !== null;
-};
-
-/**
- * Add the specified attributes to the node.
- * @param attributes - The attributes to add to the node.
- * @returns {Attributes} The attributes to add to the node.
- */
-export const addNodeAttributes = <T extends Record<string, any>>(attributes: NodeAttributes<T>): Attributes => {
-    return Object.entries(attributes).reduce(
-        (attributes, [key, config]) => ({
-            ...attributes,
-            [key]: {
-                default: config.default,
-                parseHTML: parseHTMLAttribute(key, config.default),
-                renderHTML: renderHTMLAttribute(key),
-            },
-        }),
-        {} as Attributes
-    );
-};
-
-/**
- * Parse the HTML attribute of the element.
- * @param element - The element to parse the attribute from.
- * @param attr - The attribute to parse.
- * @param fallback - The fallback value if the attribute is not found.
- * @returns {T} The parsed attribute value or the fallback value.
- */
-const parseHTMLAttribute =
-    <T>(attr: string, fallback: T) =>
-    (element: HTMLElement): T => {
-        const margins = element.getAttribute(attr);
-        return margins ? JSON.parse(margins) : fallback;
-    };
-
-/**
- * Render the HTML attribute.
- * @param attr - The attribute to render.
- * @param attributes - The attributes to render.
- * @returns {Object} The rendered attribute.
- */
-const renderHTMLAttribute =
-    <T extends Record<string, unknown>>(attr: keyof T) =>
-    (attributes: T): { [key in keyof T]: string } => {
-        const value = attributes[attr];
-
-        return {
-            [attr]: JSON.stringify(value),
-        } as { [key in keyof T]: string };
-    };
-
-/**
- * A function used to compute the attributes for the node or mark
- * created by this rule. Can also be used to describe further
- * conditions the DOM element or style must match.
- * @param nodeTagAttribute - The attribute of the node tag.
- * @param preventNestedNodes - True if nested nodes should be prevented, false otherwise.
- * @returns {Attrs | false | null} When it returns `false`, the rule won't match.
- * When it returns null or undefined, that is interpreted as an empty/default set of
- * attributes.
- */
-const parseHTMLNodeGetAttrs =
-    (nodeTagAttribute: string, preventNestedNodes: boolean) =>
-    (node: HTMLElement): Attrs | false | null => {
-        const parent = node.parentElement;
-
-        if (preventNestedNodes) {
-            if (parent && parent.hasAttribute(nodeTagAttribute)) {
-                return false;
-            }
-        }
-
-        const attrs = Array.from(node.attributes);
-
-        return attrs.reduce((acc, attribute) => {
-            const { name, value } = attribute;
-
-            if (name in acc) {
-                return acc;
-            }
-
-            return {
-                ...acc,
-                [name]: wrapJSONParse(value),
-            };
-        }, {});
-    };
 
 /**
  * A rule that matches a node based on the specified tag and attribute.

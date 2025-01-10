@@ -15,7 +15,7 @@ import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
 import { Nullable } from "../types/record";
 import { getPageAttributeByPageNum, isPageNode } from "./page";
 import { mmToPixels } from "./window";
-import { nodeHasAttribute } from "./nodes/node";
+import { nodeHasAttribute } from "./attributes/getAttributes";
 import { setPageNodeAttribute } from "./setPageAttributes";
 import { getPageNodePaperOrientation } from "./paperOrientation";
 import { BodyNodeAttributes } from "../types/body";

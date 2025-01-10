@@ -13,7 +13,7 @@ import { DARK_THEME } from "../constants/theme";
 import { Nullable } from "../types/record";
 import { getPageAttributeByPageNum, isPageNode } from "./page";
 import { isValidColour } from "./colour";
-import { nodeHasAttribute } from "./nodes/node";
+import { nodeHasAttribute } from "./attributes/getAttributes";
 import { getDeviceTheme } from "./theme";
 import { setPageNodeAttribute } from "./setPageAttributes";
 
