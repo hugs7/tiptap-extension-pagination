@@ -647,7 +647,7 @@ export const renderPageView = (view: EditorView): void => {
  */
 const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
-    const { pageType, bodyType } = getPaginationNodeTypes(schema);
+    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
 
     const contentNodes: NodePosArray = [];
     state.doc.forEach((pageNode, offset) => {
@@ -657,6 +657,8 @@ const collectContentNodes = (state: EditorState): NodePosArray => {
                     pageRegionNode.forEach((child, childOffset) => {
                         contentNodes.push({ node: child, pos: offset + pageRegionOffset + childOffset + 1 });
                     });
+                } else if (pageRegionNode.type === headerFooterType) {
+                    // Don't collect header/footer nodes
                 } else {
                     contentNodes.push({ node: pageRegionNode, pos: offset + pageRegionOffset + 1 });
                 }
