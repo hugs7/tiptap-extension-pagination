@@ -16,18 +16,20 @@ import {
     setSelectionToEndOfParagraph,
 } from "../utils/selection";
 import {
-    getNextParagraph,
-    getParagraphNodeAndPosition,
-    getPreviousParagraph,
     getThisPageNodePosition,
-    isAtStartOrEndOfParagraph,
-    isParagraphNode,
     isPosAtEndOfPage,
     isPosAtStartOfDocument,
     isPosAtStartOfPage,
     isPositionWithinParagraph,
     isTextNode,
 } from "../utils/pagination";
+import {
+    getNextParagraph,
+    getParagraphNodeAndPosition,
+    getPreviousParagraph,
+    isAtStartOrEndOfParagraph,
+    isParagraphNode,
+} from "../utils/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/node";
 import { getPageNodeByPageNum, isPageNode } from "../utils/page";
