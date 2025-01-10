@@ -46,7 +46,7 @@ const HeaderFooterNode = Node.create({
             const { editor, node, getPos } = props;
             const pos = getPos();
 
-            const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
+            const { node: pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
             const pageRegionType = getHeaderFooterNodeType(node);
             if (!pageNode) {
                 throw new Error(`Page node not found from ${pageRegionType ?? HEADER_FOOTER_NODE_NAME} node at position ${pos}`);

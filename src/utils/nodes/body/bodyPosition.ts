@@ -9,6 +9,7 @@ import { Nullable } from "../../../types/record";
 import { isBodyNode } from "./body";
 import { BODY_NODE_NAME } from "../../../constants/body";
 import { getParentNodePosOfType } from "../node";
+import { NullableNodePos } from "../../../types/node";
 
 /**
  * Get the body node (parent of the current node) position.

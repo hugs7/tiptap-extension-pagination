@@ -100,7 +100,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        const { paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+        const { node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
         if (!paragraphNode) {
             console.warn("No current paragraph node found");
             return false;
@@ -148,7 +148,7 @@ const KeymapPlugin = keymap({
 
         if (isPosAtEndOfBody(doc, $pos)) {
             // Traverse $pos.path to find the nearest page node
-            const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+            const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
             if (!paragraphNode) {
                 console.warn("No current paragraph node found");
                 return false;
@@ -195,13 +195,13 @@ const KeymapPlugin = keymap({
             }
 
             // Append the content of the current paragraph to the end of the previous paragraph
-            const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+            const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
             if (!paragraphNode) {
                 console.warn("No current paragraph node found");
                 return false;
             }
 
-            const { prevParagraphPos, prevParagraphNode } = getPreviousParagraph(doc, paragraphPos);
+            const { pos: prevParagraphPos, node: prevParagraphNode } = getPreviousParagraph(doc, paragraphPos);
             if (!prevParagraphNode) {
                 console.warn("No previous paragraph node found");
                 return false;
@@ -254,7 +254,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+        const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
         if (!paragraphNode) {
             console.warn("No current paragraph node found");
             return false;

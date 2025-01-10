@@ -6,6 +6,7 @@
 
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { Nullable } from "../../types/record";
+import { NullableNodePos } from "../../types/node";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./document";
 import { inRange } from "../math";
@@ -44,7 +45,7 @@ export const getStartOfParagraphPosition = (doc: PMNode, pos: ResolvedPos | numb
         return getStartOfParagraphPosition(doc, doc.resolve(pos));
     }
 
-    const { paragraphPos } = getParagraphNodeAndPosition(doc, pos);
+    const { pos: paragraphPos } = getParagraphNodeAndPosition(doc, pos);
     return paragraphPos;
 };
 
@@ -59,7 +60,7 @@ export const getEndOfParagraphPosition = (doc: PMNode, $pos: ResolvedPos | numbe
         return getEndOfParagraphPosition(doc, doc.resolve($pos));
     }
 
-    const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+    const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
     if (!paragraphNode) {
         return paragraphPos;
     }
@@ -71,9 +72,9 @@ export const getEndOfParagraphPosition = (doc: PMNode, $pos: ResolvedPos | numbe
  * Get the previous paragraph node.
  * @param doc - The document node.
  * @param pos - The position in the document.
- * @returns {PMNode} The previous paragraph node.
+ * @returns {NullableNodePos} The previous paragraph node or null if not found and position.
  */
-export const getPreviousParagraph = (doc: PMNode, pos: number): { prevParagraphPos: number; prevParagraphNode: Nullable<PMNode> } => {
+export const getPreviousParagraph = (doc: PMNode, pos: number): NullableNodePos => {
     let prevParagraphPos = pos;
     let prevParagraphNode = null;
     while (prevParagraphNode === null && prevParagraphPos > 0) {
@@ -93,16 +94,16 @@ export const getPreviousParagraph = (doc: PMNode, pos: number): { prevParagraphP
         prevParagraphPos = -1;
     }
 
-    return { prevParagraphPos, prevParagraphNode };
+    return { pos: prevParagraphPos, node: prevParagraphNode };
 };
 
 /**
  * Get the next paragraph node.
  * @param doc - The document node.
  * @param pos - The position in the document.
- * @returns {PMNode} The next paragraph node.
+ * @returns {NullableNodePos} The next paragraph node or null if not found and position.
  */
-export const getNextParagraph = (doc: PMNode, pos: number): { nextParagraphPos: number; nextParagraphNode: Nullable<PMNode> } => {
+export const getNextParagraph = (doc: PMNode, pos: number): NullableNodePos => {
     const documentLength = doc.content.size;
     let nextParagraphPos = pos;
     let nextParagraphNode = null;
@@ -123,7 +124,7 @@ export const getNextParagraph = (doc: PMNode, pos: number): { nextParagraphPos: 
         nextParagraphPos = -1;
     }
 
-    return { nextParagraphPos, nextParagraphNode };
+    return { pos: nextParagraphPos, node: nextParagraphNode };
 };
 
 /**
@@ -137,7 +138,7 @@ export const isAtStartOfParagraph = (doc: PMNode, $pos: ResolvedPos | number): b
         return isAtStartOfParagraph(doc, doc.resolve($pos));
     }
 
-    const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+    const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
     if (!paragraphNode) {
         return false;
     }
@@ -157,7 +158,7 @@ export const isAtEndOfParagraph = (doc: PMNode, $pos: ResolvedPos | number): boo
         return isAtEndOfParagraph(doc, doc.resolve($pos));
     }
 
-    const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+    const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
     if (!paragraphNode) {
         return false;
     }
@@ -186,7 +187,7 @@ export const isPreviousParagraphEmpty = (doc: PMNode, $pos: ResolvedPos | number
         return isPreviousParagraphEmpty(doc, doc.resolve($pos));
     }
 
-    const { prevParagraphNode } = getPreviousParagraph(doc, $pos.pos);
+    const { node: prevParagraphNode } = getPreviousParagraph(doc, $pos.pos);
     if (!prevParagraphNode) {
         return false;
     }
@@ -205,7 +206,7 @@ export const isNextParagraphEmpty = (doc: PMNode, $pos: ResolvedPos | number): b
         return isNextParagraphEmpty(doc, doc.resolve($pos));
     }
 
-    const { nextParagraphNode } = getNextParagraph(doc, $pos.pos);
+    const { node: nextParagraphNode } = getNextParagraph(doc, $pos.pos);
     if (!nextParagraphNode) {
         return false;
     }
@@ -227,32 +228,25 @@ export const getThisParagraphNodePosition = (doc: PMNode, pos: ResolvedPos | num
  * Get the paragraph node position and the paragraph node itself.
  * @param doc - The document node.
  * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {paragraphPos: number, paragraphNode: Node} The position and the node of the paragraph.
+ * @returns {NullableNodePos} The position and the node or null if not found of the paragraph.
  */
-export const getParagraphNodeAndPosition = (
-    doc: PMNode,
-    pos: ResolvedPos | number
-): { paragraphPos: number; paragraphNode: Nullable<PMNode> } => {
+export const getParagraphNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
     if (typeof pos === "number") {
         return getParagraphNodeAndPosition(doc, doc.resolve(pos));
     }
 
     if (isPosAtStartOfDocument(doc, pos, false)) {
-        // Find the next paragraph node
-        const { nextParagraphPos, nextParagraphNode } = getNextParagraph(doc, pos.pos);
-        return { paragraphPos: nextParagraphPos, paragraphNode: nextParagraphNode };
+        return getNextParagraph(doc, pos.pos);
     } else if (isPosAtEndOfDocument(doc, pos)) {
-        // Find the previous paragraph node
-        const { prevParagraphPos, prevParagraphNode } = getPreviousParagraph(doc, pos.pos);
-        return { paragraphPos: prevParagraphPos, paragraphNode: prevParagraphNode };
+        return getPreviousParagraph(doc, pos.pos);
     }
 
     const paragraphPos = getThisParagraphNodePosition(doc, pos);
     const paragraphNode = doc.nodeAt(paragraphPos);
     if (!isParagraphNode(paragraphNode)) {
         console.warn("No paragraph node found");
-        return { paragraphPos: -1, paragraphNode };
+        return { pos: -1, node: paragraphNode };
     }
 
-    return { paragraphPos, paragraphNode };
+    return { pos: paragraphPos, node: paragraphNode };
 };

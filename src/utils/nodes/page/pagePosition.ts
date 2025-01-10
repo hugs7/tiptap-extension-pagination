@@ -6,9 +6,9 @@
 
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { PAGE_NODE_NAME } from "../../../constants/page";
-import { Nullable } from "../../../types/record";
 import { getParentNodePosOfType } from "../node";
 import { isPageNode } from "./page";
+import { NullableNodePos } from "../../../types/node";
 
 /**
  * Get the page node (parent of the current node) position.
@@ -24,9 +24,9 @@ export const getThisPageNodePosition = (doc: PMNode, pos: ResolvedPos | number):
  * Get the page node position and the page node itself.
  * @param doc - The document node.
  * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {pagePos: number, pageNode: Node} The position and the node of the page.
+ * @returns {NullableNodePos} The position and the node of the page.
  */
-export const getPageNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): { pagePos: number; pageNode: Nullable<PMNode> } => {
+export const getPageNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
     if (typeof pos === "number") {
         return getPageNodeAndPosition(doc, doc.resolve(pos));
     }
@@ -35,10 +35,10 @@ export const getPageNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): 
     const pageNode = doc.nodeAt(pagePos);
     if (!isPageNode(pageNode)) {
         console.warn("No page node found");
-        return { pagePos: -1, pageNode };
+        return { pos: -1, node: pageNode };
     }
 
-    return { pagePos, pageNode };
+    return { pos: pagePos, node: pageNode };
 };
 
 /**
@@ -52,7 +52,7 @@ export const getStartOfPagePosition = (doc: PMNode, pos: ResolvedPos | number): 
         return getStartOfPagePosition(doc, doc.resolve(pos));
     }
 
-    const { pagePos } = getPageNodeAndPosition(doc, pos);
+    const { pos: pagePos } = getPageNodeAndPosition(doc, pos);
 
     return pagePos;
 };
@@ -68,7 +68,7 @@ export const getEndOfPagePosition = (doc: PMNode, pos: ResolvedPos | number): nu
         return getEndOfPagePosition(doc, doc.resolve(pos));
     }
 
-    const { pagePos, pageNode } = getPageNodeAndPosition(doc, pos);
+    const { pos: pagePos, node: pageNode } = getPageNodeAndPosition(doc, pos);
     if (!pageNode) {
         return pagePos;
     }

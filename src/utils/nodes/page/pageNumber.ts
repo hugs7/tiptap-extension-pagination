@@ -94,7 +94,7 @@ export const getPageNumber = (doc: PMNode, $pos: ResolvedPos | number, zeroIndex
         return getPageNumber(doc, doc.resolve($pos));
     }
 
-    const { pagePos } = getPageNodeAndPosition(doc, $pos);
+    const { pos: pagePos } = getPageNodeAndPosition(doc, $pos);
     if (pagePos < 0) {
         console.log("Unable to find page node");
         return -1;
