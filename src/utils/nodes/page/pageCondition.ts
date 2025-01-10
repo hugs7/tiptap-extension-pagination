@@ -138,7 +138,7 @@ export const isPosMatchingEndOfPageBodyCondition = (doc: PMNode, $pos: ResolvedP
     }
 
     if (endOfBodyPos < 0) {
-        console.warn("Invalid end of page position");
+        console.warn("Invalid end of page body position");
         return false;
     }
 
