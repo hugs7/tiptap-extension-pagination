@@ -5,10 +5,10 @@
  */
 
 import { Node as PMNode } from "@tiptap/pm/model";
-import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_ATTR_KEYS, BODY_NODE_NAME } from "../../constants/body";
-import { Nullable } from "../../types/record";
-import { BodyNodeAttributes } from "../../types/body";
-import { MarginConfig } from "../../types/page";
+import { BODY_DEFAULT_ATTRIBUTES, BODY_NODE_ATTR_KEYS, BODY_NODE_NAME } from "../../../constants/body";
+import { Nullable } from "../../../types/record";
+import { BodyNodeAttributes } from "../../../types/body";
+import { MarginConfig } from "../../../types/page";
 
 /**
  * Check if the given node is a body node.

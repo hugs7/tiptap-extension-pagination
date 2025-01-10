@@ -7,7 +7,7 @@
 import { Node as PMNode } from "@tiptap/pm/model";
 import { Transaction } from "@tiptap/pm/state";
 import { isPageNode } from "../page";
-import { isBodyNode } from "../../body";
+import { isBodyNode } from "../../body/body";
 import { getPageRegionNodeAndPos } from "../../../pageRegion/getAttributes";
 import { setNodeAttribute, setNodesTypeAttribute } from "../../../attributes/setAttributes";
 

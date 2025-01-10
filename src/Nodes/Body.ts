@@ -6,7 +6,7 @@
 
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { BODY_ATTRIBUTES, BODY_NODE_NAME } from "../constants/body";
-import { isBodyNode } from "../utils/nodes/body";
+import { isBodyNode } from "../utils/nodes/body/body";
 import { parseHTMLNode } from "../utils/nodes/node";
 import { calculateShorthandMargins, calculateBodyMargins } from "../utils/nodes/body/attributes/pageMargins";
 import { mm } from "../utils/units";
