@@ -9,39 +9,39 @@ import { PAGE_NODE_NAME } from "../constants/page";
 import { BODY_NODE_NAME } from "../constants/body";
 import { HEADER_FOOTER_NODE_NAME } from "../constants/pageRegions";
 import { PaginationNodeTypes } from "../types/pagination";
-import { getEndOfPagePosition, getStartOfPagePosition } from "./nodes/page/pagePosition";
+import { getStartOfBodyPosition, getEndOfBodyPosition } from "./nodes/body/bodyPosition";
 import { getEndOfParagraphPosition, getStartOfParagraphPosition } from "./nodes/paragraph";
 
 /**
- * Get the start of the page and paragraph positions.
+ * Get the start of the body and paragraph positions.
  * @param doc - The document node.
  * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {startOfPagePos: number, startOfParagraphPos: number} The start positions of the page and paragraph.
+ * @returns {startOfBodyPos: number, startOfParagraphPos: number} The start positions of the body and paragraph.
  */
-export const getStartOfPageAndParagraphPosition = (
+export const getStartOfBodyAndParagraphPosition = (
     doc: PMNode,
     pos: ResolvedPos | number
-): { startOfPagePos: number; startOfParagraphPos: number } => {
+): { startOfBodyPos: number; startOfParagraphPos: number } => {
     const startOfParagraphPos = getStartOfParagraphPosition(doc, pos);
-    const startOfPagePos = getStartOfPagePosition(doc, pos);
+    const startOfBodyPos = getStartOfBodyPosition(doc, pos);
 
-    return { startOfPagePos, startOfParagraphPos };
+    return { startOfBodyPos, startOfParagraphPos };
 };
 
 /**
- * Get the end of the page and paragraph positions.
+ * Get the end of the body and paragraph positions.
  * @param doc - The document node.
  * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {endOfPagePos: number, endOfParagraphPos: number} The end positions of the page and paragraph.
+ * @returns {endOfBodyPos: number, endOfParagraphPos: number} The end positions of the body and paragraph.
  */
-export const getEndOfPageAndParagraphPosition = (
+export const getEndOfBodyAndParagraphPosition = (
     doc: PMNode,
     $pos: ResolvedPos | number
-): { endOfPagePos: number; endOfParagraphPos: number } => {
+): { endOfBodyPos: number; endOfParagraphPos: number } => {
     const endOfParagraphPos = getEndOfParagraphPosition(doc, $pos);
-    const endOfPagePos = getEndOfPagePosition(doc, $pos);
+    const endOfBodyPos = getEndOfBodyPosition(doc, $pos);
 
-    return { endOfPagePos, endOfParagraphPos };
+    return { endOfBodyPos, endOfParagraphPos };
 };
 
 /**
