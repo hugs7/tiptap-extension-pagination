@@ -12,7 +12,7 @@ import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
 import { MarginConfig, MultiAxisSide } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
 import { mm } from "../units";
-import { getBodyNodeMargins } from "./body";
+import { getBodyNodeMargins } from "../nodes/body";
 import { getPageRegionAttributeByPageNum } from "./getAttributes";
 
 /**

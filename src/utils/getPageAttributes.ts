@@ -24,7 +24,7 @@ import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
 import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
 import { getFooterNodeAttributes, getHeaderNodeAttributes } from "./pageRegion/pageRegion";
-import { getBodyNodeAttributes } from "./pageRegion/body";
+import { getBodyNodeAttributes } from "./nodes/body";
 import { getPageRegionNode } from "./pageRegion/getAttributes";
 import { PaginationNodeAttributes } from "../types/pagination";
 

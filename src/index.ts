@@ -36,7 +36,7 @@ export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColo
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
 export { getPageNumPageMargins } from "./utils/pageRegion/margins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
-export { getBodyNodeMargins } from "./utils/pageRegion/body";
+export { getBodyNodeMargins } from "./utils/nodes/body";
 export { doesDocHavePageNodes } from "./utils/page";
 
 // === Exports ===

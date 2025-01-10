@@ -10,7 +10,7 @@ import { getPaperDimensionsFromPageNode } from "../paperSize";
 import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "./pageRegion";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
-import { getBodyNodeMargins } from "./body";
+import { getBodyNodeMargins } from "../nodes/body";
 
 /**
  * Calculates the dimensions in millimetres of a header or footer node based on its paper size

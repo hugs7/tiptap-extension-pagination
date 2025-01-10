@@ -13,7 +13,7 @@ import { NullableNodePos } from "../../types/node";
 import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
 import { getHeaderFooterNodeType, isHeaderFooterNode } from "./pageRegion";
-import { isBodyNode } from "./body";
+import { isBodyNode } from "../nodes/body";
 
 /**
  * Get the page region node of the current page by the page region type.
