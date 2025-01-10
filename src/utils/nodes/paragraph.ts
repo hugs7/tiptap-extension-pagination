@@ -34,6 +34,40 @@ export const isPositionWithinParagraph = ($pos: ResolvedPos): boolean => {
 };
 
 /**
+ * Get the start of the paragraph position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {number} The start position of the paragraph.
+ */
+export const getStartOfParagraphPosition = (doc: PMNode, pos: ResolvedPos | number): number => {
+    if (typeof pos === "number") {
+        return getStartOfParagraphPosition(doc, doc.resolve(pos));
+    }
+
+    const { paragraphPos } = getParagraphNodeAndPosition(doc, pos);
+    return paragraphPos;
+};
+
+/**
+ * Get the end of the paragraph position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {number} The end position of the paragraph.
+ */
+export const getEndOfParagraphPosition = (doc: PMNode, $pos: ResolvedPos | number): number => {
+    if (typeof $pos === "number") {
+        return getEndOfParagraphPosition(doc, doc.resolve($pos));
+    }
+
+    const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+    if (!paragraphNode) {
+        return paragraphPos;
+    }
+
+    return paragraphPos + paragraphNode.content.size;
+};
+
+/**
  * Get the previous paragraph node.
  * @param doc - The document node.
  * @param pos - The position in the document.

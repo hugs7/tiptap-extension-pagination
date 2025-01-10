@@ -10,22 +10,7 @@ import { BODY_NODE_NAME } from "../constants/body";
 import { HEADER_FOOTER_NODE_NAME } from "../constants/pageRegions";
 import { PaginationNodeTypes } from "../types/pagination";
 import { getEndOfPagePosition, getStartOfPagePosition } from "./nodes/page";
-import { getParagraphNodeAndPosition } from "./nodes/paragraph";
-
-/**
- * Get the start of the paragraph position.
- * @param doc - The document node.
- * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {number} The start position of the paragraph.
- */
-export const getStartOfParagraphPosition = (doc: PMNode, pos: ResolvedPos | number): number => {
-    if (typeof pos === "number") {
-        return getStartOfParagraphPosition(doc, doc.resolve(pos));
-    }
-
-    const { paragraphPos } = getParagraphNodeAndPosition(doc, pos);
-    return paragraphPos;
-};
+import { getEndOfParagraphPosition, getStartOfParagraphPosition } from "./nodes/paragraph";
 
 /**
  * Get the start of the page and paragraph positions.
@@ -41,25 +26,6 @@ export const getStartOfPageAndParagraphPosition = (
     const startOfPagePos = getStartOfPagePosition(doc, pos);
 
     return { startOfPagePos, startOfParagraphPos };
-};
-
-/**
- * Get the end of the paragraph position.
- * @param doc - The document node.
- * @param pos - The resolved position in the document or the absolute position of the node.
- * @returns {number} The end position of the paragraph.
- */
-export const getEndOfParagraphPosition = (doc: PMNode, $pos: ResolvedPos | number): number => {
-    if (typeof $pos === "number") {
-        return getEndOfParagraphPosition(doc, doc.resolve($pos));
-    }
-
-    const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
-    if (!paragraphNode) {
-        return paragraphPos;
-    }
-
-    return paragraphPos + paragraphNode.content.size;
 };
 
 /**
