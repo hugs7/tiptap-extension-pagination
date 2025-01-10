@@ -6,7 +6,7 @@
 
 import { Plugin, PluginKey, EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
-import { buildPageView } from "../utils/pagination";
+import { buildPageView } from "../utils/buildPageView";
 import { isNodeEmpty } from "../utils/nodes/node";
 import { doesDocHavePageNodes } from "../utils/nodes/page";
 
