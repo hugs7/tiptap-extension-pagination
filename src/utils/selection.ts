@@ -83,7 +83,7 @@ export const setSelectionAtEndOfDocument = (tr: Transaction): Transaction => {
 export const setSelectionToStartOfParagraph = (tr: Transaction, paragraphPos: number, paragraphNode: PMNode): void => {
     if (isNodeEmpty(paragraphNode)) {
         // Node will not have a text selection so move to the start of the paragraph
-        setSelectionAtPos(tr, paragraphPos); // + 1 ?
+        setSelectionAtPos(tr, paragraphPos);
     } else {
         const paragraphStartPos = tr.doc.resolve(paragraphPos + 1);
         moveToNearestTextSelection(tr, paragraphStartPos, 1);
