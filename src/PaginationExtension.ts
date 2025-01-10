@@ -7,7 +7,7 @@
 import { Extension } from "@tiptap/core";
 import { DEFAULT_PAPER_SIZE } from "./constants/paperSize";
 import { DEFAULT_PAPER_COLOUR } from "./constants/paperColours";
-import { DEFAULT_MARGIN_CONFIG } from "./constants/pageMargins";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "./constants/pageMargins";
 import { DEFAULT_PAPER_ORIENTATION } from "./constants/paperOrientation";
 import { PAGE_NODE_ATTR_KEYS } from "./constants/page";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "./constants/pageBorders";
@@ -268,7 +268,7 @@ const PaginationExtension = Extension.create<PaginationOptions>({
             defaultPaperColour: DEFAULT_PAPER_COLOUR,
             useDeviceThemeForPaperColour: false,
             defaultPaperOrientation: DEFAULT_PAPER_ORIENTATION,
-            defaultMarginConfig: DEFAULT_MARGIN_CONFIG,
+            defaultMarginConfig: DEFAULT_PAGE_MARGIN_CONFIG,
             defaultPageBorders: DEFAULT_PAGE_BORDER_CONFIG,
         };
     },

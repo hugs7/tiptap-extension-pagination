@@ -7,7 +7,7 @@
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
-import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
 import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
@@ -72,7 +72,7 @@ const calculateFooterMargins = (pageNode: PMNode, footerNode: PMNode, yMargins: 
 
     const bodyNode = getPageRegionNode(pageNode, "body");
     if (bodyNode) {
-        const { top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+        const { top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_PAGE_MARGIN_CONFIG;
         const { height } = calculateBodyDimensions(pageNode, bodyNode);
         yMargins.top -= top + height;
     }
@@ -113,8 +113,8 @@ export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode:
  * @param pageNum - The page number to retrieve the page margin config for.
  * @returns {MarginConfig} The page margin config of the specified page or default.
  */
-export const getPageNumBodyMargins = (context: Editor | EditorState, pageNum: number): MarginConfig => {
-    const getDefault = () => DEFAULT_MARGIN_CONFIG;
+export const getPageNumPageMargins = (context: Editor | EditorState, pageNum: number): MarginConfig => {
+    const getDefault = () => DEFAULT_PAGE_MARGIN_CONFIG;
     return getPageRegionAttributeByPageNum(context, pageNum, "body", getDefault, getBodyNodeMargins);
 };
 
@@ -128,7 +128,7 @@ export const getPageNumBodyMargins = (context: Editor | EditorState, pageNum: nu
  */
 export const calculateBodyMargins = (pageNode: PMNode, bodyNode: PMNode): MarginConfig => {
     // Copy the default margin config to avoid modifying the original.
-    const { ...bodyMargins } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+    const { ...bodyMargins } = getBodyNodeMargins(bodyNode) ?? DEFAULT_PAGE_MARGIN_CONFIG;
 
     const headerNode = getPageRegionNode(pageNode, "header");
     const footerNode = getPageRegionNode(pageNode, "footer");
@@ -205,7 +205,7 @@ export const updateBodyMargin = (tr: Transaction, pagePos: number, bodyNode: PMN
         value,
         getBodyNodeMargins,
         isValidPageMargins,
-        DEFAULT_MARGIN_CONFIG,
+        DEFAULT_PAGE_MARGIN_CONFIG,
         BODY_NODE_ATTR_KEYS.pageMargins
     );
 };
