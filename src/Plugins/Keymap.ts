@@ -31,7 +31,7 @@ import { isPosAtStartOfDocument } from "../utils/nodes/document";
 import { getThisPageNodePosition } from "../utils/nodes/page/pagePosition";
 import { isTextNode } from "../utils/nodes/text";
 import { getPageNodeByPageNum } from "../utils/nodes/page/pageNumber";
-import { isPosAtEndOfPageBody, isPosAtStartOfPageBody } from "../utils/nodes/page/pageCondition";
+import { isPosAtEndOfBody, isPosAtStartOfBody } from "../utils/nodes/body/bodyCondition";
 
 const KeymapPlugin = keymap({
     ArrowLeft: (state, dispatch) => {
@@ -44,10 +44,16 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        const { tr } = state;
+        const { doc, tr } = state;
         const $pos = getResolvedPosition(state);
-        const newPos = $pos.pos - 1;
-        setSelectionAtPos(tr, newPos);
+
+        if (isPosAtStartOfBody(doc, $pos)) {
+            console.log("At start of page body");
+        } else {
+            const newPos = $pos.pos - 1;
+            setSelectionAtPos(tr, newPos);
+        }
+
         dispatch(tr);
         return true;
     },
@@ -61,10 +67,16 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        const { tr } = state;
+        const { doc, tr } = state;
         const $pos = getResolvedPosition(state);
-        const newPos = $pos.pos + 1;
-        setSelectionAtPos(tr, newPos);
+
+        if (isPosAtEndOfBody(doc, $pos)) {
+            console.log("At end of page body");
+        } else {
+            const newPos = $pos.pos + 1;
+            setSelectionAtPos(tr, newPos);
+        }
+
         dispatch(tr);
         return true;
     },
@@ -134,7 +146,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        if (isPosAtEndOfPageBody(doc, $pos)) {
+        if (isPosAtEndOfBody(doc, $pos)) {
             // Traverse $pos.path to find the nearest page node
             const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
             if (!paragraphNode) {
@@ -156,7 +168,7 @@ const KeymapPlugin = keymap({
         } else if (isPosAtStartOfDocument(doc, $pos, true)) {
             // Prevent deleting the first page node
             return true;
-        } else if (!isPosAtStartOfPageBody(doc, $pos)) {
+        } else if (!isPosAtStartOfBody(doc, $pos)) {
             return false;
         } else {
             // Traverse $pos.path to find the nearest page node
@@ -227,7 +239,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        if (!isPosAtEndOfPageBody(doc, $pos)) {
+        if (!isPosAtEndOfBody(doc, $pos)) {
             return false;
         }
 
