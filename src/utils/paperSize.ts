@@ -18,6 +18,7 @@ import { mmToPixels } from "./window";
 import { nodeHasAttribute } from "./node";
 import { setPageNodeAttribute } from "./setPageAttributes";
 import { getPageNodePaperOrientation } from "./paperOrientation";
+import { BodyNodeAttributes } from "../types/body";
 
 /**
  * Check if the given paper size is valid.
@@ -70,18 +71,26 @@ export const flipDimensions = (dimensions: PaperDimensions): PaperDimensions => 
 /**
  * Calculates the pixel width and height of a given paper size.
  * @param pageNodeAttributes - The attributes of the page node.
+ * @param bodyNodeAttributes - The attributes of the body node.
  * @returns {PageContentPixelDimensions} The height and width of the page in pixels.
  */
-export const calculatePageContentPixelDimensions = (pageNodeAttributes: PageNodeAttributes): PageContentPixelDimensions => {
+export const calculatePageContentPixelDimensions = (
+    pageNodeAttributes: PageNodeAttributes,
+    bodyNodeAttributes: BodyNodeAttributes
+): PageContentPixelDimensions => {
     const { paperSize, paperOrientation, pageBorders } = pageNodeAttributes;
-    const { top: borderTop, right: borderRight, bottom: borderBottom, left: borderLeft } = pageBorders;
     const { width, height } = getPaperDimensions(paperSize, paperOrientation);
 
+    const { top: marginTop, left: marginLeft, right: marginRight, bottom: marginBottom } = bodyNodeAttributes.pageMargins;
+    const verticalMargins = marginTop + marginBottom;
+    const horizontalMargins = marginLeft + marginRight;
+
+    const { top: borderTop, right: borderRight, bottom: borderBottom, left: borderLeft } = pageBorders;
     const verticalBorders = borderTop + borderBottom;
     const horizontalBorders = borderLeft + borderRight;
 
-    const pageContentHeight = mmToPixels(height) - verticalBorders;
-    const pageContentWidth = mmToPixels(width) - horizontalBorders;
+    const pageContentHeight = mmToPixels(height - verticalMargins) - verticalBorders;
+    const pageContentWidth = mmToPixels(width - horizontalMargins) - horizontalBorders;
 
     return { pageContentHeight, pageContentWidth };
 };

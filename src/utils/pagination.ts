@@ -740,7 +740,7 @@ const buildNewDocument = (
     const { pageNodeType: pageType, headerFooterNodeType: headerFooterType, bodyNodeType: bodyType } = getPaginationNodeTypes(schema);
 
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(state, pageNum);
 
     const constructPageRegions = (currentPageContent: PMNode[]): PMNode[] => {
         const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageRegionNodeAttributes;
@@ -770,7 +770,7 @@ const buildNewDocument = (
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
-        const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight;
+        const isPageFull = currentHeight + nodeHeight > bodyPixelDimensions.pageContentHeight;
         if (isPageFull && currentPageContent.length > 0) {
             const pageNode = addPage(currentPageContent);
             cumulativeNewDocPos += pageNode.nodeSize;
@@ -778,7 +778,7 @@ const buildNewDocument = (
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(state, pageNum));
             }
         }
 
