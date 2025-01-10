@@ -11,13 +11,14 @@ import {
     moveToNearestTextSelection,
     moveToNextTextBlock,
     moveToPreviousTextBlock,
+    moveToThisTextBlock,
     setSelection,
     setSelectionAtPos,
     setSelectionToEndOfParagraph,
 } from "../utils/selection";
 
 import {
-    getNextParagraph,
+    getFirstParagraphInNextPageBodyAfterPos,
     getParagraphNodeAndPosition,
     getPreviousParagraph,
     isAtStartOrEndOfParagraph,
@@ -30,7 +31,6 @@ import { isPageNode } from "../utils/nodes/page/page";
 import { isPosAtStartOfDocument } from "../utils/nodes/document";
 import { getThisPageNodePosition } from "../utils/nodes/page/pagePosition";
 import { isTextNode } from "../utils/nodes/text";
-import { getPageNodeByPageNum } from "../utils/nodes/page/pageNumber";
 import { isPosAtEndOfBody, isPosAtStartOfBody } from "../utils/nodes/body/bodyCondition";
 
 const KeymapPlugin = keymap({
@@ -72,6 +72,34 @@ const KeymapPlugin = keymap({
 
         if (isPosAtEndOfBody(doc, $pos)) {
             console.log("At end of page body");
+
+            const thisPos = $pos.pos;
+            const expectedTextNodePos = thisPos - 1;
+            const thisTextNode = doc.nodeAt(expectedTextNodePos);
+            if (!thisTextNode) {
+                console.warn("No node found at position", expectedTextNodePos);
+                return false;
+            }
+
+            const { pos: paragraphPos, node: paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
+            if (!paragraphNode) {
+                console.warn("No current paragraph node found");
+                return false;
+            }
+
+            if (!isParagraphNode(thisTextNode) && !isTextNode(thisTextNode)) {
+                console.warn("Unexpected node type found at position", expectedTextNodePos);
+                return false;
+            }
+
+            const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos);
+            if (!nextParagraphNode) {
+                console.warn("No first paragraph node found in next page.");
+                return false;
+            }
+
+            const newSelection = moveToThisTextBlock(tr, nextParagraphPos);
+            setSelection(tr, newSelection);
         } else {
             const newPos = $pos.pos + 1;
             setSelectionAtPos(tr, newPos);
@@ -265,31 +293,9 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        const thisPageChild = doc.childAfter(paragraphPos);
-        if (!isPageNode(thisPageChild.node)) {
-            console.warn("No page node found");
-            return false;
-        }
-
-        const pageNum = thisPageChild.index;
-        const nextPageNum = pageNum + 1;
-        if (nextPageNum > doc.childCount - 1) {
-            console.log("At end of document");
-            // If we don't handle the delete, the default behaviour will remove this
-            // paragraph node, which we don't want.
-            dispatch(tr);
-            return true;
-        }
-
-        const nextPageNode = getPageNodeByPageNum(doc, nextPageNum);
-        if (!nextPageNode) {
-            console.log("No next page node found");
-            return false;
-        }
-
-        const { nextParagraphPos, nextParagraphNode } = getNextParagraph(doc, thisPos);
+        const { pos: nextParagraphPos, node: nextParagraphNode } = getFirstParagraphInNextPageBodyAfterPos(doc, paragraphPos);
         if (!nextParagraphNode) {
-            console.log("No first paragraph node found");
+            console.warn("No first paragraph node found in next page.");
             return false;
         }
 
