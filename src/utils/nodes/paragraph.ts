@@ -6,8 +6,8 @@
 
 import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { Nullable } from "../../types/record";
-import { getParentNodePosOfType, isNodeEmpty } from "./node";
-import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "../pagination";
+import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
+import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./document";
 import { inRange } from "../math";
 
 /**
@@ -22,6 +22,15 @@ export const isParagraphNode = (node: Nullable<PMNode>): boolean => {
     }
 
     return node.type.name === "paragraph";
+};
+
+/**
+ * Get the type of the node at the specified position.
+ * @param $pos - The resolved position in the document.
+ * @returns The type of the node at the specified position.
+ */
+export const isPositionWithinParagraph = ($pos: ResolvedPos): boolean => {
+    return getPositionNodeType($pos) === "paragraph";
 };
 
 /**

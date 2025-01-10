@@ -4,7 +4,7 @@
  * @description Utility functions for page nodes in the editor.
  */
 
-import { Node as PMNode } from "@tiptap/pm/model";
+import { Node as PMNode, ResolvedPos } from "@tiptap/pm/model";
 import { EditorState } from "@tiptap/pm/state";
 import { Editor } from "@tiptap/core";
 import { PAGE_NODE_NAME } from "../../constants/page";
@@ -12,6 +12,10 @@ import { NodePos, NodePosArray } from "../../types/node";
 import { Nullable } from "../../types/record";
 import { inRange } from "../math";
 import { getStateFromContext } from "../editor";
+import { getParentNodePosOfType } from "./node";
+import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./document";
+import { isPositionWithinParagraph } from "./paragraph";
+import { getEndOfPageAndParagraphPosition, getStartOfPageAndParagraphPosition } from "../pagination";
 
 /**
  * Check if the given node is a page node.
@@ -133,6 +137,29 @@ export const getPageNodePosByPageNum = (doc: PMNode, pageNum: number): Nullable<
 };
 
 /**
+ * Get the page number of the resolved position.
+ * @param doc - The document node.
+ * @param $pos - The resolved position in the document.
+ * @param zeroIndexed - Whether to return the page number as zero-indexed. Default is true.
+ * @returns {number} The page number of the resolved position.
+ */
+export const getPageNumber = (doc: PMNode, $pos: ResolvedPos | number, zeroIndexed: boolean = true): number => {
+    if (typeof $pos === "number") {
+        return getPageNumber(doc, doc.resolve($pos));
+    }
+
+    const { pagePos } = getPageNodeAndPosition(doc, $pos);
+    if (pagePos < 0) {
+        console.log("Unable to find page node");
+        return -1;
+    }
+
+    const pageNodes = collectPageNodes(doc);
+    const pageNode = pageNodes.findIndex((node) => node.pos === pagePos);
+    return pageNode + (zeroIndexed ? 0 : 1);
+};
+
+/**
  * Handles cases where the given page number is out of range.
  * Logs a warning and falls back to the last page number.
  * @param state - The current editor state.
@@ -183,4 +210,221 @@ export const getPageAttributeByPageNum = <T>(
     }
 
     return getNodeAttribute(pageNode) ?? getDefault();
+};
+
+/**
+ * Get the page node (parent of the current node) position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {number} The position of the page node.
+ */
+export const getThisPageNodePosition = (doc: PMNode, pos: ResolvedPos | number): number => {
+    return getParentNodePosOfType(doc, pos, PAGE_NODE_NAME).pos;
+};
+
+/**
+ * Get the page node position and the page node itself.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {pagePos: number, pageNode: Node} The position and the node of the page.
+ */
+export const getPageNodeAndPosition = (doc: PMNode, pos: ResolvedPos | number): { pagePos: number; pageNode: Nullable<PMNode> } => {
+    if (typeof pos === "number") {
+        return getPageNodeAndPosition(doc, doc.resolve(pos));
+    }
+
+    const pagePos = getThisPageNodePosition(doc, pos);
+    const pageNode = doc.nodeAt(pagePos);
+    if (!isPageNode(pageNode)) {
+        console.warn("No page node found");
+        return { pagePos: -1, pageNode };
+    }
+
+    return { pagePos, pageNode };
+};
+
+/**
+ * Get the start of the page position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {number} The start position of the page.
+ */
+export const getStartOfPagePosition = (doc: PMNode, pos: ResolvedPos | number): number => {
+    if (typeof pos === "number") {
+        return getStartOfPagePosition(doc, doc.resolve(pos));
+    }
+
+    const { pagePos } = getPageNodeAndPosition(doc, pos);
+
+    return pagePos;
+};
+
+/**
+ * Get the end of the page position.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {number} The end position of the page.
+ */
+export const getEndOfPagePosition = (doc: PMNode, pos: ResolvedPos | number): number => {
+    if (typeof pos === "number") {
+        return getEndOfPagePosition(doc, doc.resolve(pos));
+    }
+
+    const { pagePos, pageNode } = getPageNodeAndPosition(doc, pos);
+    if (!pageNode) {
+        return pagePos;
+    }
+
+    return pagePos + pageNode.content.size;
+};
+
+/**
+ * Check if the given position is at the start of the document.
+ * @param state - The current editor state.
+ * @returns True if text is currently highlighted, false otherwise.
+ */
+const isPosMatchingStartOfPageCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
+    // Resolve position if given as a number
+    if (typeof $pos === "number") {
+        return isPosMatchingStartOfPageCondition(doc, doc.resolve($pos), checkExactStart);
+    }
+
+    // Check if we are at the start of the document
+    if (isPosAtStartOfDocument(doc, $pos, false)) {
+        return true;
+    }
+
+    // Ensure that the position is within a valid block (paragraph)
+    if (!isPositionWithinParagraph($pos)) {
+        return false;
+    }
+
+    // Get positions for paragraph and page
+    const { startOfPagePos, startOfParagraphPos } = getStartOfPageAndParagraphPosition(doc, $pos);
+    if (startOfPagePos < 0) {
+        console.warn("Invalid page position");
+        return false;
+    }
+
+    if (startOfParagraphPos < 0) {
+        console.warn("Invalid paragraph position");
+        return false;
+    }
+
+    // Determine the condition to check
+    const isFirstParagraph = startOfPagePos + 1 === startOfParagraphPos;
+    if (checkExactStart) {
+        // Check if position is exactly at the start of the page
+        // First position of page will always be 1 more than the paragraph position
+        const isPosAtStartOfParagraph = $pos.pos - 1 === startOfParagraphPos;
+        if (isFirstParagraph && isPosAtStartOfParagraph) {
+            console.log("At the start of the page");
+            return true;
+        }
+        console.log("Not at the start of the page");
+        return false;
+    } else {
+        // Check if position is at the first child of the page
+        if (isFirstParagraph) {
+            console.log("In the first child of the page");
+            return true;
+        }
+        console.log("Not in the first child of the page");
+        return false;
+    }
+};
+
+/**
+ * Check if the given position is at the start of the page or the first child of the page.
+ * @param doc - The document node.
+ * @param $pos - The resolved position in the document or the absolute position of the node.
+ * @returns {boolean} True if the condition is met, false otherwise.
+ */
+export const isPosAtStartOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingStartOfPageCondition(doc, $pos, true);
+};
+
+/**
+ * Check if the given position is at the first paragraph child of the page.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {boolean} True if the position is at the start of the page, false otherwise.
+ */
+export const isPosAtFirstChildOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingStartOfPageCondition(doc, $pos, false);
+};
+
+/**
+ * Check if the given position is at the end of the page or the last child of the page.
+ * @param doc - The document node.
+ * @param $pos - The resolved position in the document or the absolute position of the node.
+ * @param checkExactEnd - Whether to check for the exact end of the page (true) or the last child of the page (false).
+ * @returns {boolean} True if the condition is met, false otherwise.
+ */
+const isPosMatchingEndOfPageCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
+    // Resolve position if given as a number
+    if (typeof $pos === "number") {
+        return isPosMatchingEndOfPageCondition(doc, doc.resolve($pos), checkExactEnd);
+    }
+
+    // Check if we are at the end of the document
+    if (isPosAtEndOfDocument(doc, $pos)) {
+        return true;
+    }
+
+    // Ensure that the position is within a valid block (paragraph)
+    if (!isPositionWithinParagraph($pos)) {
+        return false;
+    }
+
+    // Get positions for paragraph and page
+    const { endOfParagraphPos, endOfPagePos } = getEndOfPageAndParagraphPosition(doc, $pos);
+    if (endOfParagraphPos < 0) {
+        console.warn("Invalid end of paragraph position");
+        return false;
+    }
+
+    if (endOfPagePos < 0) {
+        console.warn("Invalid end of page position");
+        return false;
+    }
+
+    // Determine the condition to check
+    if (checkExactEnd) {
+        // Check if position is exactly at the end of the page
+        if ($pos.pos === endOfPagePos) {
+            console.log("At the end of the page");
+            return true;
+        }
+        console.log("Not at the end of the page");
+        return false;
+    } else {
+        // Check if position is at the last child of the page
+        if (endOfParagraphPos + 1 === endOfPagePos) {
+            console.log("In the last child of the page");
+            return true;
+        }
+        console.log("Not in the last child of the page");
+        return false;
+    }
+};
+
+/**
+ * Check if the given position is exactly at the end of the page.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {boolean} True if the position is at the end of the page, false otherwise.
+ */
+export const isPosAtEndOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingEndOfPageCondition(doc, $pos, true);
+};
+
+/**
+ * Check if the given position is at the last paragraph child of the page.
+ * @param doc - The document node.
+ * @param pos - The resolved position in the document or the absolute position of the node.
+ * @returns {boolean} True if the position is at the end of the page, false otherwise.
+ */
+export const isPosAtLastChildOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingEndOfPageCondition(doc, $pos, false);
 };

@@ -15,24 +15,21 @@ import {
     setSelectionAtPos,
     setSelectionToEndOfParagraph,
 } from "../utils/selection";
-import {
-    getThisPageNodePosition,
-    isPosAtEndOfPage,
-    isPosAtStartOfDocument,
-    isPosAtStartOfPage,
-    isPositionWithinParagraph,
-    isTextNode,
-} from "../utils/pagination";
+
 import {
     getNextParagraph,
     getParagraphNodeAndPosition,
     getPreviousParagraph,
     isAtStartOrEndOfParagraph,
     isParagraphNode,
+    isPositionWithinParagraph,
 } from "../utils/nodes/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/nodes/node";
-import { getPageNodeByPageNum, isPageNode } from "../utils/nodes/page";
+import { getPageNodeByPageNum, isPageNode, isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page";
+import { isPosAtStartOfDocument } from "../utils/nodes/document";
+import { getThisPageNodePosition } from "..";
+import { isTextNode } from "../utils/nodes/text";
 
 const KeymapPlugin = keymap({
     ArrowLeft: (state, dispatch) => {

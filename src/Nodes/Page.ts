@@ -14,7 +14,8 @@ import { isPageNode } from "../utils/nodes/page";
 import { mm, px } from "../utils/units";
 import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
-import { addNodeAttributes, parseHTMLNode } from "../utils/nodes/node";
+import { parseHTMLNode } from "../utils/nodes/node";
+import { addNodeAttributes } from "../utils/attributes/addAttributes";
 
 const baseElement = "div" as const;
 const dataPageAttribute = "data-page" as const;

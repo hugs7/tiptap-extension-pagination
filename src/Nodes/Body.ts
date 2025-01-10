@@ -10,10 +10,10 @@ import { isBodyNode } from "../utils/nodes/body";
 import { parseHTMLNode } from "../utils/nodes/node";
 import { calculateShorthandMargins, calculateBodyMargins } from "../utils/pageRegion/margins";
 import { mm } from "../utils/units";
-import { getPageNodeAndPosition } from "../utils/pagination";
 import { calculateBodyDimensions } from "../utils/pageRegion/dimensions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 import { addNodeAttributes } from "../utils/attributes/addAttributes";
+import { getPageNodeAndPosition } from "../utils/nodes/page";
 
 const baseElement = "div" as const;
 const bodyAttribute = "data-page-body" as const;

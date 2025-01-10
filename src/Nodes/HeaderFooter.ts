@@ -6,9 +6,7 @@
 
 import { HEADER_FOOTER_NODE_NAME, HEADER_FOOTER_ATTRIBUTES, FOOTER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
-import { addNodeAttributes, parseHTMLNode } from "../utils/nodes/node";
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
-import { getPageNodeAndPosition } from "../utils/pagination";
 import { mm } from "../utils/units";
 import { calculateHeaderFooterDimensions } from "../utils/pageRegion/dimensions";
 import {
@@ -17,6 +15,9 @@ import {
     getHeaderFooterNodeXMargins,
     isHeaderFooterNode,
 } from "../utils/pageRegion/pageRegion";
+import { addNodeAttributes } from "../utils/attributes/addAttributes";
+import { parseHTMLNode } from "../utils/nodes/node";
+import { getPageNodeAndPosition } from "../utils/nodes/page";
 
 const baseElement = "div" as const;
 const headerFooterAttribute = "data-page-header-footer" as const;

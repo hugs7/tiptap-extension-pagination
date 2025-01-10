@@ -30,7 +30,7 @@ import BodyNode from "./Nodes/Body";
 
 // === Utils ===
 export { isPageNode } from "./utils/nodes/page";
-export { getPageNumber, getThisPageNodePosition } from "./utils/pagination";
+export { getPageNumber, getThisPageNodePosition } from "./utils/nodes/page";
 export { getPageNumPaperSize, getPageNodePaperSize } from "./utils/paperSize";
 export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
