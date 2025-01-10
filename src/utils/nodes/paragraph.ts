@@ -10,6 +10,7 @@ import { NullableNodePos } from "../../types/node";
 import { getParentNodePosOfType, getPositionNodeType, isNodeEmpty } from "./node";
 import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./document";
 import { inRange } from "../math";
+import { getBodyAfterPos, getBodyBeforePos } from "./body/bodyPosition";
 
 /**
  * Check if the given node is a paragraph node.
@@ -249,4 +250,36 @@ export const getParagraphNodeAndPosition = (doc: PMNode, pos: ResolvedPos | numb
     }
 
     return { pos: paragraphPos, node: paragraphNode };
+};
+
+/**
+ * Gets the previous page's past body paragraph and position, if any, before the given position.
+ * @param doc - The current document.
+ * @param pos - Any position within the current page's body
+ * @returns {NullableNodePos} The previous page body's last paragraph and position, if any.
+ */
+export const getLastParagraphInPreviousPageBodyBeforePos = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
+    const previousPageBody = getBodyBeforePos(doc, pos);
+    if (!previousPageBody.node) {
+        console.warn("No previous page body node found");
+        return previousPageBody;
+    }
+
+    return getPreviousParagraph(doc, previousPageBody.pos);
+};
+
+/**
+ * Gets the next page's first body paragraph and positiom, if any, after the given position.
+ * @param doc - The current document.
+ * @param pos - Any position within the current page's body
+ * @returns {NullableNodePos} The next page body's first paragraph and position, if any.
+ */
+export const getFirstParagraphInNextPageBodyAfterPos = (doc: PMNode, pos: ResolvedPos | number): NullableNodePos => {
+    const nextPageBody = getBodyAfterPos(doc, pos);
+    if (!nextPageBody.node) {
+        console.warn("No next page body node found");
+        return nextPageBody;
+    }
+
+    return getNextParagraph(doc, nextPageBody.pos);
 };
