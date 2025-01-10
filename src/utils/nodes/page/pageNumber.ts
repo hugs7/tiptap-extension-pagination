@@ -24,9 +24,9 @@ export const getNumPagesInDoc = (doc: PMNode): number => {
 };
 
 /**
- * Get the last page number in the document.
+ * Get the last page number in the document (0-indexed).
  * @param doc - The current document.
- * @returns {number} The last page number in the document.
+ * @returns {number} The last page number in the document (0-indexed).
  */
 export const getLastPageNum = (doc: PMNode): number => {
     return getNumPagesInDoc(doc) - 1;
@@ -35,7 +35,7 @@ export const getLastPageNum = (doc: PMNode): number => {
 /**
  * Check if the page number is in range for the document.
  * @param doc - The current document.
- * @param pageNum - The page number to check.
+ * @param pageNum - The page number to check (0-indexed).
  * @returns {boolean} True if the page number is in range, false otherwise.
  */
 export const isPageNumInRange = (doc: PMNode, pageNum: number): boolean => {
