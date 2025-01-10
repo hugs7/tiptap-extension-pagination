@@ -11,7 +11,7 @@ import { pageSides } from "../constants/pageSides";
 import { PageSide, MultiSide, MultiAxisSide } from "../types/page";
 import { Nullable } from "../types/record";
 import { isPageNode } from "./nodes/page/page";
-import { setPageNodeAttribute } from "./setPageAttributes";
+import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
 import { NodePos } from "../types/node";
 import { getPageNodePosByPageNum } from "./nodes/page/pageNumber";
 

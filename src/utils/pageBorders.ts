@@ -13,7 +13,6 @@ import { BorderConfig } from "../types/page";
 import { Nullable } from "../types/record";
 import { px } from "./units";
 import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
-
 import { setPageNodePosSideConfig, updatePageSideConfig } from "./setSideConfig";
 import { MultiAxisSide } from "../types/page";
 

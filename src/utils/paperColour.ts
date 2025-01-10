@@ -16,7 +16,7 @@ import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
 import { isValidColour } from "./colour";
 import { nodeHasAttribute } from "./attributes/getAttributes";
 import { getDeviceTheme } from "./theme";
-import { setPageNodeAttribute } from "./setPageAttributes";
+import { setPageNodeAttribute } from "./nodes/page/setPageAttributes";
 
 /**
  * Get the paper colour based on the device theme.
