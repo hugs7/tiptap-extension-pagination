@@ -10,7 +10,7 @@ import { PaperOrientation, PaperSize } from "./paper";
  * The dimensions of a page in pixels. Deliberately not using PaperDimensions
  * from /src/types/paper.ts to avoid mistakenly using the wrong units.
  */
-export type PageContentPixelDimensions = { pageContentHeight: number; pageContentWidth: number };
+export type PageContentPixelDimensions = { bodyHeight: number; bodyWidth: number };
 
 /**
  * Attributes for a page node.

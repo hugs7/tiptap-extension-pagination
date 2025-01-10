@@ -594,15 +594,15 @@ export const getPageNumber = (doc: PMNode, $pos: ResolvedPos | number, zeroIndex
 export const getPaginationNodeTypes = (schema: Schema): PaginationNodeTypes => {
     const { nodes } = schema;
 
-    const pageType = nodes[PAGE_NODE_NAME];
-    const headerFooterType = nodes[HEADER_FOOTER_NODE_NAME];
-    const bodyType = nodes[BODY_NODE_NAME];
+    const pageNodeType = nodes[PAGE_NODE_NAME];
+    const headerFooterNodeType = nodes[HEADER_FOOTER_NODE_NAME];
+    const bodyNodeType = nodes[BODY_NODE_NAME];
 
-    if (!pageType || !headerFooterType || !bodyType) {
+    if (!pageNodeType || !headerFooterNodeType || !bodyNodeType) {
         throw new Error("Page, body, or header/footer node type not found in schema");
     }
 
-    return { pageType, headerFooterType, bodyType };
+    return { pageNodeType, headerFooterNodeType, bodyNodeType };
 };
 
 /**
@@ -647,19 +647,23 @@ export const renderPageView = (view: EditorView): void => {
  */
 const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
-    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
-    const contentNodeTypes = [headerFooterType, bodyType];
+    const { pageNodeType, headerFooterNodeType, bodyNodeType } = getPaginationNodeTypes(schema);
 
     const contentNodes: NodePosArray = [];
     state.doc.forEach((pageNode, offset) => {
-        if (pageNode.type === pageType) {
+        if (pageNode.type === pageNodeType) {
+            let pageContentOffset = 1;
             pageNode.forEach((pageRegionNode, pageRegionOffset) => {
-                if (contentNodeTypes.includes(pageRegionNode.type)) {
+                if (pageRegionNode.type === headerFooterNodeType) {
+                    // Don't collect header/footer nodes
+                    // But we do need to account for their size/offset
+                    pageContentOffset += 1;
+                } else if (pageRegionNode.type === bodyNodeType) {
                     pageRegionNode.forEach((child, childOffset) => {
-                        contentNodes.push({ node: child, pos: offset + pageRegionOffset + childOffset + 1 });
+                        contentNodes.push({ node: child, pos: offset + pageRegionOffset + childOffset + pageContentOffset });
                     });
                 } else {
-                    contentNodes.push({ node: pageRegionNode, pos: offset + pageRegionOffset + 1 });
+                    contentNodes.push({ node: pageRegionNode, pos: offset + pageRegionOffset + pageContentOffset });
                 }
             });
         } else {
@@ -733,10 +737,10 @@ const buildNewDocument = (
     const { schema, doc } = state;
     let pageNum = 0;
 
-    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
+    const { pageNodeType: pageType, headerFooterNodeType: headerFooterType, bodyNodeType: bodyType } = getPaginationNodeTypes(schema);
 
     const pages: PMNode[] = [];
-    let { pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum);
+    let { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(state, pageNum);
 
     const constructPageRegions = (currentPageContent: PMNode[]): PMNode[] => {
         const { header: headerAttrs, body: bodyAttrs, footer: footerAttrs } = pageRegionNodeAttributes;
@@ -766,7 +770,7 @@ const buildNewDocument = (
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
-        const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight;
+        const isPageFull = currentHeight + nodeHeight > bodyPixelDimensions.bodyHeight;
         if (isPageFull && currentPageContent.length > 0) {
             const pageNode = addPage(currentPageContent);
             cumulativeNewDocPos += pageNode.nodeSize;
@@ -774,7 +778,7 @@ const buildNewDocument = (
             currentHeight = 0;
             pageNum++;
             if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions } = getPaginationNodeAttributes(state, pageNum));
+                ({ pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions } = getPaginationNodeAttributes(state, pageNum));
             }
         }
 

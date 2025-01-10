@@ -6,8 +6,12 @@
 
 import { EditorState } from "@tiptap/pm/state";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
-import { calculatePageContentPixelDimensions, getPageNodePaperSize, getPageNumPaperSize } from "./paperSize";
+import { PageNodeAttributes } from "../types/page";
+import {
+    calculatePageContentPixelDimensions as calculateBodyPixelDimensions,
+    getPageNodePaperSize,
+    getPageNumPaperSize,
+} from "./paperSize";
 import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
 import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
 import { getPageNodePageBorders, getPageNumPageBorders } from "./pageBorders";
@@ -22,6 +26,7 @@ import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
 import { getFooterNodeAttributes, getHeaderNodeAttributes } from "./pageRegion/pageRegion";
 import { getBodyNodeAttributes } from "./pageRegion/body";
 import { getPageRegionNode } from "./pageRegion/getAttributes";
+import { PaginationNodeAttributes } from "../types/pagination";
 
 /**
  * Retrieves the page node attributes from the editor state.
@@ -90,20 +95,13 @@ const getPageRegionNodeAttributes = (state: EditorState, pageNum: number): PageR
 /**
  * Retrieves the page node attributes and calculates the pixel dimensions of the page.
  * @param pageNodeAttributes - The attributes of the page node.
- * @returns { PageNodeAttributes, PageRegionNodeAttributesObject, PagePixelDimensions } The attributes of the page node,
+ * @returns {PaginationNodeAttributes} The attributes of the page node,
  * body node and the pixel dimensions of the page.
  */
-export const getPaginationNodeAttributes = (
-    state: EditorState,
-    pageNum: number
-): {
-    pageNodeAttributes: PageNodeAttributes;
-    pageRegionNodeAttributes: PageRegionNodeAttributesObject;
-    pagePixelDimensions: PageContentPixelDimensions;
-} => {
+export const getPaginationNodeAttributes = (state: EditorState, pageNum: number): PaginationNodeAttributes => {
     const pageNodeAttributes = getPageNodeAttributesByPageNum(state, pageNum);
     const pageRegionNodeAttributes = getPageRegionNodeAttributes(state, pageNum);
-    const pagePixelDimensions = calculatePageContentPixelDimensions(pageNodeAttributes);
+    const bodyPixelDimensions = calculateBodyPixelDimensions(pageNodeAttributes, pageRegionNodeAttributes.body);
 
-    return { pageNodeAttributes, pageRegionNodeAttributes, pagePixelDimensions };
+    return { pageNodeAttributes, pageRegionNodeAttributes, bodyPixelDimensions };
 };

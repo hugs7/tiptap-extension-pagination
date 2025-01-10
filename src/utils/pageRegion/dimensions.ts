@@ -7,7 +7,7 @@
 import { Node as PMNode } from "@tiptap/pm/model";
 import { PaperDimensions } from "../../types/paper";
 import { getPaperDimensionsFromPageNode } from "../paperSize";
-import { DEFAULT_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "./pageRegion";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { getBodyNodeMargins } from "./body";
@@ -36,7 +36,7 @@ export const calculateHeaderFooterDimensions = (pageNode: PMNode, headerFooterNo
  */
 export const calculateBodyDimensions = (pageNode: PMNode, bodyNode: PMNode): PaperDimensions => {
     const { width: pageWidth, height: pageHeight } = getPaperDimensionsFromPageNode(pageNode);
-    const { bottom, left, right, top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_MARGIN_CONFIG;
+    const { bottom, left, right, top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_PAGE_MARGIN_CONFIG;
 
     const width = pageWidth - (left + right);
     const height = pageHeight - (top + bottom);
