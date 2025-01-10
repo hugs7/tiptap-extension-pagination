@@ -14,7 +14,7 @@ import {
 } from "./paperSize";
 import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
 import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
-import { getPageNodePageBorders, getPageNumPageBorders } from "../../../pageBorders";
+import { getPageNodePageBorders, getPageNumPageBorders } from "./pageBorders";
 import { DEFAULT_PAPER_SIZE } from "../../../../constants/paperSize";
 import { DEFAULT_PAPER_ORIENTATION } from "../../../../constants/paperOrientation";
 import { DEFAULT_PAPER_COLOUR } from "../../../../constants/paperColours";

@@ -12,7 +12,7 @@ import { getPaperDimensionsFromPageNode } from "../utils/nodes/page/attributes/p
 import { getPageNodePaperColour } from "../utils/nodes/page/attributes/paperColour";
 import { isPageNode } from "../utils/nodes/page/page";
 import { mm, px } from "../utils/units";
-import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/pageBorders";
+import { calculateShorthandPageBorders, getPageNodePageBorders } from "../utils/nodes/page/attributes/pageBorders";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 import { parseHTMLNode } from "../utils/nodes/node";
 import { addNodeAttributes } from "../utils/attributes/addAttributes";

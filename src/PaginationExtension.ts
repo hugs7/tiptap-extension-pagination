@@ -23,7 +23,7 @@ import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/no
 import { setBodyNodesAttribute, setPageNodesAttribute } from "./utils/nodes/page/attributes/setPageAttributes";
 import { setPageNodePosPaperOrientation } from "./utils/nodes/page/attributes/paperOrientation";
 import { isMarginValid, isValidPageMargins, setBodyNodePosPageMargins, updateBodyMargin } from "./utils/nodes/body/attributes/pageMargins";
-import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
+import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/nodes/page/attributes/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
 
 export interface PaginationOptions {
