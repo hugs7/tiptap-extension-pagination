@@ -31,7 +31,7 @@ import { isPosAtStartOfDocument } from "../utils/nodes/document";
 import { getThisPageNodePosition } from "../utils/nodes/page/pagePosition";
 import { isTextNode } from "../utils/nodes/text";
 import { getPageNodeByPageNum } from "../utils/nodes/page/pageNumber";
-import { isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page/pageCondition";
+import { isPosAtEndOfPageBody, isPosAtStartOfPageBody } from "../utils/nodes/page/pageCondition";
 
 const KeymapPlugin = keymap({
     ArrowLeft: (state, dispatch) => {
@@ -134,7 +134,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        if (isPosAtEndOfPage(doc, $pos)) {
+        if (isPosAtEndOfPageBody(doc, $pos)) {
             // Traverse $pos.path to find the nearest page node
             const { paragraphPos, paragraphNode } = getParagraphNodeAndPosition(doc, $pos);
             if (!paragraphNode) {
@@ -156,7 +156,7 @@ const KeymapPlugin = keymap({
         } else if (isPosAtStartOfDocument(doc, $pos, true)) {
             // Prevent deleting the first page node
             return true;
-        } else if (!isPosAtStartOfPage(doc, $pos)) {
+        } else if (!isPosAtStartOfPageBody(doc, $pos)) {
             return false;
         } else {
             // Traverse $pos.path to find the nearest page node
@@ -227,7 +227,7 @@ const KeymapPlugin = keymap({
             return false;
         }
 
-        if (!isPosAtEndOfPage(doc, $pos)) {
+        if (!isPosAtEndOfPageBody(doc, $pos)) {
             return false;
         }
 

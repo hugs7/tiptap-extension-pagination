@@ -15,8 +15,8 @@ import { getStartOfBodyAndParagraphPosition, getEndOfBodyAndParagraphPosition } 
  * @param $pos - The resolved position in the document or the absolute position of the node.
  * @returns {boolean} True if the condition is met, false otherwise.
  */
-export const isPosAtStartOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
-    return isPosMatchingStartOfPageCondition(doc, $pos, true);
+export const isPosAtStartOfPageBody = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingStartOfPageBodyCondition(doc, $pos, true);
 };
 
 /**
@@ -25,8 +25,8 @@ export const isPosAtStartOfPage = (doc: PMNode, $pos: ResolvedPos | number): boo
  * @param pos - The resolved position in the document or the absolute position of the node.
  * @returns {boolean} True if the position is at the start of the page, false otherwise.
  */
-export const isPosAtFirstChildOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
-    return isPosMatchingStartOfPageCondition(doc, $pos, false);
+export const isPosAtFirstChildOfPageBody = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingStartOfPageBodyCondition(doc, $pos, false);
 };
 
 /**
@@ -35,8 +35,8 @@ export const isPosAtFirstChildOfPage = (doc: PMNode, $pos: ResolvedPos | number)
  * @param pos - The resolved position in the document or the absolute position of the node.
  * @returns {boolean} True if the position is at the end of the page, false otherwise.
  */
-export const isPosAtEndOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
-    return isPosMatchingEndOfPageCondition(doc, $pos, true);
+export const isPosAtEndOfPageBody = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingEndOfPageBodyCondition(doc, $pos, true);
 };
 
 /**
@@ -45,8 +45,8 @@ export const isPosAtEndOfPage = (doc: PMNode, $pos: ResolvedPos | number): boole
  * @param pos - The resolved position in the document or the absolute position of the node.
  * @returns {boolean} True if the position is at the end of the page, false otherwise.
  */
-export const isPosAtLastChildOfPage = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
-    return isPosMatchingEndOfPageCondition(doc, $pos, false);
+export const isPosAtLastChildOfPageBody = (doc: PMNode, $pos: ResolvedPos | number): boolean => {
+    return isPosMatchingEndOfPageBodyCondition(doc, $pos, false);
 };
 
 /**
@@ -56,10 +56,10 @@ export const isPosAtLastChildOfPage = (doc: PMNode, $pos: ResolvedPos | number):
  * @param allowTextBlock - Whether to allow text blocks at the start of the document. Default is false.
  * @returns {boolean} True if the position is at the start of the document, false otherwise.
  */
-export const isPosMatchingStartOfPageCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
+export const isPosMatchingStartOfPageBodyCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactStart: boolean): boolean => {
     // Resolve position if given as a number
     if (typeof $pos === "number") {
-        return isPosMatchingStartOfPageCondition(doc, doc.resolve($pos), checkExactStart);
+        return isPosMatchingStartOfPageBodyCondition(doc, doc.resolve($pos), checkExactStart);
     }
 
     // Check if we are at the start of the document
@@ -114,10 +114,10 @@ export const isPosMatchingStartOfPageCondition = (doc: PMNode, $pos: ResolvedPos
  * @param checkExactEnd - Whether to check for the exact end of the page (true) or the last child of the page (false).
  * @returns {boolean} True if the condition is met, false otherwise.
  */
-export const isPosMatchingEndOfPageCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
+export const isPosMatchingEndOfPageBodyCondition = (doc: PMNode, $pos: ResolvedPos | number, checkExactEnd: boolean): boolean => {
     // Resolve position if given as a number
     if (typeof $pos === "number") {
-        return isPosMatchingEndOfPageCondition(doc, doc.resolve($pos), checkExactEnd);
+        return isPosMatchingEndOfPageBodyCondition(doc, doc.resolve($pos), checkExactEnd);
     }
 
     // Check if we are at the end of the document
