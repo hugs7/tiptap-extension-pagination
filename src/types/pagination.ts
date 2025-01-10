@@ -10,7 +10,7 @@ import { NodeType } from "@tiptap/pm/model";
  * Collects nodes types used in pagination.
  */
 export type PaginationNodeTypes = {
-    pageType: NodeType;
-    headerFooterType: NodeType;
-    bodyType: NodeType;
+    pageNodeType: NodeType;
+    headerFooterNodeType: NodeType;
+    bodyNodeType: NodeType;
 };
