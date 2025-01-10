@@ -4,15 +4,19 @@
  * @description The Header/Footer node for the editor.
  */
 
-import { HEADER_FOOTER_NODE_NAME, HEADER_FOOTER_ATTRIBUTES } from "../constants/pageRegions";
+import { HEADER_FOOTER_NODE_NAME, HEADER_FOOTER_ATTRIBUTES, FOOTER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { constructChildOnlyClipboardPlugin } from "../utils/clipboard";
 import { addNodeAttributes, parseHTMLNode } from "../utils/node";
 import { Node, NodeViewRendererProps, mergeAttributes } from "@tiptap/core";
 import { getPageNodeAndPosition } from "../utils/pagination";
 import { mm } from "../utils/units";
 import { calculateHeaderFooterDimensions } from "../utils/pageRegion/dimensions";
-import { calculateHeaderFooterMargins, calculateShorthandMargins } from "../utils/pageRegion/margins";
-import { getHeaderFooterNodeType, isHeaderFooterNode } from "../utils/pageRegion/pageRegion";
+import {
+    getHeaderFooterNodePageEndOffset,
+    getHeaderFooterNodeType,
+    getHeaderFooterNodeXMargins,
+    isHeaderFooterNode,
+} from "../utils/pageRegion/pageRegion";
 
 const baseElement = "div" as const;
 const headerFooterAttribute = "data-page-header-footer" as const;
@@ -42,8 +46,8 @@ const HeaderFooterNode = Node.create({
             const pos = getPos();
 
             const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
+            const pageRegionType = getHeaderFooterNodeType(node);
             if (!pageNode) {
-                const pageRegionType = getHeaderFooterNodeType(node);
                 throw new Error(`Page node not found from ${pageRegionType ?? HEADER_FOOTER_NODE_NAME} node at position ${pos}`);
             }
 
@@ -52,16 +56,26 @@ const HeaderFooterNode = Node.create({
             dom.classList.add(HEADER_FOOTER_NODE_NAME);
 
             const { width, height } = calculateHeaderFooterDimensions(pageNode, node);
-            const calculatedMargins = calculateHeaderFooterMargins(pageNode, node);
+            const endOffset = getHeaderFooterNodePageEndOffset(node) ?? FOOTER_DEFAULT_ATTRIBUTES.pageEndOffset;
+            const xMargins = getHeaderFooterNodeXMargins(node) ?? FOOTER_DEFAULT_ATTRIBUTES.xMargins;
 
             dom.style.height = mm(height);
             dom.style.width = mm(width);
-            dom.style.margin = calculateShorthandMargins(calculatedMargins);
+            dom.style.left = mm(xMargins.left);
+            switch (pageRegionType) {
+                case "header":
+                    dom.style.top = mm(endOffset);
+                    break;
+                case "footer":
+                    dom.style.bottom = mm(endOffset);
+                    break;
+            }
 
             dom.style.border = "1px solid #ccc";
 
             dom.style.overflow = "hidden";
-            dom.style.position = "relative";
+            dom.style.position = "absolute";
+            dom.style.boxSizing = "border-box";
 
             const contentDOM = document.createElement(baseElement);
             dom.appendChild(contentDOM);

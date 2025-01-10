@@ -43,7 +43,7 @@ const BodyNode = Node.create({
 
             const { pageNode } = getPageNodeAndPosition(editor.state.doc, pos);
             if (!pageNode) {
-                throw new Error("Page node not found from body node at position " + pos);
+                throw new Error(`Page node not found from body node at position ${pos}`);
             }
 
             const dom = document.createElement(baseElement);
@@ -51,7 +51,7 @@ const BodyNode = Node.create({
             dom.classList.add(BODY_NODE_NAME);
 
             const { width, height } = calculateBodyDimensions(pageNode, node);
-            const calculatedMargins = calculateBodyMargins(pageNode, node);
+            const calculatedMargins = calculateBodyMargins(node);
 
             dom.style.height = mm(height);
             dom.style.width = mm(width);
