@@ -647,14 +647,13 @@ export const renderPageView = (view: EditorView): void => {
  */
 const collectContentNodes = (state: EditorState): NodePosArray => {
     const { schema } = state;
-    const { pageType, headerFooterType, bodyType } = getPaginationNodeTypes(schema);
-    const contentNodeTypes = [headerFooterType, bodyType];
+    const { pageType, bodyType } = getPaginationNodeTypes(schema);
 
     const contentNodes: NodePosArray = [];
     state.doc.forEach((pageNode, offset) => {
         if (pageNode.type === pageType) {
             pageNode.forEach((pageRegionNode, pageRegionOffset) => {
-                if (contentNodeTypes.includes(pageRegionNode.type)) {
+                if (pageRegionNode.type === bodyType) {
                     pageRegionNode.forEach((child, childOffset) => {
                         contentNodes.push({ node: child, pos: offset + pageRegionOffset + childOffset + 1 });
                     });
