@@ -20,7 +20,7 @@ import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
 import { DEFAULT_PAPER_COLOUR } from "../constants/paperColours";
 import { DEFAULT_PAGE_BORDER_CONFIG } from "../constants/pageBorders";
 import { PageRegionNodeAttributesObject } from "../types/pageRegions";
-import { doesDocHavePageNodes, getPageNodeByPageNum } from "./page";
+import { doesDocHavePageNodes, getPageNodeByPageNum } from "./nodes/page";
 import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../constants/body";
 import { getFooterNodeAttributes, getHeaderNodeAttributes } from "./pageRegion/pageRegion";

@@ -7,11 +7,11 @@
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState } from "@tiptap/pm/state";
 import { Editor } from "@tiptap/core";
-import { PAGE_NODE_NAME } from "../constants/page";
-import { NodePos, NodePosArray } from "../types/node";
-import { Nullable } from "../types/record";
-import { inRange } from "./math";
-import { getStateFromContext } from "./editor";
+import { PAGE_NODE_NAME } from "../../constants/page";
+import { NodePos, NodePosArray } from "../../types/node";
+import { Nullable } from "../../types/record";
+import { inRange } from "../math";
+import { getStateFromContext } from "../editor";
 
 /**
  * Check if the given node is a page node.

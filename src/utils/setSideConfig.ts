@@ -10,7 +10,7 @@ import { Dispatch } from "@tiptap/core";
 import { pageSides } from "../constants/pageSides";
 import { PageSide, MultiSide, MultiAxisSide } from "../types/page";
 import { Nullable } from "../types/record";
-import { getPageNodePosByPageNum, isPageNode } from "./page";
+import { getPageNodePosByPageNum, isPageNode } from "./nodes/page";
 import { setPageNodeAttribute } from "./setPageAttributes";
 import { NodePos } from "../types/node";
 

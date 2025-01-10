@@ -19,7 +19,7 @@ import { PaginationNodeTypes } from "../types/pagination";
 import { getParentNodePosOfType, getPositionNodeType } from "./nodes/node";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
-import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
+import { collectPageNodes, isPageNode, isPageNumInRange } from "./nodes/page";
 import { getPaginationNodeAttributes } from "./getPageAttributes";
 import { getParagraphNodeAndPosition, isParagraphNode } from "./paragraph";
 

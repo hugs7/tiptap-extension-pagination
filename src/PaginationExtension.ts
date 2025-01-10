@@ -16,7 +16,7 @@ import { PaperOrientation, PaperSize } from "./types/paper";
 import { BorderConfig, MultiSide, MarginConfig } from "./types/page";
 import KeymapPlugin from "./Plugins/Keymap";
 import PaginationPlugin from "./Plugins/Pagination";
-import { getPageNodePosByPageNum, isPageNode } from "./utils/page";
+import { getPageNodePosByPageNum, isPageNode } from "./utils/nodes/page";
 import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPagePaperSize } from "./utils/paperSize";
 import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
 import { setBodyNodesAttribute, setPageNodesAttribute } from "./utils/setPageAttributes";

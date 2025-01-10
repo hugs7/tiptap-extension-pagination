@@ -11,7 +11,7 @@ import { PageRegion } from "../../types/pageRegions";
 import { Nullable } from "../../types/record";
 import { NullableNodePos } from "../../types/node";
 import { getStateFromContext } from "../editor";
-import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../page";
+import { doesDocHavePageNodes, getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../nodes/page";
 import { getHeaderFooterNodeType, isHeaderFooterNode } from "./pageRegion";
 import { isBodyNode } from "../nodes/body";
 
