@@ -9,30 +9,7 @@ import { Transaction } from "@tiptap/pm/state";
 import { isPageNode } from "./page";
 import { isBodyNode } from "./pageRegion/body";
 import { getPageRegionNodeAndPos } from "./pageRegion/getAttributes";
-
-/**
- * Set a node attribute to the given value for the nodes of the type handled by the setNodeTypeAttribute callback.
- * @param tr - The transaction to apply the change to.
- * @param attr - The attribute to set.
- * @param value - The value to set the attribute to.
- * @param setNodesTypeAttribute - The callback to set the attribute for a node of the type handled by the callback.
- * @returns {boolean} True if any attribute was changed, false otherwise.
- */
-const setNodesTypeAttribute = <V>(
-    tr: Transaction,
-    attr: string,
-    value: V,
-    setNodesTypeAttribute: (tr: Transaction, pos: number, node: PMNode, attr: string, value: V) => boolean
-): boolean => {
-    const { doc } = tr;
-    const transactions: boolean[] = [];
-
-    doc.forEach((node, pos) => {
-        transactions.push(setNodesTypeAttribute(tr, pos, node, attr, value));
-    });
-
-    return transactions.some((changed) => changed);
-};
+import { setNodesTypeAttribute } from "./attributes/setAttributes";
 
 /**
  * Set a page node attribute to the given value for all page nodes in the document.
