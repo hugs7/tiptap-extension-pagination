@@ -7,22 +7,13 @@
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
-import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../constants/pageMargins";
 import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
-import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES, HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
-import { MarginConfig, MultiAxisSide, YMarginConfig } from "../../types/page";
+import { MarginConfig, MultiAxisSide } from "../../types/page";
 import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import {
-    getHeaderFooterNodeHeight,
-    getHeaderFooterNodePageEndOffset,
-    getHeaderFooterNodeType,
-    getHeaderFooterNodeXMargins,
-} from "./pageRegion";
 import { mm } from "../units";
-import { calculateBodyDimensions } from "./dimensions";
 import { getBodyNodeMargins } from "./body";
-import { getPageRegionAttributeByPageNum, getPageRegionNode } from "./getAttributes";
-import { getPaperDimensionsFromPageNode } from "../paperSize";
+import { getPageRegionAttributeByPageNum } from "./getAttributes";
 
 /**
  * Checks if a (single) margin is valid.
@@ -42,67 +33,6 @@ export const isMarginValid = (margin: number): boolean => {
  */
 export const isValidPageMargins = (pageMargins: MarginConfig): boolean => {
     return Object.values(pageMargins).every(isMarginValid);
-};
-
-/**
- * Calculate the effective DOM margins of the header node.
- * @param headerNode - The header node to calculate the margins for.
- * @param yMargins - The y margins to set.
- * @returns {void}
- */
-const calculateHeaderMargins = (headerNode: PMNode, yMargins: YMarginConfig): void => {
-    const startOffset = getHeaderFooterNodePageEndOffset(headerNode) ?? HEADER_DEFAULT_ATTRIBUTES.pageEndOffset;
-    yMargins.top = startOffset;
-};
-
-/**
- * Calculate the effective DOM margins of the footer node.
- * @param pageNode - The page node containing the body node.
- * @param footerNode - The footer node to calculate the margins for.
- * @param yMargins - The y margins to set.
- * @returns {void}
- */
-const calculateFooterMargins = (pageNode: PMNode, footerNode: PMNode, yMargins: YMarginConfig): void => {
-    const { height: pageHeight } = getPaperDimensionsFromPageNode(pageNode);
-
-    const footerHeight = getHeaderFooterNodeHeight(footerNode) ?? HEADER_FOOTER_DEFAULT_ATTRIBUTES.height;
-    const endOffset = getHeaderFooterNodePageEndOffset(footerNode) ?? FOOTER_DEFAULT_ATTRIBUTES.pageEndOffset;
-    yMargins.top = pageHeight - (footerHeight + endOffset);
-
-    const bodyNode = getPageRegionNode(pageNode, "body");
-    if (bodyNode) {
-        const { top } = getBodyNodeMargins(bodyNode) ?? DEFAULT_PAGE_MARGIN_CONFIG;
-        const { height } = calculateBodyDimensions(pageNode, bodyNode);
-        yMargins.top -= top + height;
-    }
-};
-
-/**
- * Calculate the effective DOM margins of the header or footer node. Takes into account
- * what the margins should be to ensure the other page region nodes are
- * visible on the page.
- * @param pageNode - The page node containing the header/footer node.
- * @param headerFooterNode - The header or footer node to calculate the margins for.
- */
-export const calculateHeaderFooterMargins = (pageNode: PMNode, headerFooterNode: PMNode): MarginConfig => {
-    const nodeType = getHeaderFooterNodeType(headerFooterNode);
-
-    let yMargins: YMarginConfig = { top: 0, bottom: 0 };
-
-    switch (nodeType) {
-        case "header":
-            calculateHeaderMargins(headerFooterNode, yMargins);
-            break;
-        case "footer":
-            calculateFooterMargins(pageNode, headerFooterNode, yMargins);
-            break;
-        default:
-            console.error(`Unknown header/footer node type: ${nodeType}`);
-    }
-
-    const xMargins = getHeaderFooterNodeXMargins(headerFooterNode) ?? DEFAULT_X_MARGIN_CONFIG;
-
-    return { ...xMargins, ...yMargins };
 };
 
 /**
