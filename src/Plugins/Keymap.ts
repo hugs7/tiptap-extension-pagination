@@ -26,10 +26,11 @@ import {
 } from "../utils/nodes/paragraph";
 import { isNodeEmpty } from "@tiptap/core";
 import { appendAndReplaceNode, deleteNode } from "../utils/nodes/node";
-import { getPageNodeByPageNum, isPageNode, isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page";
+import { isPageNode, isPosAtEndOfPage, isPosAtStartOfPage } from "../utils/nodes/page/page";
 import { isPosAtStartOfDocument } from "../utils/nodes/document";
 import { getThisPageNodePosition } from "..";
 import { isTextNode } from "../utils/nodes/text";
+import { getPageNodeByPageNum } from "../utils/nodes/page/pageNumber";
 
 const KeymapPlugin = keymap({
     ArrowLeft: (state, dispatch) => {

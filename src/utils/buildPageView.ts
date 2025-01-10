@@ -14,11 +14,11 @@ import { Nullable } from "../types/record";
 import { MarginConfig } from "../types/page";
 import { moveToNearestValidCursorPosition, moveToThisTextBlock, setSelection, setSelectionAtEndOfDocument } from "./selection";
 import { inRange } from "./math";
-import { isPageNumInRange } from "./nodes/page";
 import { getPaginationNodeAttributes } from "./getPageAttributes";
 import { isParagraphNode } from "./nodes/paragraph";
 import { isTextNode } from "./nodes/text";
 import { getPaginationNodeTypes } from "./pagination";
+import { isPageNumInRange } from "./nodes/page/pageNumber";
 
 /**
  * Builds a new document with paginated content.

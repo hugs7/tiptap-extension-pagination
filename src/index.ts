@@ -29,15 +29,16 @@ import HeaderFooterNode from "./Nodes/HeaderFooter";
 import BodyNode from "./Nodes/Body";
 
 // === Utils ===
-export { isPageNode } from "./utils/nodes/page";
-export { getPageNumber, getThisPageNodePosition } from "./utils/nodes/page";
+export { isPageNode } from "./utils/nodes/page/page";
+export { getThisPageNodePosition } from "./utils/nodes/page/page";
+export { getPageNumber } from "./utils/nodes/page/pageNumber";
 export { getPageNumPaperSize, getPageNodePaperSize } from "./utils/paperSize";
 export { getPageNumPaperColour, getPageNodePaperColour } from "./utils/paperColour";
 export { getPageNumPaperOrientation, getPageNodePaperOrientation } from "./utils/paperOrientation";
 export { getPageNumPageMargins } from "./utils/pageRegion/margins";
 export { getPageNumPageBorders, getPageNodePageBorders } from "./utils/pageBorders";
 export { getBodyNodeMargins } from "./utils/nodes/body";
-export { doesDocHavePageNodes } from "./utils/nodes/page";
+export { doesDocHavePageNodes } from "./utils/nodes/page/page";
 
 // === Exports ===
 export { PageNode, HeaderFooterNode, BodyNode };

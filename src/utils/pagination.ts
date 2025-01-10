@@ -9,7 +9,7 @@ import { PAGE_NODE_NAME } from "../constants/page";
 import { BODY_NODE_NAME } from "../constants/body";
 import { HEADER_FOOTER_NODE_NAME } from "../constants/pageRegions";
 import { PaginationNodeTypes } from "../types/pagination";
-import { getEndOfPagePosition, getStartOfPagePosition } from "./nodes/page";
+import { getEndOfPagePosition, getStartOfPagePosition } from "./nodes/page/page";
 import { getEndOfParagraphPosition, getStartOfParagraphPosition, isPositionWithinParagraph } from "./nodes/paragraph";
 import { isPosAtEndOfDocument, isPosAtStartOfDocument } from "./nodes/document";
 

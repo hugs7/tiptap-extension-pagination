@@ -11,7 +11,8 @@ import { DEFAULT_PAPER_COLOUR, DARK_PAPER_COLOUR, LIGHT_PAPER_COLOUR } from "../
 import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
 import { DARK_THEME } from "../constants/theme";
 import { Nullable } from "../types/record";
-import { getPageAttributeByPageNum, isPageNode } from "./nodes/page";
+import { isPageNode } from "./nodes/page/page";
+import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
 import { isValidColour } from "./colour";
 import { nodeHasAttribute } from "./attributes/getAttributes";
 import { getDeviceTheme } from "./theme";
