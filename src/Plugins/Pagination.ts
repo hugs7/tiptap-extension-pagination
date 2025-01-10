@@ -6,7 +6,7 @@
 
 import { Plugin, PluginKey, EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
-import { renderPageView } from "../utils/pagination";
+import { buildPageView } from "../utils/pagination";
 import { isNodeEmpty } from "../utils/nodes/node";
 import { doesDocHavePageNodes } from "../utils/nodes/page";
 
@@ -33,7 +33,7 @@ const PaginationPlugin = new Plugin({
 
                 isPaginating = true;
 
-                renderPageView(view);
+                buildPageView(view);
 
                 // Reset paginating flag regardless of success or failure because we do not want to get
                 // stuck out of this loop.

@@ -110,11 +110,11 @@ export const getPaginationNodeTypes = (schema: Schema): PaginationNodeTypes => {
 };
 
 /**
- * Renders a new document with paginated content.
+ * Builds a new document with paginated content.
  * @param view - The editor view.
  * @returns {void}
  */
-export const renderPageView = (view: EditorView): void => {
+export const buildPageView = (view: EditorView): void => {
     const { state, dispatch } = view;
     const { doc } = state;
 
