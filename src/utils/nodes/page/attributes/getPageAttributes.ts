@@ -11,9 +11,9 @@ import {
     calculatePageContentPixelDimensions as calculateBodyPixelDimensions,
     getPageNodePaperSize,
     getPageNumPaperSize,
-} from "../../../paperSize";
-import { getPageNodePaperColour, getPageNumPaperColour } from "../../../paperColour";
-import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "../../../paperOrientation";
+} from "./paperSize";
+import { getPageNodePaperColour, getPageNumPaperColour } from "./paperColour";
+import { getPageNodePaperOrientation, getPageNumPaperOrientation } from "./paperOrientation";
 import { getPageNodePageBorders, getPageNumPageBorders } from "../../../pageBorders";
 import { DEFAULT_PAPER_SIZE } from "../../../../constants/paperSize";
 import { DEFAULT_PAPER_ORIENTATION } from "../../../../constants/paperOrientation";
@@ -23,7 +23,7 @@ import { PageRegionNodeAttributesObject } from "../../../../types/pageRegions";
 import { doesDocHavePageNodes } from "../page";
 import { FOOTER_DEFAULT_ATTRIBUTES, HEADER_DEFAULT_ATTRIBUTES } from "../../../../constants/pageRegions";
 import { BODY_DEFAULT_ATTRIBUTES } from "../../../../constants/body";
-import { getFooterNodeAttributes, getHeaderNodeAttributes } from "../../../pageRegion/pageRegion";
+import { getFooterNodeAttributes, getHeaderNodeAttributes } from "../../headerFooter/headerFooter";
 import { getBodyNodeAttributes } from "../../body";
 import { getPageRegionNode } from "../../../pageRegion/getAttributes";
 import { PaginationNodeAttributes } from "../../../../types/pagination";

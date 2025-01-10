@@ -7,13 +7,13 @@
 import { Dispatch, Editor } from "@tiptap/core";
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
-import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { Nullable } from "../types/record";
-import { PaperOrientation } from "../types/paper";
-import { isPageNode } from "./nodes/page/page";
-import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
-import { setPageNodeAttribute } from "./nodes/page/attributes/setPageAttributes";
+import { PAGE_NODE_ATTR_KEYS } from "../../../../constants/page";
+import { DEFAULT_PAPER_ORIENTATION } from "../../../../constants/paperOrientation";
+import { Nullable } from "../../../../types/record";
+import { PaperOrientation } from "../../../../types/paper";
+import { isPageNode } from "../page";
+import { getPageAttributeByPageNum } from "../pageNumber";
+import { setPageNodeAttribute } from "./setPageAttributes";
 
 /**
  * Get the paper orientation of a particular page node in the document.

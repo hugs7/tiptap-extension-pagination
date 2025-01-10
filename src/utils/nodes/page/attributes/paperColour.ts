@@ -7,16 +7,16 @@
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { DEFAULT_PAPER_COLOUR, DARK_PAPER_COLOUR, LIGHT_PAPER_COLOUR } from "../constants/paperColours";
-import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
-import { DARK_THEME } from "../constants/theme";
-import { Nullable } from "../types/record";
-import { isPageNode } from "./nodes/page/page";
-import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
-import { isValidColour } from "./colour";
-import { nodeHasAttribute } from "./attributes/getAttributes";
-import { getDeviceTheme } from "./theme";
-import { setPageNodeAttribute } from "./nodes/page/attributes/setPageAttributes";
+import { DEFAULT_PAPER_COLOUR, DARK_PAPER_COLOUR, LIGHT_PAPER_COLOUR } from "../../../../constants/paperColours";
+import { PAGE_NODE_ATTR_KEYS } from "../../../../constants/page";
+import { DARK_THEME } from "../../../../constants/theme";
+import { Nullable } from "../../../../types/record";
+import { isPageNode } from "../page";
+import { getPageAttributeByPageNum } from "../pageNumber";
+import { isValidColour } from "../../../colour";
+import { nodeHasAttribute } from "../../../attributes/getAttributes";
+import { getDeviceTheme } from "../../../theme";
+import { setPageNodeAttribute } from "./setPageAttributes";
 
 /**
  * Get the paper colour based on the device theme.

@@ -6,9 +6,9 @@
 
 import { Node as PMNode } from "@tiptap/pm/model";
 import { PaperDimensions } from "../../types/paper";
-import { getPaperDimensionsFromPageNode } from "../paperSize";
+import { getPaperDimensionsFromPageNode } from "../nodes/page/attributes/paperSize";
 import { DEFAULT_PAGE_MARGIN_CONFIG, DEFAULT_X_MARGIN_CONFIG } from "../../constants/pageMargins";
-import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "./pageRegion";
+import { getHeaderFooterNodeHeight, getHeaderFooterNodeXMargins } from "../nodes/headerFooter/headerFooter";
 import { HEADER_FOOTER_DEFAULT_ATTRIBUTES } from "../../constants/pageRegions";
 import { getBodyNodeMargins } from "../nodes/body";
 

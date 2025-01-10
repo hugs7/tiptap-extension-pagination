@@ -18,11 +18,11 @@ import KeymapPlugin from "./Plugins/Keymap";
 import PaginationPlugin from "./Plugins/Pagination";
 import { isPageNode } from "./utils/nodes/page/page";
 import { getPageNodePosByPageNum } from "./utils/nodes/page/pageNumber";
-import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPagePaperSize } from "./utils/paperSize";
-import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/paperColour";
+import { isValidPaperSize, pageNodeHasPageSize, setPageNodePosPaperSize, setPagePaperSize } from "./utils/nodes/page/attributes/paperSize";
+import { getDeviceThemePaperColour, setPageNodePosPaperColour } from "./utils/nodes/page/attributes/paperColour";
 import { setBodyNodesAttribute, setPageNodesAttribute } from "./utils/nodes/page/attributes/setPageAttributes";
-import { setPageNodePosPaperOrientation } from "./utils/paperOrientation";
-import { isMarginValid, isValidPageMargins, setBodyNodePosPageMargins, updateBodyMargin } from "./utils/pageRegion/margins";
+import { setPageNodePosPaperOrientation } from "./utils/nodes/page/attributes/paperOrientation";
+import { isMarginValid, isValidPageMargins, setBodyNodePosPageMargins, updateBodyMargin } from "./utils/nodes/body/attributes/pageMargins";
 import { isBorderValid, isValidPageBorders, setPageNodePosPageBorders, updatePageBorder } from "./utils/pageBorders";
 import { setDocumentSideConfig, setDocumentSideValue, setPageSideConfig, setPageSideValue } from "./utils/setSideConfig";
 

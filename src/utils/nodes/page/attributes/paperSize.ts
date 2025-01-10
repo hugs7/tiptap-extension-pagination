@@ -7,19 +7,19 @@
 import { EditorState, Transaction } from "@tiptap/pm/state";
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
-import { DEFAULT_PAPER_SIZE, paperDimensions } from "../constants/paperSize";
-import { PAGE_NODE_ATTR_KEYS } from "../constants/page";
-import { DEFAULT_PAPER_ORIENTATION } from "../constants/paperOrientation";
-import { PaperOrientation, PaperDimensions, PaperSize } from "../types/paper";
-import { PageNodeAttributes, PageContentPixelDimensions } from "../types/page";
-import { Nullable } from "../types/record";
-import { isPageNode } from "./nodes/page/page";
-import { getPageAttributeByPageNum } from "./nodes/page/pageNumber";
-import { mmToPixels } from "./window";
-import { nodeHasAttribute } from "./attributes/getAttributes";
-import { setPageNodeAttribute } from "./nodes/page/attributes/setPageAttributes";
-import { getPageNodePaperOrientation } from "./nodes/page/attributes/paperOrientation";
-import { BodyNodeAttributes } from "../types/body";
+import { DEFAULT_PAPER_SIZE, paperDimensions } from "../../../../constants/paperSize";
+import { PAGE_NODE_ATTR_KEYS } from "../../../../constants/page";
+import { DEFAULT_PAPER_ORIENTATION } from "../../../../constants/paperOrientation";
+import { PaperOrientation, PaperDimensions, PaperSize } from "../../../../types/paper";
+import { PageNodeAttributes, PageContentPixelDimensions } from "../../../../types/page";
+import { Nullable } from "../../../../types/record";
+import { isPageNode } from "../page";
+import { getPageAttributeByPageNum } from "../pageNumber";
+import { mmToPixels } from "../../../window";
+import { nodeHasAttribute } from "../../../attributes/getAttributes";
+import { setPageNodeAttribute } from "./setPageAttributes";
+import { getPageNodePaperOrientation } from "./paperOrientation";
+import { BodyNodeAttributes } from "../../../../types/body";
 
 /**
  * Check if the given paper size is valid.

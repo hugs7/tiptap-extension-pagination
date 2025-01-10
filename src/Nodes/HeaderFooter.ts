@@ -14,7 +14,7 @@ import {
     getHeaderFooterNodeType,
     getHeaderFooterNodeXMargins,
     isHeaderFooterNode,
-} from "../utils/pageRegion/pageRegion";
+} from "../utils/nodes/headerFooter/headerFooter";
 import { addNodeAttributes } from "../utils/attributes/addAttributes";
 import { parseHTMLNode } from "../utils/nodes/node";
 import { getPageNodeAndPosition } from "../utils/nodes/page/pagePosition";

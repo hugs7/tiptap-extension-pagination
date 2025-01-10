@@ -12,7 +12,7 @@ import { Nullable } from "../../types/record";
 import { NullableNodePos } from "../../types/node";
 import { getStateFromContext } from "../editor";
 import { doesDocHavePageNodes } from "../nodes/page/page";
-import { getHeaderFooterNodeType, isHeaderFooterNode } from "./pageRegion";
+import { getHeaderFooterNodeType, isHeaderFooterNode } from "../nodes/headerFooter/headerFooter";
 import { isBodyNode } from "../nodes/body";
 import { getPageNodeByPageNum, handleOutOfRangePageNum, isPageNumInRange } from "../nodes/page/pageNumber";
 

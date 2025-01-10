@@ -1,19 +1,19 @@
 /**
- * @file /src/utils/pageRegion/margins.ts
- * @name Margins
+ * @file /src/utils/pageRegion/pageMargins.ts
+ * @name PageMargins
  * @description Utility functions for body margins
  */
 
 import { Dispatch, Editor } from "@tiptap/core";
 import { Node as PMNode } from "@tiptap/pm/model";
 import { EditorState, Transaction } from "@tiptap/pm/state";
-import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../constants/pageMargins";
-import { BODY_NODE_ATTR_KEYS } from "../../constants/body";
-import { MarginConfig, MultiAxisSide } from "../../types/page";
-import { setPageNodePosSideConfig, updatePageSideConfig } from "../setSideConfig";
-import { mm } from "../units";
-import { getBodyNodeMargins } from "../nodes/body";
-import { getPageRegionAttributeByPageNum } from "./getAttributes";
+import { DEFAULT_PAGE_MARGIN_CONFIG } from "../../../../constants/pageMargins";
+import { BODY_NODE_ATTR_KEYS } from "../../../../constants/body";
+import { MarginConfig, MultiAxisSide } from "../../../../types/page";
+import { setPageNodePosSideConfig, updatePageSideConfig } from "../../../setSideConfig";
+import { mm } from "../../../units";
+import { getBodyNodeMargins } from "../../body";
+import { getPageRegionAttributeByPageNum } from "../../../pageRegion/getAttributes";
 
 /**
  * Checks if a (single) margin is valid.
