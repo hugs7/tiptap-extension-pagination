@@ -33,6 +33,40 @@ import { appendAndReplaceNode, deleteNode } from "../utils/node";
 import { getPageNodeByPageNum, isPageNode } from "../utils/page";
 
 const KeymapPlugin = keymap({
+    ArrowLeft: (state, dispatch) => {
+        if (!dispatch) {
+            console.warn("No dispatch function provided");
+            return false;
+        }
+
+        if (isHighlighting(state)) {
+            return false;
+        }
+
+        const { tr } = state;
+        const $pos = getResolvedPosition(state);
+        const newPos = $pos.pos - 1;
+        setSelectionAtPos(tr, newPos);
+        dispatch(tr);
+        return true;
+    },
+    ArrowRight: (state, dispatch) => {
+        if (!dispatch) {
+            console.warn("No dispatch function provided");
+            return false;
+        }
+
+        if (isHighlighting(state)) {
+            return false;
+        }
+
+        const { tr } = state;
+        const $pos = getResolvedPosition(state);
+        const newPos = $pos.pos + 1;
+        setSelectionAtPos(tr, newPos);
+        dispatch(tr);
+        return true;
+    },
     Enter: (state, dispatch) => {
         if (!dispatch) {
             console.warn("No dispatch function provided");
