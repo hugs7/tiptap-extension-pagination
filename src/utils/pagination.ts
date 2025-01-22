@@ -753,7 +753,7 @@ export const buildNewDocument = (
               table?.type && table.type.name === 'table' && table.content && table.content.content.length > 0
             )
             measurements = optimisedMeasurements.slice(0, tables.length)
-            i += groupTables.length
+            i += groupTables.length - 1
           }
 
           tables.forEach((table, index) => {
