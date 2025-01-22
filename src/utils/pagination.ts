@@ -791,7 +791,6 @@ export const buildNewDocument = (
                 ;({ pageNodeAttributes, pagePixelDimensions } =
                   getCalculatedPageNodeAttributes(state, pageNum))
               }
-              console.log('hererereh')
             } else {
               currentPageContent.push(table)
               currentHeight += measurements[index].totalHeight
