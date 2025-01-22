@@ -4,11 +4,8 @@
  * @description Custom plugin for paginating the editor content.
  */
 
-import { EditorState,Plugin, PluginKey } from "@tiptap/pm/state";
+import { Plugin, PluginKey, EditorState } from "@tiptap/pm/state";
 import { EditorView } from "@tiptap/pm/view";
-
-import { isNodeEmpty } from "../utils/node";
-import { doesDocHavePageNodes } from "../utils/page";
 import {
     buildNewDocument,
     collectContentNodes,
@@ -16,6 +13,8 @@ import {
     measureNodeHeights,
     paginationUpdateCursorPosition,
 } from "../utils/pagination";
+import { isNodeEmpty } from "../utils/node";
+import { doesDocHavePageNodes } from "../utils/page";
 
 const PaginationPlugin = new Plugin({
     key: new PluginKey("pagination"),
@@ -50,7 +49,7 @@ const PaginationPlugin = new Plugin({
 
                     const { newDoc, oldToNewPosMap } = buildNewDocument(state, contentNodes, nodeHeights, view);
 
-                    const {tr} = state;
+                    const tr = state.tr;
                     // Compare the content of the documents
                     if (!newDoc.content.eq(doc.content)) {
                         tr.replaceWith(0, doc.content.size, newDoc.content);
