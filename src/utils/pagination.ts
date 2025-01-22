@@ -710,24 +710,21 @@ export const buildNewDocument = (
           const oldPoses: number[] = []
           if (!node.attrs.groupId) {
             const measurement = tableHandler.measureTable(node, oldPos, view)
-
-            if (isPageFull) {
-              // this has already checked whether the node fits
-              const {
-                tables: optimisedTables,
-                measurements: optimisedMeasurements,
-              } = tableHandler.splitTableAtHeight(
-                node,
-                availableHeight,
-                measurement,
-                schema,
-                pagePixelDimensions.pageContentHeight,
-              )
-              tables = optimisedTables.filter((table) =>
-                table?.type && table.type.name === 'table' && table.content && table.content.content.length > 0
-              )
-              measurements = optimisedMeasurements.slice(0, tables.length)
-            }
+            const {
+              tables: optimisedTables,
+              measurements: optimisedMeasurements,
+            } = tableHandler.splitTableAtHeight(
+              node,
+              availableHeight,
+              measurement,
+              schema,
+              pagePixelDimensions.pageContentHeight,
+            )
+            tables = optimisedTables.filter((table) =>
+              table?.type && table.type.name === 'table' && table.content && table.content.content.length > 0
+            )
+            measurements = optimisedMeasurements.slice(0, tables.length)
+          
           } else {
             const groupTables = contentNodes.filter(
               (n) =>
@@ -794,6 +791,7 @@ export const buildNewDocument = (
                 ;({ pageNodeAttributes, pagePixelDimensions } =
                   getCalculatedPageNodeAttributes(state, pageNum))
               }
+              console.log('hererereh')
             } else {
               currentPageContent.push(table)
               currentHeight += measurements[index].totalHeight
