@@ -16,7 +16,7 @@ export type TableMeasurement = {
  */
 export type TableSplitResult = {
   tables: PMNode[];
-  mapping: { from: number; to: number }[];
+  mapping: TableMapping[];
   groupId: string;
   measurements: TableMeasurement[];
 }
@@ -24,8 +24,13 @@ export type TableSplitResult = {
 /**
  * A type definition for a table group.
  */
-export type TableGroup  = {
+export type TableGroup = {
   tables: PMNode[];
   originalTable: PMNode;
   positions: number[];
+}
+
+export type TableMapping = {
+    from: number; 
+    to: number;
 }

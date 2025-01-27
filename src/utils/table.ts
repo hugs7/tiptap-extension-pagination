@@ -1,6 +1,6 @@
 import { Node as PMNode, Schema } from "@tiptap/pm/model";
 import { EditorView } from "@tiptap/pm/view";
-import { TableGroup, TableMeasurement, TableSplitResult } from "../types/table";
+import { TableGroup, TableMapping, TableMeasurement, TableSplitResult } from "../types/table";
 import { TABLE_NODE_TYPE } from "../constants/table";
 
 export class TableHandler {
@@ -116,7 +116,7 @@ export class TableHandler {
         const headerRowCount = this.getHeaderRowCount(tableNode);
         const tables: PMNode[] = [];
         const measurements: TableMeasurement[] = [];
-        let mapping: { from: number; to: number }[] = [];
+        let mapping: TableMapping[] = [];
 
         const groupId = `table-group-${Date.now()}`;
 
@@ -349,5 +349,15 @@ export class TableHandler {
      */
     filterTablesWithContent(tables: PMNode[]): PMNode[] {
         return tables.filter(table => table?.type && table.type.name === TABLE_NODE_TYPE && table.content && table.content.content.length > 0);
+    }
+    
+    /**
+     * Calculate new base position
+     * @param cumulativeNewDocPos Current cumulutive position
+     * @param currentPageContent Page content
+     * @returns 
+     */
+    calculateNewBasePosition(cumulativeNewDocPos: number, currentPageContent: PMNode[]) {
+        return cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0)
     }
 }

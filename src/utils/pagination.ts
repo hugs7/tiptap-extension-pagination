@@ -761,7 +761,7 @@ export const buildNewDocument = (
 
                     if (oldPoses[index]) {
                         // For tables at page boundaries, use cumulative position
-                        const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
+                        const basePos = tableHandler.calculateNewBasePosition(cumulativeNewDocPos, currentPageContent);
                         oldToNewPosMap.set(oldPoses[index], basePos);
                     }
                     const pageNode = addPage(currentPageContent);
@@ -779,7 +779,7 @@ export const buildNewDocument = (
 
                     if (oldPoses[index]) {
                         // For the last table, calculate position based on all previous content in the page
-                        const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
+                        const basePos = tableHandler.calculateNewBasePosition(cumulativeNewDocPos, currentPageContent);
                         oldToNewPosMap.set(oldPoses[index], basePos);
                     }
                 }
