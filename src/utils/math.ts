@@ -24,3 +24,12 @@ export const inRange = (value: number, min: number, max: number): boolean => {
 export const pythagoreanTheorem = (a: number, b: number): number => {
     return Math.sqrt(a ** 2 + b ** 2);
 };
+
+/**
+ * Calculates the sum of an array of numbers.
+ * @param array - The array of numbers.
+ * @returns The sum of the numbers in the array.
+ */
+export const sumArray = (array: number[]): number => {
+    return array.reduce((a, b) => a + b, 0);
+};
