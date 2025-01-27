@@ -1,6 +1,7 @@
 import { Node as PMNode, Schema } from "@tiptap/pm/model";
 import { EditorView } from "@tiptap/pm/view";
 import { TableGroup, TableMeasurement, TableSplitResult } from "../types/table";
+import { TABLE_NODE_TYPE } from "../constants/table";
 
 export class TableHandler {
     private static instance: TableHandler;
@@ -83,7 +84,7 @@ export class TableHandler {
         }
         // Fallback to using nodeSize if DOM is not available
         const firstRow = rows[0];
-        const table = firstRow.type.name === "table" ? firstRow : firstRow.parent;
+        const table = firstRow.type.name === TABLE_NODE_TYPE ? firstRow : firstRow.parent;
         if (!table) {
             return rows.map((row) => row.nodeSize);
         }
@@ -117,7 +118,6 @@ export class TableHandler {
         const measurements: TableMeasurement[] = [];
         let mapping: { from: number; to: number }[] = [];
 
-        // Check if table is already part of a group
         const groupId = `table-group-${Date.now()}`;
 
         // If table fits in available height, return as is with groupId
@@ -341,5 +341,13 @@ export class TableHandler {
         });
 
         return { tables: optimisedTables, measurements: optimisedMeasurements };
+    }
+    /**
+     * Filter tables with content
+     * @param tables The tables to filter
+     * @returns The filtered tables
+     */
+    filterTablesWithContent(tables: PMNode[]): PMNode[] {
+        return tables.filter(table => table?.type && table.type.name === TABLE_NODE_TYPE && table.content && table.content.content.length > 0);
     }
 }

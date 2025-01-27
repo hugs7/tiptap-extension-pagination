@@ -20,6 +20,7 @@ import { getCalculatedPageNodeAttributes } from "./getPageAttributes";
 import { MarginConfig } from "../types/paper";
 import { TableMeasurement } from "../types/table";
 import { TableHandler } from "./table";
+import { TABLE_NODE_TYPE } from "../constants/table";
 
 /**
  * Check if the given node is a paragraph node.
@@ -687,13 +688,13 @@ export const buildNewDocument = (
     const oldToNewPosMap: CursorMap = new Map<number, number>();
     let cumulativeNewDocPos = 1;
     const tableHandler = TableHandler.getInstance();
-    
+
     for (let i = 0; i < contentNodes.length; i++) {
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
         const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight && currentPageContent.length > 0;
-        const isTable = node.type.name === "table";
+        const isTable = node.type.name ===  TABLE_NODE_TYPE;
 
         if (isTable) {
             let tables: PMNode[] = [],
@@ -710,12 +711,10 @@ export const buildNewDocument = (
                     schema,
                     pagePixelDimensions.pageContentHeight
                 );
-                tables = optimisedTables.filter(
-                    (table) => table?.type && table.type.name === "table" && table.content && table.content.content.length > 0
-                );
+                tables = tableHandler.filterTablesWithContent(optimisedTables);
                 measurements = optimisedMeasurements.slice(0, tables.length);
             } else {
-                const groupTables = contentNodes.filter((n) => n.node.type.name === "table" && n.node.attrs.groupId === node.attrs.groupId);
+                const groupTables = contentNodes.filter((n) => n.node.type.name === TABLE_NODE_TYPE && n.node.attrs.groupId === node.attrs.groupId);
                 const groupMeasurements = groupTables.map((t) => tableHandler.measureTable(t.node, t.pos, view));
                 groupTables.forEach((t) => {
                     // Store absolute position without adjustments
@@ -728,15 +727,13 @@ export const buildNewDocument = (
                     availableHeight,
                     pagePixelDimensions.pageContentHeight
                 );
-                tables = optimisedTables.filter(
-                    (table) => table?.type && table.type.name === "table" && table.content && table.content.content.length > 0
-                );
+                tables = tableHandler.filterTablesWithContent(optimisedTables);
                 measurements = optimisedMeasurements.slice(0, tables.length);
                 i += groupTables.length - 1;
             }
 
             tables.forEach((table, index) => {
-                if (!table || !table.type || table.type.name !== "table" || !table.content) {
+                if (!table || !table.type || table.type.name !== TABLE_NODE_TYPE || !table.content) {
                     console.warn("Invalid table encountered during pagination");
                     return;
                 }
