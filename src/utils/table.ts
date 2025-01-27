@@ -99,6 +99,27 @@ export class TableHandler {
     }
 
     /**
+     * Determines the index at which to split a table based on available height.
+     * @param measurement The measurement details of the table.
+     * @param headerRowCount The number of header rows in the table.
+     * @param availableHeight The available height for the table on the current page.
+     * @returns The index at which to split the table.
+     */
+    private getSplitIndex(measurement: TableMeasurement, headerRowCount: number, availableHeight: number): [number, number] {
+        let splitIndex = headerRowCount;
+        let currentHeight = sumArray(measurement.rowHeights.slice(0, headerRowCount));
+
+        for (let i = headerRowCount; i < measurement.rowHeights.length; i++) {
+            if (currentHeight + measurement.rowHeights[i] > availableHeight) {
+                break;
+            }
+            currentHeight += measurement.rowHeights[i];
+            splitIndex = i + 1;
+        }
+        return [splitIndex, currentHeight];
+    }
+
+    /**
      * Split a table at a given height.
      * @param tableNode The table node to split.
      * @param availableHeight The available height for the table.
@@ -140,16 +161,7 @@ export class TableHandler {
         }
 
         // Find split point for current page
-        let splitIndex = headerRowCount;
-        let currentHeight = sumArray(measurement.rowHeights.slice(0, headerRowCount));
-
-        for (let i = headerRowCount; i < measurement.rowHeights.length; i++) {
-            if (currentHeight + measurement.rowHeights[i] > availableHeight) {
-                break;
-            }
-            currentHeight += measurement.rowHeights[i];
-            splitIndex = i + 1;
-        }
+        const [splitIndex, currentHeight] = this.getSplitIndex(measurement, headerRowCount, availableHeight);
 
         // Create first table with header rows
         const firstTableRows = rows.slice(0, splitIndex);
@@ -350,16 +362,18 @@ export class TableHandler {
      * @returns The filtered tables
      */
     filterTablesWithContent(tables: PMNode[]): PMNode[] {
-        return tables.filter(table => table?.type && table.type.name === TABLE_NODE_TYPE && table.content && table.content.content.length > 0);
+        return tables.filter(
+            (table) => table?.type && table.type.name === TABLE_NODE_TYPE && table.content && table.content.content.length > 0
+        );
     }
-    
+
     /**
      * Calculate new base position
      * @param cumulativeNewDocPos Current cumulutive position
      * @param currentPageContent Page content
-     * @returns 
+     * @returns
      */
     calculateNewBasePosition(cumulativeNewDocPos: number, currentPageContent: PMNode[]) {
-        return cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0)
+        return cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
     }
 }
