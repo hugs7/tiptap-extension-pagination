@@ -18,7 +18,8 @@ import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
 import { getCalculatedPageNodeAttributes } from "./getPageAttributes";
 import { MarginConfig } from "../types/paper";
-import { TableHandler, TableMeasurement } from "./table";
+import { TableMeasurement } from "../types/table";
+import { TableHandler } from "./table";
 
 /**
  * Check if the given node is a paragraph node.
