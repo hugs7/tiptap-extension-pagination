@@ -3,6 +3,7 @@ import { EditorView } from "@tiptap/pm/view";
 import { TableGroup, TableMapping, TableMeasurement, TableSplitResult } from "../types/table";
 import { TABLE_NODE_TYPE } from "../constants/table";
 import { sumArray } from "./math";
+import { NodePosArray } from "../types/node";
 
 export class TableHandler {
     private static instance: TableHandler;
@@ -97,7 +98,65 @@ export class TableHandler {
     private getHeaderRowCount(node: PMNode): number {
         return node.attrs.headerRows || 0;
     }
+    /**
+     * Manages table pagination by handling table splitting and positioning
+     * @param node The table node to manage
+     * @param oldPos The original position of the table
+     * @param view The editor view
+     * @param schema The document schema
+     * @param contentNodes Array of content nodes
+     * @param availableHeight Available height on current page
+     * @param pageContentHeight Total height of a page
+     * @param i Current index in contentNodes array
+     * @returns Object containing processed tables, measurements, oldPoses, and the updated index
+     */
+    manageTable(
+        node: PMNode,
+        oldPos: number,
+        view: EditorView,
+        schema: Schema,
+        contentNodes: NodePosArray,
+        availableHeight: number,
+        pageContentHeight: number,
+        i: number
+    ): { tables: PMNode[]; measurements: TableMeasurement[]; oldPoses: number[]; newIndex: number } {
+        let tables: PMNode[] = [];
+        let measurements: TableMeasurement[] = [];
+        const oldPoses: number[] = [];
 
+        if (!node.attrs.groupId) {
+            const measurement = this.measureTable(node, oldPos, view);
+            const { tables: optimisedTables, measurements: optimisedMeasurements } = this.splitTableAtHeight(
+                node,
+                availableHeight,
+                measurement,
+                schema,
+                pageContentHeight
+            );
+            tables = this.filterTablesWithContent(optimisedTables);
+            measurements = optimisedMeasurements.slice(0, tables.length);
+            oldPoses.push(oldPos);
+            return { tables, measurements, oldPoses, newIndex: i };
+        } else {
+            const groupTables = contentNodes.filter(
+                (n) => n.node.type.name === TABLE_NODE_TYPE && n.node.attrs.groupId === node.attrs.groupId
+            );
+            const groupMeasurements = groupTables.map((t) => this.measureTable(t.node, t.pos, view));
+            groupTables.forEach((t) => {
+                oldPoses.push(t.pos);
+            });
+            const { tables: optimisedTables, measurements: optimisedMeasurements } = this.optimiseTables(
+                groupTables.map((t) => t.node),
+                groupMeasurements,
+                schema,
+                availableHeight,
+                pageContentHeight
+            );
+            tables = this.filterTablesWithContent(optimisedTables);
+            measurements = optimisedMeasurements.slice(0, tables.length);
+            return { tables, measurements, oldPoses, newIndex: i + groupTables.length - 1 };
+        }
+    }
     /**
      * Determines the index at which to split a table based on available height.
      * @param measurement The measurement details of the table.
@@ -278,7 +337,14 @@ export class TableHandler {
      * @param availableSpace The available space in the current page.
      * @returns The optimised table and measurement.
      */
-    private handleOverflow(table: PMNode, measurement: TableMeasurement, nextTable: PMNode | undefined, nextMeasurement: TableMeasurement | undefined, schema: Schema, availableSpace: number) {
+    private handleOverflow(
+        table: PMNode,
+        measurement: TableMeasurement,
+        nextTable: PMNode | undefined,
+        nextMeasurement: TableMeasurement | undefined,
+        schema: Schema,
+        availableSpace: number
+    ) {
         const rows = table.content.content;
         const rowsToMove: PMNode[] = [];
         const movedRowMeasurements: number[] = [];
@@ -329,7 +395,14 @@ export class TableHandler {
      * @param availableSpace The available space in the current page.
      * @returns The optimised table and measurement.
      */
-    private handleUnderflow(table: PMNode, measurement: TableMeasurement, nextTable: PMNode, nextMeasurement: TableMeasurement, schema: Schema, availableSpace: number) {
+    private handleUnderflow(
+        table: PMNode,
+        measurement: TableMeasurement,
+        nextTable: PMNode,
+        nextMeasurement: TableMeasurement,
+        schema: Schema,
+        availableSpace: number
+    ) {
         const availableHeight = availableSpace - measurement.totalHeight;
         const nextTableRows = nextTable.content.content;
         const rowsToMove: PMNode[] = [];

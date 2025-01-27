@@ -18,7 +18,6 @@ import { inRange } from "./math";
 import { collectPageNodes, isPageNode, isPageNumInRange } from "./page";
 import { getCalculatedPageNodeAttributes } from "./getPageAttributes";
 import { MarginConfig } from "../types/paper";
-import { TableMeasurement } from "../types/table";
 import { TableHandler } from "./table";
 import { TABLE_NODE_TYPE } from "../constants/table";
 
@@ -203,7 +202,7 @@ export const getEndOfPagePosition = (doc: PMNode, pos: ResolvedPos | number): nu
 /**
  * Get the end of the paragraph position.
  * @param doc - The document node.
- * @param pos - The resolved position in the document or the absolute position of the node.
+ * @param $pos - The resolved position in the document or the absolute position of the node.
  * @returns {number} The end position of the paragraph.
  */
 export const getEndOfParagraphPosition = (doc: PMNode, $pos: ResolvedPos | number): number => {
@@ -694,52 +693,29 @@ export const buildNewDocument = (
         const nodeHeight = nodeHeights[i];
 
         const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight && currentPageContent.length > 0;
-        const isTable = node.type.name ===  TABLE_NODE_TYPE;
+        const isTable = node.type.name === TABLE_NODE_TYPE;
 
         if (isTable) {
-            let tables: PMNode[] = [],
-                measurements: TableMeasurement[] = [];
             const availableHeight = pagePixelDimensions.pageContentHeight - currentHeight;
-            const oldPoses: number[] = [];
+            const { tables, measurements, oldPoses, newIndex } = tableHandler.manageTable(
+                node,
+                oldPos,
+                view,
+                schema,
+                contentNodes,
+                availableHeight,
+                pagePixelDimensions.pageContentHeight,
+                i
+            );
+            i = newIndex;
 
-            if (!node.attrs.groupId) {
-                const measurement = tableHandler.measureTable(node, oldPos, view);
-                const { tables: optimisedTables, measurements: optimisedMeasurements } = tableHandler.splitTableAtHeight(
-                    node,
-                    availableHeight,
-                    measurement,
-                    schema,
-                    pagePixelDimensions.pageContentHeight
-                );
-                tables = tableHandler.filterTablesWithContent(optimisedTables);
-                measurements = optimisedMeasurements.slice(0, tables.length);
-            } else {
-                const groupTables = contentNodes.filter((n) => n.node.type.name === TABLE_NODE_TYPE && n.node.attrs.groupId === node.attrs.groupId);
-                const groupMeasurements = groupTables.map((t) => tableHandler.measureTable(t.node, t.pos, view));
-                groupTables.forEach((t) => {
-                    // Store absolute position without adjustments
-                    oldPoses.push(t.pos);
-                });
-                const { tables: optimisedTables, measurements: optimisedMeasurements } = tableHandler.optimiseTables(
-                    groupTables.map((t) => t.node),
-                    groupMeasurements,
-                    schema,
-                    availableHeight,
-                    pagePixelDimensions.pageContentHeight
-                );
-                tables = tableHandler.filterTablesWithContent(optimisedTables);
-                measurements = optimisedMeasurements.slice(0, tables.length);
-                i += groupTables.length - 1;
-            }
-
-            tables.forEach((table, index) => {
+            tables.forEach((table: PMNode, index: number) => {
                 if (!table || !table.type || table.type.name !== TABLE_NODE_TYPE || !table.content) {
                     console.warn("Invalid table encountered during pagination");
                     return;
                 }
                 // insert current if the first entry exceeds height
                 if (index === 0 && measurements[index].totalHeight > availableHeight) {
-
                     if (oldPoses[index]) {
                         // Calculate position based on current page content plus the table's position within the page
                         const basePos = cumulativeNewDocPos + currentPageContent.reduce((sum, n) => sum + n.nodeSize, 0);
