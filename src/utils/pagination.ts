@@ -665,7 +665,7 @@ export const buildNewDocument = (
     state: EditorState,
     contentNodes: NodePosArray,
     nodeHeights: number[],
-    view: EditorView,
+    view: EditorView
 ): { newDoc: PMNode; oldToNewPosMap: CursorMap } => {
     const { schema, doc } = state;
     let pageNum = 0;
@@ -685,110 +685,99 @@ export const buildNewDocument = (
 
     const oldToNewPosMap: CursorMap = new Map<number, number>();
     let cumulativeNewDocPos = 1;
-    const tableHandler = TableHandler.getInstance()
+    const tableHandler = TableHandler.getInstance();
     for (let i = 0; i < contentNodes.length; i++) {
         const { node, pos: oldPos } = contentNodes[i];
         const nodeHeight = nodeHeights[i];
 
         const isPageFull = currentHeight + nodeHeight > pagePixelDimensions.pageContentHeight && currentPageContent.length > 0;
-        const isTable = node.type.name === 'table';
+        const isTable = node.type.name === "table";
         if (isTable) {
-          let tables: PMNode[] = [],
-            measurements: TableMeasurement[] = [];
-          const availableHeight =
-            pagePixelDimensions.pageContentHeight - currentHeight;
-          const oldPoses: number[] = [];
-          if (!node.attrs.groupId) {
-            const measurement = tableHandler.measureTable(node, oldPos, view);
-            const {
-              tables: optimisedTables,
-              measurements: optimisedMeasurements,
-            } = tableHandler.splitTableAtHeight(
-              node,
-              availableHeight,
-              measurement,
-              schema,
-              pagePixelDimensions.pageContentHeight,
-            );
-            tables = optimisedTables.filter((table) =>
-              table?.type && table.type.name === 'table' && table.content && table.content.content.length > 0
-            );
-            measurements = optimisedMeasurements.slice(0, tables.length);
-          } else {
-            const groupTables = contentNodes.filter(
-              (n) =>
-                n.node.type.name === 'table' &&
-                n.node.attrs.groupId === node.attrs.groupId,
-            )
-            const groupMeasurements = groupTables.map((t) =>
-              tableHandler.measureTable(t.node, t.pos, view),
-            );
-            groupTables.forEach((t) => {
-              // Store absolute position without adjustments
-              oldPoses.push(t.pos)
-            });
-            const { tables: optimisedTables, measurements: optimisedMeasurements } =
-              tableHandler.optimiseTables(
-                groupTables.map((t) => t.node),
-                groupMeasurements,
-                schema,
-                availableHeight,
-                pagePixelDimensions.pageContentHeight,
-              );
-            tables = optimisedTables.filter((table) =>
-              table?.type && table.type.name === 'table' && table.content && table.content.content.length > 0
-            );
-            measurements = optimisedMeasurements.slice(0, tables.length);
-            i += groupTables.length - 1;
-          }
-
-          tables.forEach((table, index) => {
-            if (!table || !table.type || table.type.name !== 'table' || !table.content) {
-              console.warn('Invalid table encountered during pagination');
-              return;
-            }
-            // insert current if the first entry exceeds height
-            if (index === 0 && measurements[index].totalHeight > availableHeight) {
-              if (oldPoses[index]) {
-                // Calculate position based on current page content plus the table's position within the page
-                const basePos = cumulativeNewDocPos + currentPageContent.reduce((sum, n) => sum + n.nodeSize, 0);
-                oldToNewPosMap.set(oldPoses[index], basePos);
-              }
-              const pageNode = addPage(currentPageContent);
-              cumulativeNewDocPos += pageNode.nodeSize;
-              currentPageContent = [];
-              currentHeight = 0;
-              pageNum++;
-              if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
-              }
-            }
-            if (index < tables.length - 1) {
-              currentPageContent.push(table);
-              if (oldPoses[index]) {
-                // For tables at page boundaries, use cumulative position
-                const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
-                oldToNewPosMap.set(oldPoses[index], basePos);
-              }
-              const pageNode = addPage(currentPageContent);
-              cumulativeNewDocPos += pageNode.nodeSize;
-              currentPageContent = [];
-              currentHeight = 0;
-              pageNum++;
-              if (isPageNumInRange(doc, pageNum)) {
-                ({ pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
-              }
+            let tables: PMNode[] = [],
+                measurements: TableMeasurement[] = [];
+            const availableHeight = pagePixelDimensions.pageContentHeight - currentHeight;
+            const oldPoses: number[] = [];
+            if (!node.attrs.groupId) {
+                const measurement = tableHandler.measureTable(node, oldPos, view);
+                const { tables: optimisedTables, measurements: optimisedMeasurements } = tableHandler.splitTableAtHeight(
+                    node,
+                    availableHeight,
+                    measurement,
+                    schema,
+                    pagePixelDimensions.pageContentHeight
+                );
+                tables = optimisedTables.filter(
+                    (table) => table?.type && table.type.name === "table" && table.content && table.content.content.length > 0
+                );
+                measurements = optimisedMeasurements.slice(0, tables.length);
             } else {
-              currentPageContent.push(table);
-              currentHeight += measurements[index].totalHeight;
-
-              if (oldPoses[index]) {
-                // For the last table, calculate position based on all previous content in the page
-                const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
-                oldToNewPosMap.set(oldPoses[index], basePos);
-              }
+                const groupTables = contentNodes.filter((n) => n.node.type.name === "table" && n.node.attrs.groupId === node.attrs.groupId);
+                const groupMeasurements = groupTables.map((t) => tableHandler.measureTable(t.node, t.pos, view));
+                groupTables.forEach((t) => {
+                    // Store absolute position without adjustments
+                    oldPoses.push(t.pos);
+                });
+                const { tables: optimisedTables, measurements: optimisedMeasurements } = tableHandler.optimiseTables(
+                    groupTables.map((t) => t.node),
+                    groupMeasurements,
+                    schema,
+                    availableHeight,
+                    pagePixelDimensions.pageContentHeight
+                );
+                tables = optimisedTables.filter(
+                    (table) => table?.type && table.type.name === "table" && table.content && table.content.content.length > 0
+                );
+                measurements = optimisedMeasurements.slice(0, tables.length);
+                i += groupTables.length - 1;
             }
-          })
+
+            tables.forEach((table, index) => {
+                if (!table || !table.type || table.type.name !== "table" || !table.content) {
+                    console.warn("Invalid table encountered during pagination");
+                    return;
+                }
+                // insert current if the first entry exceeds height
+                if (index === 0 && measurements[index].totalHeight > availableHeight) {
+                    if (oldPoses[index]) {
+                        // Calculate position based on current page content plus the table's position within the page
+                        const basePos = cumulativeNewDocPos + currentPageContent.reduce((sum, n) => sum + n.nodeSize, 0);
+                        oldToNewPosMap.set(oldPoses[index], basePos);
+                    }
+                    const pageNode = addPage(currentPageContent);
+                    cumulativeNewDocPos += pageNode.nodeSize;
+                    currentPageContent = [];
+                    currentHeight = 0;
+                    pageNum++;
+                    if (isPageNumInRange(doc, pageNum)) {
+                        ({ pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
+                    }
+                }
+                if (index < tables.length - 1) {
+                    currentPageContent.push(table);
+                    if (oldPoses[index]) {
+                        // For tables at page boundaries, use cumulative position
+                        const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
+                        oldToNewPosMap.set(oldPoses[index], basePos);
+                    }
+                    const pageNode = addPage(currentPageContent);
+                    cumulativeNewDocPos += pageNode.nodeSize;
+                    currentPageContent = [];
+                    currentHeight = 0;
+                    pageNum++;
+                    if (isPageNumInRange(doc, pageNum)) {
+                        ({ pageNodeAttributes, pagePixelDimensions } = getCalculatedPageNodeAttributes(state, pageNum));
+                    }
+                } else {
+                    currentPageContent.push(table);
+                    currentHeight += measurements[index].totalHeight;
+
+                    if (oldPoses[index]) {
+                        // For the last table, calculate position based on all previous content in the page
+                        const basePos = cumulativeNewDocPos + currentPageContent.slice(0, -1).reduce((sum, n) => sum + n.nodeSize, 0);
+                        oldToNewPosMap.set(oldPoses[index], basePos);
+                    }
+                }
+            });
         } else if (isPageFull) {
             const pageNode = addPage(currentPageContent);
             cumulativeNewDocPos += pageNode.nodeSize;
@@ -802,12 +791,12 @@ export const buildNewDocument = (
 
         // Record the mapping from old position to new position
         if (!isTable) {
-          const nodeStartPosInNewDoc = cumulativeNewDocPos + currentPageContent.reduce((sum, n) => sum + n.nodeSize, 0);
+            const nodeStartPosInNewDoc = cumulativeNewDocPos + currentPageContent.reduce((sum, n) => sum + n.nodeSize, 0);
 
-          oldToNewPosMap.set(oldPos, nodeStartPosInNewDoc);
+            oldToNewPosMap.set(oldPos, nodeStartPosInNewDoc);
 
-          currentPageContent.push(node);
-          currentHeight += nodeHeight;
+            currentPageContent.push(node);
+            currentHeight += nodeHeight;
         }
     }
 
