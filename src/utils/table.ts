@@ -241,120 +241,117 @@ export class TableHandler {
      * @param schema The schema of the document.
      * @param availableHeight The available height in the current page
      * @param pageHeight The height of a page.
-     * @returns The optimised tables, measurements, and updated mapping.
+     * @returns The optimised tables and measurements.
      */
     optimiseTables(tables: PMNode[], measurements: TableMeasurement[], schema: Schema, availableHeight: number, pageHeight: number) {
         const optimisedTables: PMNode[] = [];
         const optimisedMeasurements: TableMeasurement[] = [];
 
         tables.forEach((table, index) => {
-            let isOptimised: boolean = false;
-            const nextRowIndex = index + 1;
             const measurement = measurements[index];
-            const tableHeight = measurement.totalHeight;
             const availableSpace = index === 0 ? availableHeight : pageHeight;
 
-            // handle overflows
             if (measurement.totalHeight > availableSpace) {
-                const rows = table.content.content;
-                const rowsToMove: PMNode[] = [];
-                const movedRowMeasurements: number[] = [];
-                let totalSpaceTaken = 0;
-                let rowsToRemove = 0;
-
-                for (let i = rows.length - 1; i >= 0; i--) {
-                    const rowHeight = measurement.rowHeights[i];
-
-                    if (tableHeight - totalSpaceTaken <= availableSpace) break;
-
-                    rowsToMove.unshift(rows[i]);
-                    movedRowMeasurements.unshift(rowHeight);
-                    totalSpaceTaken += rowHeight;
-                    rowsToRemove++;
-                }
-
-                if (rowsToMove.length) {
-                    isOptimised = true;
-                    // Create new content for the current table
-                    optimisedTables.push(schema.nodes.table.create({ ...table.attrs }, rows.slice(0, -rowsToMove.length)));
-                    // add a new measurement for the adjusted table
-                    optimisedMeasurements.push({
-                        rowHeights: measurement.rowHeights.slice(0, -rowsToMove.length),
-                        headerRowCount: 0,
-                        totalHeight: measurement.totalHeight - totalSpaceTaken,
-                        breakPoints: measurement.breakPoints,
-                        cumulativeHeights: measurement.cumulativeHeights.slice(0, -rowsToMove.length),
-                    });
-
-                    if (tables[nextRowIndex]) {
-                        const nextTable = tables[nextRowIndex];
-                        const rows = [...rowsToMove, ...nextTable.content.content];
-                        // replaces next child so this is repeated
-                        tables[nextRowIndex] = schema.nodes.table.create({ ...nextTable.attrs }, rows);
-                        measurements[nextRowIndex].rowHeights.unshift(...movedRowMeasurements);
-                        measurements[nextRowIndex].totalHeight += totalSpaceTaken;
-                    } else {
-                        const newTable = schema.nodes.table.create({ ...table.attrs }, rowsToMove);
-                        optimisedTables.push(newTable);
-                        optimisedMeasurements.push({
-                            ...measurement,
-                            rowHeights: movedRowMeasurements,
-                            totalHeight: sumArray(movedRowMeasurements),
-                        });
-                    }
-                }
-            }
-
-            if (measurement.totalHeight < availableSpace && tables[nextRowIndex]) {
-                const availableHeight = availableSpace - measurement.totalHeight;
-                const nextTable = tables[nextRowIndex];
-                const nextTableMeasurements = measurements[nextRowIndex];
-                const nextTableRows = nextTable.content.content;
-                const rowsToMove: PMNode[] = [];
-                const movedRowMeasurements: number[] = [];
-                let totalSpaceTaken = 0;
-                let rowsToAdd = 0;
-
-                for (let i = 0; i < nextTableRows.length; i++) {
-                    const rowHeight = nextTableMeasurements.rowHeights[i];
-                    if (availableHeight - totalSpaceTaken <= rowHeight) break;
-
-                    rowsToMove.push(nextTableRows[i]);
-                    movedRowMeasurements.push(rowHeight);
-                    totalSpaceTaken += rowHeight;
-                    rowsToAdd++;
-                }
-
-                if (rowsToAdd) {
-                    isOptimised = true;
-                    // push current table optimised
-                    const rows = [...table.content.content, ...rowsToMove];
-                    optimisedTables.push(schema.nodes.table.create({ ...table.attrs }, rows));
-                    optimisedMeasurements.push({
-                        ...nextTableMeasurements,
-                        totalHeight: measurement.totalHeight + totalSpaceTaken,
-                        rowHeights: measurement.rowHeights.slice(0, rowsToAdd),
-                        cumulativeHeights: [
-                            ...measurement.cumulativeHeights,
-                            ...nextTableMeasurements.cumulativeHeights.slice(0, rowsToAdd),
-                        ],
-                    });
-
-                    // remove rows from next table
-                    tables[nextRowIndex] = schema.nodes.table.create({ ...nextTable.attrs }, nextTableRows.slice(rowsToAdd));
-                    measurements[nextRowIndex].rowHeights = measurements[nextRowIndex].rowHeights.slice(rowsToAdd);
-                    measurements[nextRowIndex].cumulativeHeights = measurements[nextRowIndex].cumulativeHeights.slice(rowsToAdd);
-                    measurements[nextRowIndex].totalHeight -= totalSpaceTaken;
-                }
-            }
-
-            if (!isOptimised) {
+                const result = this.handleOverflow(table, measurement, tables[index + 1], measurements[index + 1], schema, availableSpace);
+                optimisedTables.push(...result.tables);
+                optimisedMeasurements.push(...result.measurements);
+            } else if (measurement.totalHeight < availableSpace && tables[index + 1]) {
+                const result = this.handleUnderflow(table, measurement, tables[index + 1], measurements[index + 1], schema, availableSpace);
+                optimisedTables.push(result.table);
+                optimisedMeasurements.push(result.measurement);
+            } else {
                 optimisedTables.push(table);
                 optimisedMeasurements.push(measurement);
             }
         });
 
         return { tables: optimisedTables, measurements: optimisedMeasurements };
+    }
+
+    /**
+     * Function to handle the overflow of a table by moving rows between tables.
+     * @param table The table to handle.
+     * @param measurement The measurement of the table.
+     * @param nextTable The next table in the group.
+     * @param nextMeasurement The measurement of the next table.
+     * @param schema The schema of the document.
+     * @param availableSpace The available space in the current page.
+     * @returns The optimised table and measurement.
+     */
+    private handleOverflow(table: PMNode, measurement: TableMeasurement, nextTable: PMNode | undefined, nextMeasurement: TableMeasurement | undefined, schema: Schema, availableSpace: number) {
+        const rows = table.content.content;
+        const rowsToMove: PMNode[] = [];
+        const movedRowMeasurements: number[] = [];
+        let totalSpaceTaken = 0;
+
+        for (let i = rows.length - 1; i >= 0; i--) {
+            if (measurement.totalHeight - totalSpaceTaken <= availableSpace) break;
+            rowsToMove.unshift(rows[i]);
+            movedRowMeasurements.unshift(measurement.rowHeights[i]);
+            totalSpaceTaken += measurement.rowHeights[i];
+        }
+
+        const optimisedTable = schema.nodes.table.create({ ...table.attrs }, rows.slice(0, -rowsToMove.length));
+        const optimisedMeasurement: TableMeasurement = {
+            rowHeights: measurement.rowHeights.slice(0, -rowsToMove.length),
+            headerRowCount: 0,
+            totalHeight: measurement.totalHeight - totalSpaceTaken,
+            breakPoints: measurement.breakPoints,
+            cumulativeHeights: measurement.cumulativeHeights.slice(0, -rowsToMove.length),
+        };
+
+        if (nextTable) {
+            const updatedNextTable = schema.nodes.table.create({ ...nextTable.attrs }, [...rowsToMove, ...nextTable.content.content]);
+            const updatedNextMeasurement = {
+                ...nextMeasurement!,
+                rowHeights: [...movedRowMeasurements, ...nextMeasurement!.rowHeights],
+                totalHeight: nextMeasurement!.totalHeight + totalSpaceTaken,
+            };
+            return { tables: [optimisedTable, updatedNextTable], measurements: [optimisedMeasurement, updatedNextMeasurement] };
+        } else {
+            const newTable = schema.nodes.table.create({ ...table.attrs }, rowsToMove);
+            const newMeasurement: TableMeasurement = {
+                ...measurement,
+                rowHeights: movedRowMeasurements,
+                totalHeight: movedRowMeasurements.reduce((sum, height) => sum + height, 0),
+            };
+            return { tables: [optimisedTable, newTable], measurements: [optimisedMeasurement, newMeasurement] };
+        }
+    }
+
+    /**
+     * Function to handle the underflow of a table by moving rows between tables.
+     * @param table The table to handle.
+     * @param measurement The measurement of the table.
+     * @param nextTable The next table in the group.
+     * @param nextMeasurement The measurement of the next table.
+     * @param schema The schema of the document.
+     * @param availableSpace The available space in the current page.
+     * @returns The optimised table and measurement.
+     */
+    private handleUnderflow(table: PMNode, measurement: TableMeasurement, nextTable: PMNode, nextMeasurement: TableMeasurement, schema: Schema, availableSpace: number) {
+        const availableHeight = availableSpace - measurement.totalHeight;
+        const nextTableRows = nextTable.content.content;
+        const rowsToMove: PMNode[] = [];
+        const movedRowMeasurements: number[] = [];
+        let totalSpaceTaken = 0;
+
+        for (let i = 0; i < nextTableRows.length; i++) {
+            if (availableHeight - totalSpaceTaken <= nextMeasurement.rowHeights[i]) break;
+            rowsToMove.push(nextTableRows[i]);
+            movedRowMeasurements.push(nextMeasurement.rowHeights[i]);
+            totalSpaceTaken += nextMeasurement.rowHeights[i];
+        }
+
+        const optimisedTable = schema.nodes.table.create({ ...table.attrs }, [...table.content.content, ...rowsToMove]);
+        const optimisedMeasurement: TableMeasurement = {
+            ...measurement,
+            totalHeight: measurement.totalHeight + totalSpaceTaken,
+            rowHeights: [...measurement.rowHeights, ...movedRowMeasurements],
+            cumulativeHeights: [...measurement.cumulativeHeights, ...nextMeasurement.cumulativeHeights.slice(0, rowsToMove.length)],
+        };
+
+        return { table: optimisedTable, measurement: optimisedMeasurement };
     }
     /**
      * Filter tables with content
