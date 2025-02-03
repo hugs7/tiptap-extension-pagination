@@ -36,6 +36,8 @@
         "@rollup/plugin-typescript": "^12.1.2",
         "@tiptap/core": "2.11.0",
         "@tiptap/pm": "2.11.0",
+        "@tiptap/react": "2.11.0",
+        "@types/react": "^19.0.8",
         "rimraf": "^6.0.1",
         "rollup": "^4.34.0",
         "rollup-plugin-auto-external": "^2.0.0",
@@ -45,6 +47,7 @@
     },
     "peerDependencies": {
         "@tiptap/core": "^2.11.0",
-        "@tiptap/pm": "^2.11.0"
+        "@tiptap/pm": "^2.11.0",
+        "@tiptap/react": "^2.11.0"
     }
 }
