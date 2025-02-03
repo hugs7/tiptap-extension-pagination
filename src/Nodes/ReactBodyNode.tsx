@@ -88,7 +88,7 @@ export function ReactBodyNode(props: NodeViewProps) {
             className="body-node"
             data-page-body-content={isVisible}
         >
-            <div ref={contentRef} style={{ width: "100%", height: "100%", backgroundColor: isVisible ? "green" : "red", visibility: isVisible ? "visible" : "hidden"}}>
+            <div ref={contentRef} style={{ width: "100%", height: "100%", backgroundColor: isVisible ? "green" : "red", contentVisibility: isVisible ? "visible" : "hidden"}}>
                  <NodeViewContent  />
             </div>
            
