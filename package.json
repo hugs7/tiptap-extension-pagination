@@ -45,8 +45,5 @@
     "peerDependencies": {
         "@tiptap/core": "^2.11.5",
         "@tiptap/pm": "^2.11.5"
-    },
-    "dependencies": {
-        "tiptap-extension-pagination": "file:"
     }
 }
